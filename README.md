@@ -42,4 +42,7 @@ or
 For more information about using Python on Heroku, see these Dev Center articles:
 
 - [Python on Heroku](https://devcenter.heroku.com/categories/python)
+<<<<<<< HEAD
 # QuantPolitik
+=======
+>>>>>>> 4ae7a8606aebddf0a2eee749df91e59c7b75f0d4

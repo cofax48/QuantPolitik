@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # coding=utf-8
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
@@ -10,12 +11,19 @@ from hello.country_to_number import iso_numberifier
 
 
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
+=======
+from django.shortcuts import render
+from django.http import HttpResponse
+
+from .models import Greeting
+>>>>>>> 4ae7a8606aebddf0a2eee749df91e59c7b75f0d4
 
 # Create your views here.
 def index(request):
     # return HttpResponse('Hello from Python!')
     return render(request, 'index.html')
 
+<<<<<<< HEAD
 def dataDashBoard(request):
     return render(request, 'dataDashBoard.html')
 
@@ -90,3 +98,15 @@ def get_Table_and_Column(request):
 
 
     return JsonResponse(country_and_data_list, safe=False)
+=======
+
+def db(request):
+
+    greeting = Greeting()
+    greeting.save()
+
+    greetings = Greeting.objects.all()
+
+    return render(request, 'db.html', {'greetings': greetings})
+
+>>>>>>> 4ae7a8606aebddf0a2eee749df91e59c7b75f0d4
