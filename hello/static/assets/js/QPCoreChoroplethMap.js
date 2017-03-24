@@ -1,7 +1,7 @@
 (function(whole_data) {
 
 var whole_data = [];
-d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData) {
+d3.json('http://localhost:5000/api/QP_Score', function(error, incomingData) {
   var today = new Date();
   var dd = today.getDate();
   var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -23,7 +23,7 @@ d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData
 function mapDraw() {
 console.log('yayyyyy');
 
-var width = 1000, height = 428;
+var width = 1600, height = 840;
 
 var zoom = d3.behavior.zoom()
     .scaleExtent([1, 5])
