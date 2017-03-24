@@ -4,15 +4,25 @@ var whole_data = [];
 d3.json('http://localhost:5000/api/QP_Score', function(error, incomingData) {
   var today = new Date();
   var dd = today.getDate();
-  var mm = today.getMonth()+1; //January is 0!
+  var monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+  ];
+  var mm = today.getMonth(); //January is 0!
+  var month_name = monthNames[mm]
   var yyyy = today.getFullYear();
   if(dd<10) {dd='0'+dd}
   if(mm<10) {mm='0'+mm}
-  today = mm+'/'+dd+'/'+yyyy;
+  today = month_name+'-'+dd+'-'+yyyy;
   var column_to_use = today;
-  console.log(incomingData[0])
-  for (var i in _.range(198)) {whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
+  console.log(today);
+  for (var i in _.range(198)) {if (whole_data.length == 197) {mapDraw()}
+  else {
+    whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
+}
     });
+function mapDraw() {
+console.log('yayyyyy');
+
 var width = 1000, height = 428;
 
 var zoom = d3.behavior.zoom()
@@ -57,7 +67,7 @@ d3.json(url, function (error, world) {
         ////    Legend Legend Legend Legend Legend Legend Legend Legend
         ////
         //////////////////////////////////////////////////////////////////
-
+        console.log('65', whole_data);
 
         var legendWidth = 140, legendHeight = 400;
         var key = d3.select("svg#ChoroplethMap").append("svg")
@@ -172,4 +182,5 @@ function moveAndZoom() {
     mainGroup.style("stroke-width", ((1 / s) * 2) + "px");
     mainGroup.attr('transform', 'translate(' + x + ',' + y + ')scale(' + s + ')');
 }
+}//MapDraw
 }(window.qpcore = window.qpcore || {}));

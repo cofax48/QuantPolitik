@@ -1,6 +1,6 @@
 # coding=utf-8
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
 
 from sqlalchemy import create_engine
@@ -26,7 +26,7 @@ def get_Table(request):
     #connect to database
     conn = engine.connect()
     #preform query and return json data
-    
+
     #Eliminate WSGI Get notation
     ABRV_table_name = str(request)[24:]
     ABRV_table_name = ABRV_table_name[:-2]
@@ -34,7 +34,7 @@ def get_Table(request):
     ABRV_table_name != '/favicon.ico'
 
     list_return = []
-    
+
     if '/' in str(ABRV_table_name):
         get_Table_and_Column(request)
     else:
@@ -55,20 +55,20 @@ def get_Table(request):
 
 
         list_return.append(country_and_data_dict)
-        
-    return HttpResponse(list_return)
+
+    return JsonResponse(list_return, safe=False)
 
 def get_Table_and_Column(request):
     #connect to database
     conn = engine.connect()
     #preform query and return json data
-    
+
     #Eliminate WSGI Get notation
     ABRV_table_name = str(request)[24:]
     ABRV_table_name = str(ABRV_table_name)[:-2]
 
-    
-    table_name, column_name = ABRV_table_name.split("/")    
+
+    table_name, column_name = ABRV_table_name.split("/")
     column_name = column_name.replace('%20', ' ')
 
     query = conn.execute('SELECT "{}" FROM "{}";'.format(column_name, table_name))
@@ -88,5 +88,5 @@ def get_Table_and_Column(request):
     json_list_to_send = []
     json_list_to_send.append(country_and_data_list)
 
-    
-    return HttpResponse(json_list_to_send)
+
+    return JsonResponse(country_and_data_list, safe=False)
