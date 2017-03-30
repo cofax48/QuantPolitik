@@ -26,9 +26,36 @@ from sqlalchemy import create_engine
 import json
 from api.country_to_number import iso_numberifier
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
-ABRV_table_and_column = 'Sec_State_Bureaucratic_Exchange/Sec_of_State_2017'
+ABRV_table_name = 'Sec_State_Bureaucratic_Exchange'
 conn = engine.connect()
 
+list_return = []
+col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '{}';'''.format(ABRV_table_name))
+col_names = []
+[col_names.append(q[3]) for q in col_query]
+query = conn.execute('SELECT * FROM "{}" ORDER BY "Country_Name";'.format(ABRV_table_name))
+query_list = query.cursor.fetchall()
+
+iso3_codes = conn.execute('''SELECT "Iso3" FROM "QP_Score" ORDER BY "Country_Name";''')
+iso3_codes_list = iso3_codes.cursor.fetchall()
+
+for i in iso3_codes_list:
+    print(i)
+
+country_and_data_dict = []
+for i in range(len(query_list)):
+    print(i)
+    country = query_list[i][0]
+    temp_list = {}
+    for c in range(len(col_names)):
+        temp_list[col_names[c]] = query_list[i][c]
+    temp_list["Iso3"] = iso3_codes_list[i][0]
+    print(temp_list)
+    country_and_data_dict.append(temp_list)
+
+
+list_return.append(country_and_data_dict)
+"""
 codex = {
     "Kosovo":"-099",
     "Afghanistan":"004",
@@ -280,14 +307,13 @@ codex = {
     "Yemen":"887",
     "Zambia":"894"
 }
-#conn.execute("""UPDATE "QP_Score" SET "Country_Name" = 'Ivory Coast' WHERE "Country_Name" = 'Côte d''Ivoire';""")
-"""
+
 table_list = ['Business_Relations', 'Trade_Relations', 'Governmental_Perspective', 'Country_Profile', 'Security', 'UN', 'QP_Score', 'Cultural_Diffusion', 'Prestige', 'Sec_State_Bureaucratic_Exchange', 'Presidential_Exchange']
 for tab in table_list:
     #conn.execute('''UPDATE "{}" SET "Country_Name" = 'Bosnia and Herzegovina' WHERE "Country_Name" = 'Bosnia and Herzgrovina';'''.format(tab))
     conn.execute('''UPDATE "{}" SET "Country_Name" = 'Saint Kitts and Nevis' WHERE "Country_Name" = 'Saint Kitss and Nevis';'''.format(tab))
 
-"""
+
 query = conn.execute('SELECT "Country_Name" FROM "{}" ORDER BY "Country_Name";'.format('QP_Score'))
 query_list = query.cursor.fetchall()
 #conn.execute('''ALTER TABLE "QP_Score" ADD COLUMN "Iso3" VARCHAR;''')
@@ -298,7 +324,7 @@ for q in query_list:
 
 
 
-"""
+
 #connect to database
 conn = engine.connect()
 #preform query and return json data
@@ -339,7 +365,7 @@ print(country_and_data_list)
 filename = 'countries_additional.json'
 with open(filename) as f:
     pop_data = json.load(f)
-    
+
 country_name_list = []
 for pop_dict in pop_data:
     country_name = pop_dict["name"]
@@ -411,7 +437,7 @@ import json
 filename = '/Users/cofax48/coding/QP_2016/countries_additional.json'
 with open(filename) as f:
     pop_data = json.load(f)
-    
+
 country_name_list = ['G-20', 'G20', 'G8', 'G7', 'ASEAN', 'ASEAN-', 'APEC', 'G-8', 'NATO', 'CARICOM', 'Gulf Cooperation Council', 'GCC', 'G-7', 'Summit of the Americas', 'East Asia Summit', 'Strategic and Economic Dialogue']
 for pop_dict in pop_data:
     country_name = pop_dict["name"]

@@ -29,6 +29,13 @@ def daily_sched_search():
             new_L = str(l).replace('<a href="', 'https://www.state.gov')
             newest_L = str(new_L).replace('">Public Schedule: ', '')
             sec_state_schedule_urls.append(newest_L)
+        else:
+            todays_daily_schedule_links = re.compile('<a href=".*?">Public Schedule: ', re.DOTALL)
+            tdsl = todays_daily_schedule_links.findall(str(todays_daily_schedule_links))
+            tdsl_to_use = tdsl[0]
+            todays_new_L = str(tdsl_to_use).replace('<a href="', 'https://www.state.gov')
+            todays_newest_L = str(todays_new_L).replace('">Public Schedule: ', '')
+            sec_state_schedule_urls.append(todays_newest_L)
     sec_state_schedule = []
     for url in sec_state_schedule_urls:
         new_res = requests.get(url)
@@ -456,7 +463,6 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
         other_leader_title = str(new_country_leader_list[diff_country][-2])
         leader_title = str(new_country_leader_list[diff_country][1])
         for meetings in total_meeting_list:
-            print('line 481', meetings)
             if any(str(country) in str(meetings) for country in country_name_list):
                 if str('CEO') in str(meetings):
                     if ('Afghan') in str(meetings):
@@ -839,9 +845,9 @@ def main():
     new_PRES_MEETING_LIST = meeting_search(kerry_daily_meetings_list, country_name_list)['new_PRES_MEETING_LIST']
     new_list = country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_dem_list)['new_list']
 
-    
+    '''
     database_updater(country_name_list, new_list)
-    
+    '''
     time2 = time.time()
     print("Total Time to run", time2-time1, 'seconds')
 main()

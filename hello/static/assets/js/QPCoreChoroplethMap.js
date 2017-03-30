@@ -1,7 +1,8 @@
 (function(whole_data) {
 
+//http://localhost:5000/api/QP_Score
 var whole_data = [];
-d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData) {
+d3.json('http://localhost:5000/api/QP_Score', function(error, incomingData) {
   var today = new Date();
   var dd = today.getDate();
   var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -57,10 +58,15 @@ d3.json(url, function (error, world) {
 
     var maxValue = d3.max(whole_data, function(d) {
       return parseFloat(d.value);})
-    var color_domain = [0,maxValue];
+
+    var minValue = d3.min(whole_data, function(d) {
+          return parseFloat(d.value);})
+
+    var color_domain = [minValue,maxValue];
     var colorQuantize = d3.scale.quantize()
         .domain(color_domain)
-        .range(["#2c7bb6", "#00a6ca","#00ccbc","#90eb9d","#ffff8c","#f9d057","#f29e2e","#e76818","#d7191c"]);
+        .range(["#d7191c", "#d7411c", "#e76818", "#e79018", "#f29e2e", "#f9ad57", "#f9d057", "#f9dc8c", "#ffeb8c",
+        "#ffeb8c", "#c7eb9d", "#90eb9d", "#00ccbc", "#00a6ca", "#0060ca", "#0006ca"]);
 
         //////////////////////////////////////////////////////////////////
         ////
@@ -87,15 +93,23 @@ d3.json(url, function (error, world) {
       legend.selectAll("stop")
       .attr("offset", "0%")
       .data([
-          {offset: "0%", color: "#d7191c"},
-          {offset: "12.5%", color: "#e76818"},
-          {offset: "25%", color: "#f29e2e"},
-          {offset: "37.5%", color: "#f9d057"},
-          {offset: "50%", color: "#ffff8c"},
-          {offset: "62.5%", color: "#90eb9d"},
-          {offset: "75%", color: "#00ccbc"},
-          {offset: "87.5%", color: "#00a6ca"},
-          {offset: "100%", color: "#2c7bb6"}
+          {offset: "0%", color: "#0006ca"},
+          {offset: "6.25%", color: "#0060ca"},
+          {offset: "12.5%", color: "#00a6ca"},
+          {offset: "18.75%", color: "#00ccbc"},
+          {offset: "25%", color: "#00ccbc"},
+          {offset: "32.25%", color: "#48eb9d"},
+          {offset: "37.5%", color: "#90eb9d"},
+          {offset: "43.75%", color: "#c7eb9d"},
+          {offset: "50%", color: "#ffeb8c"},
+          {offset: "56.25%", color: "#f9dc8c"},
+          {offset: "62.5%", color: "#f9d057"},
+          {offset: "68.75%", color: "#f9ad57"},
+          {offset: "75%", color: "#f29e2e"},
+          {offset: "82.25%", color: "#e79018"},
+          {offset: "87.5%", color: "#e76818"},
+          {offset: "93.75%", color: "#d7411c"},
+          {offset: "100%", color: "#d7191c"}
         ])
         .enter().append("stop")
         .attr("offset", function(d) { return d.offset; })
@@ -112,7 +126,7 @@ d3.json(url, function (error, world) {
 
         var legendY = d3.scale.linear()
                         .range([300, 0])
-                        .domain([0,maxValue]);
+                        .domain([minValue,maxValue]);
 
         var yAxis = d3.svg.axis()
                       .scale(legendY)

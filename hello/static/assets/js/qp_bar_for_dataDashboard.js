@@ -9,7 +9,7 @@ function createDataViz() {
 
 
   var options = select
-    .selectAll('option')
+    .selectAll('div#dashboard_graph')
   	.data(data_table_names).enter()
   	.append('option')
     .on("click", onchange)
@@ -18,20 +18,22 @@ function createDataViz() {
   function onchange() {
   	var selectValue = d3.select('select.select').property('value');
     d3.json('http://localhost:5000/api/' + selectValue, function(error, incomingData) {
+      incomingData = incomingData[0];
+      console.log(incomingData);
     var table_name = incomingData;
+    var all_data_for_map = incomingData;
     var whole_data = [table_name[30], table_name[188], table_name[60], table_name[64], table_name[81], table_name[187], table_name[144], table_name[35]];
 
     //THIS REMOVES ANY PREVIOUS INITIALIZATION
     d3.select("div#qpBubbles").selectAll("*").remove();//Removes prevoius BubbleChart svg canvas
     d3.select("div#qpBarChart").selectAll("*").remove();//Removes prevoius BarChart svg canvas
-    d3.select("div#qpCoreChoroplethMap").selectAll("*").remove();//Removes prevoius ChoroplethMap svg canvas
+    d3.select("svg#ChoroplethMap").selectAll("*").remove();//Removes prevoius ChoroplethMap svg canvas
     d3.select("#controls").selectAll("*").remove();
 
-    var columnExceptions = ["Country_Name", "Iso3"];
-
     for (i in whole_data) {
-    var dataKeys = d3.keys(whole_data[i]).filter(function(el) {
-      if (el === "Country_Name") {}
+    var dataKeys = d3.keys(all_data_for_map[i]).filter(function(el) {return el;});
+    }
+      /*
       else if (el === "Iso3") {}
       else if (el === "Economic Freedom Raw 2016 Score") {}
       else if (el === "Change in Yearly Score from 2015") {}
@@ -56,19 +58,19 @@ function createDataViz() {
       else if (el === "Iso3") {}
       else if (el === "Iso3") {}
       else {return el;}
-      /*
+
       if (el === "Country_Name") {console.log("yay1")};
       else if (el === "Iso3") {console.log("yay2")};
       else {return el;}
       */
-    });
+
 
 
     function countryClick(d) {
       d3.selectAll("td.data").data()
     }
 
-    };
+
     var buttonCreator = d3.select("#controls").selectAll("button.name")
     .data(dataKeys).enter()
     .append("button")
@@ -273,12 +275,13 @@ function createDataViz() {
 
       function qpChoroplethMapMaker() {
 
-        var width = 1000, height = 428;
+        var width = 1600, height = 840;
+
         var zoom = d3.behavior.zoom()
             .scaleExtent([1, 5])
             .on("zoom", moveAndZoom);
 
-        var svg = d3.select("div#qpCoreChoroplethMap").append("svg")
+        var svg = d3.select("svg#ChoroplethMap")
             .attr({ width: width, height: height })
             .call(zoom);
 
@@ -294,8 +297,10 @@ function createDataViz() {
             qpChoroplethMapMaker.mapButtonClick = mapButtonClick;
 
               function mapButtonClick(datapoint) {
-                d3.select("div#ChoroplethMaplegend").selectAll("*").remove();//Removes prevoius ChoroplethMap svg canvas
+                d3.select("svg#ChoroplethMap").selectAll("*").remove();//Removes prevoius ChoroplethMap svg canvas
                 svg.transition().duration(200);
+
+                console.log("stuff");
 
                 var mainGroup = svg.append("g");
                 mainGroup.style({ stroke: "white", "stroke-width": "2px", "stroke-opacity": 0.0 });
@@ -310,12 +315,17 @@ function createDataViz() {
                     country_name_and_iso[d["Iso3"]] = d.Country_Name;
                   });
 
-                  var maxValue = d3.max(whole_data, function(d) {
+                  var maxValue = d3.max(all_data_for_map, function(d) {
                     return parseFloat(d[datapoint]);});
-                  var color_domain = [0,maxValue];
+
+                  var minValue = d3.min(all_data_for_map, function(d) {
+                        return parseFloat(d[datapoint]);})
+
+                  var color_domain = [minValue,maxValue];
                   var colorQuantize = d3.scale.quantize()
                       .domain(color_domain)
-                      .range(["#2c7bb6", "#00a6ca","#00ccbc","#90eb9d","#ffff8c","#f9d057","#f29e2e","#e76818","#d7191c"]);
+                      .range(["#d7191c", "#d7411c", "#e76818", "#e79018", "#f29e2e", "#f9ad57", "#f9d057", "#f9dc8c", "#ffeb8c",
+                      "#ffeb8c", "#c7eb9d", "#90eb9d", "#00ccbc", "#00a6ca", "#0060ca", "#0006ca"]);
 
                   //////////////////////////////////////////////////////////////////
                   ////
@@ -323,9 +333,8 @@ function createDataViz() {
                   ////
                   //////////////////////////////////////////////////////////////////
 
-
                   var legendWidth = 140, legendHeight = 400;
-                  var key = d3.select("div#ChoroplethMaplegend").append("svg")
+                  var key = d3.select("svg#ChoroplethMap").append("svg")
                                .attr("width", legendWidth)
                                .attr("height", legendHeight);
 
@@ -342,15 +351,23 @@ function createDataViz() {
                 legend.selectAll("stop")
                 .attr("offset", "0%")
                 .data([
-                    {offset: "0%", color: "#d7191c"},
-                    {offset: "12.5%", color: "#e76818"},
-                    {offset: "25%", color: "#f29e2e"},
-                    {offset: "37.5%", color: "#f9d057"},
-                    {offset: "50%", color: "#ffff8c"},
-                    {offset: "62.5%", color: "#90eb9d"},
-                    {offset: "75%", color: "#00ccbc"},
-                    {offset: "87.5%", color: "#00a6ca"},
-                    {offset: "100%", color: "#2c7bb6"}
+                    {offset: "0%", color: "#0006ca"},
+                    {offset: "6.25%", color: "#0060ca"},
+                    {offset: "12.5%", color: "#00a6ca"},
+                    {offset: "18.75%", color: "#00ccbc"},
+                    {offset: "25%", color: "#00ccbc"},
+                    {offset: "32.25%", color: "#48eb9d"},
+                    {offset: "37.5%", color: "#90eb9d"},
+                    {offset: "43.75%", color: "#c7eb9d"},
+                    {offset: "50%", color: "#ffeb8c"},
+                    {offset: "56.25%", color: "#f9dc8c"},
+                    {offset: "62.5%", color: "#f9d057"},
+                    {offset: "68.75%", color: "#f9ad57"},
+                    {offset: "75%", color: "#f29e2e"},
+                    {offset: "82.25%", color: "#e79018"},
+                    {offset: "87.5%", color: "#e76818"},
+                    {offset: "93.75%", color: "#d7411c"},
+                    {offset: "100%", color: "#d7191c"}
                   ])
                   .enter().append("stop")
                   .attr("offset", function(d) { return d.offset; })
@@ -360,14 +377,14 @@ function createDataViz() {
                   //Draw the rectangle and fill with gradient
                   key.append("rect")
                     .attr("id", "legendRect")
-                  	.attr("width", legendWidth - 100)
-                  	.attr("height", legendHeight -100)
+                    .attr("width", legendWidth - 100)
+                    .attr("height", legendHeight -100)
                     .style("fill", "url(#gradient)")
-                    .attr("transform", "translate(0,10)");
+                    .attr("transform", "translate(0,90)");
 
                   var legendY = d3.scale.linear()
                                   .range([300, 0])
-                                  .domain([0,maxValue]);
+                                  .domain([minValue,maxValue]);
 
                   var yAxis = d3.svg.axis()
                                 .scale(legendY)
@@ -376,10 +393,10 @@ function createDataViz() {
                   key
                   .append("g")
                   .attr("class", "y axis")
-                  .attr("transform", "translate(41,10)")
+                  .attr("transform", "translate(41,90)")
                   .call(yAxis).append("text")
                   .attr("transform", "rotate(-90)")
-                  .attr("y", 30)
+                  .attr("y", 50)
                   .attr("dy", ".71em")
                   .style("text-anchor", "end")
                   .text("Colored Scale for " + datapoint);
@@ -397,7 +414,7 @@ function createDataViz() {
                           return colorQuantize(country_value_and_iso[d.id]);});
 
                   // Define the div for the tooltip
-                  var div = d3.select("div#qpCoreChoroplethMap").append("div")
+                  var div = d3.select("svg#ChoroplethMap").append("div")
                       .attr("class", "tooltip")
                       .style("opacity", 0);
 

@@ -42,8 +42,11 @@ def get_Table(request):
         col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '{}';'''.format(ABRV_table_name))
         col_names = []
         [col_names.append(q[3]) for q in col_query]
-        query = conn.execute('SELECT * FROM "{}";'.format(ABRV_table_name))
+        query = conn.execute('SELECT * FROM "{}" ORDER BY "Country_Name";'.format(ABRV_table_name))
         query_list = query.cursor.fetchall()
+
+        iso3_codes = conn.execute('''SELECT "Iso3" FROM "QP_Score" ORDER BY "Country_Name";''')
+        iso3_codes_list = iso3_codes.cursor.fetchall()
 
         country_and_data_dict = []
         for i in range(len(query_list)):
@@ -51,6 +54,7 @@ def get_Table(request):
             temp_list = {}
             for c in range(len(col_names)):
                 temp_list[col_names[c]] = query_list[i][c]
+            temp_list["Iso3"] = iso3_codes_list[i][0]
             country_and_data_dict.append(temp_list)
 
 
@@ -71,17 +75,21 @@ def get_Table_and_Column(request):
     table_name, column_name = ABRV_table_name.split("/")
     column_name = column_name.replace('%20', ' ')
 
-    query = conn.execute('SELECT "{}" FROM "{}";'.format(column_name, table_name))
+    query = conn.execute('SELECT "{}" FROM "{}" ORDER BY "Country_Name";'.format(column_name, table_name))
     query_list = query.cursor.fetchall()
 
 
-    country_names = conn.execute('SELECT "Country_Name" FROM "{}";'.format(table_name))
+    country_names = conn.execute('SELECT "Country_Name" FROM "{}"; ORDER BY "Country_Name"'.format(table_name))
     country_list = country_names.cursor.fetchall()
+
+    iso3_codes = conn.execute('SELECT "Iso3" FROM "QP_Score" ORDER BY "Country_Name";')
+    iso3_codes_list = iso3_codes.cursor.fetchall()
 
     country_and_data_list = []
     for i in range(len(query_list)):
         country_and_data_dict = {}
         country_and_data_dict['Country_Name']  = country_list[i][0]
+        country_and_data_dict['Iso3'] = iso3_codes_list[i][0]
         country_and_data_dict[column_name] = query_list[i][0]
         country_and_data_list.append(country_and_data_dict)
 
