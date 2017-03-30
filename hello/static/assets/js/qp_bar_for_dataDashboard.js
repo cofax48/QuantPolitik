@@ -17,9 +17,9 @@ function createDataViz() {
 
   function onchange() {
   	var selectValue = d3.select('select.select').property('value');
-    d3.json('http://localhost:5000/api/' + selectValue, function(error, incomingData) {
+    d3.json('http://www.quantpolitik.com/api/' + selectValue, function(error, incomingData) {
       incomingData = incomingData[0];
-      console.log(incomingData);
+
     var table_name = incomingData;
     var all_data_for_map = incomingData;
     var whole_data = [table_name[30], table_name[188], table_name[60], table_name[64], table_name[81], table_name[187], table_name[144], table_name[35]];

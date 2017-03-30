@@ -2,7 +2,7 @@
 
 //http://localhost:5000/api/QP_Score
 var whole_data = [];
-d3.json('http://localhost:5000/api/QP_Score', function(error, incomingData) {
+d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData) {
   var today = new Date();
   var dd = today.getDate();
   var monthNames = ["January", "February", "March", "April", "May", "June",
