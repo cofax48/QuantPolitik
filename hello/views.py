@@ -22,6 +22,9 @@ def dataDashBoard(request):
 def originalHomePage(request):
     return render(request, 'homePage.html')
 
+def aboutPage(request):
+    return render(request, 'about.html')
+
 def get_Table(request):
     #connect to database
     conn = engine.connect()
