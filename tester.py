@@ -29,6 +29,11 @@ engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d38
 ABRV_table_name = 'Sec_State_Bureaucratic_Exchange'
 conn = engine.connect()
 
+
+#conn.execute('''UPDATE "QP_Score" SET "March-31-2017" = 0;''')
+conn.execute('''ALTER TABLE "QP_Score" DROP "March-31-2017";''')
+
+"""
 list_return = []
 col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '{}';'''.format(ABRV_table_name))
 col_names = []
@@ -55,7 +60,7 @@ for i in range(len(query_list)):
 
 
 list_return.append(country_and_data_dict)
-"""
+
 codex = {
     "Kosovo":"-099",
     "Afghanistan":"004",

@@ -13,7 +13,6 @@ from unidecode import unidecode
 def daily_sched_search():
     url_list = []
     res = requests.get('https://www.state.gov/r/pa/prs/appt/2017/index.htm')
-    res.raise_for_status()
     for chunk in res.iter_content(100000):
         url_list.append(chunk)
 

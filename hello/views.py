@@ -22,6 +22,12 @@ def dataDashBoard(request):
 def originalHomePage(request):
     return render(request, 'homePage.html')
 
+def BusinessRelations(request):
+    return render(request, 'BusinessRelations.html')
+
+def TradeRelations(request):
+    return render(request, 'TradeRelations.html')
+
 def aboutPage(request):
     return render(request, 'about.html')
 

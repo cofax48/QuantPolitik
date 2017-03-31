@@ -14,7 +14,9 @@ urlpatterns = [
     url(r'^datadashboard', hello.views.dataDashBoard, name='dataDashBoard'),
     url(r'^originalHomePage', hello.views.originalHomePage, name='originalHomePage'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^about', hello.views.aboutPage, name='aboutPage'),    
+    url(r'^about', hello.views.aboutPage, name='aboutPage'),
+    url(r'^BusinessRelations', hello.views.BusinessRelations, name='BusinessRelations'),
+    url(r'^TradeRelations', hello.views.TradeRelations, name='TradeRelations'),  
     #Apis
     url(r'^api/\w{2,20}/\w{2,20}', hello.views.get_Table_and_Column, name='column_api'),
     url(r'^api/\w{2,20}', hello.views.get_Table, name='table_api'),
