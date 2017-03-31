@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime, time
+from time import sleep
 time1 = time.time()
 import re
 import requests
@@ -16,6 +17,7 @@ def daily_sched_search():
     for chunk in res.iter_content(100000):
         url_list.append(chunk)
 
+
     daily_schedule_links = re.compile('<a href=".*?">Public Schedule: ', re.DOTALL)
     dsl = daily_schedule_links.findall(str(url_list))
 
@@ -29,17 +31,11 @@ def daily_sched_search():
             new_L = str(l).replace('<a href="', 'https://www.state.gov')
             newest_L = str(new_L).replace('">Public Schedule: ', '')
             sec_state_schedule_urls.append(newest_L)
-        else:
-            todays_daily_schedule_links = re.compile('<a href=".*?">Public Schedule: ', re.DOTALL)
-            tdsl = todays_daily_schedule_links.findall(str(todays_daily_schedule_links))
-            tdsl_to_use = tdsl[0]
-            todays_new_L = str(tdsl_to_use).replace('<a href="', 'https://www.state.gov')
-            todays_newest_L = str(todays_new_L).replace('">Public Schedule: ', '')
-            sec_state_schedule_urls.append(todays_newest_L)
+
     sec_state_schedule = []
     for url in sec_state_schedule_urls:
         new_res = requests.get(url)
-
+        
         for new_chunk in new_res.iter_content(100000):
             sec_state_schedule.append(new_chunk)
 
@@ -65,7 +61,7 @@ def daily_sched_search():
                 SecState_daily_meetings_list.append(whole_meet)
 
     print('Searching the schedule')
-
+    
     return {'SecState_daily_meetings_list':SecState_daily_meetings_list}
 
 
@@ -845,9 +841,9 @@ def main():
     new_PRES_MEETING_LIST = meeting_search(kerry_daily_meetings_list, country_name_list)['new_PRES_MEETING_LIST']
     new_list = country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_dem_list)['new_list']
 
-    '''
+    
     database_updater(country_name_list, new_list)
-    '''
+    
     time2 = time.time()
     print("Total Time to run", time2-time1, 'seconds')
 main()
