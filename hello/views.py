@@ -16,21 +16,49 @@ def index(request):
     # return HttpResponse('Hello from Python!')
     return render(request, 'index.html')
 
+def aboutPage(request):
+    return render(request, 'about.html')
+
 def dataDashBoard(request):
     return render(request, 'dataDashBoard.html')
 
 def originalHomePage(request):
     return render(request, 'homePage.html')
 
+
+#Areas of Analysis
 def BusinessRelations(request):
     return render(request, 'BusinessRelations.html')
+
+def CountryProfile(request):
+    return render(request, 'CountryProfile.html')
+
+def CulturalDiffusion(request):
+    return render(request, 'CulturalDiffusion.html')
+
+def GovernmentalPerspective(request):
+    return render(request, 'GovernmentalPerspective.html')
+
+def PresidentialExchange(request):
+    return render(request, 'PresidentialExchange.html')
+
+def Prestige(request):
+    return render(request, 'Prestige.html')
+
+def SecretaryofStateExchange(request):
+    return render(request, 'SecretaryofStateExchange.html')
+
+def Security(request):
+    return render(request, 'Security.html')
 
 def TradeRelations(request):
     return render(request, 'TradeRelations.html')
 
-def aboutPage(request):
-    return render(request, 'about.html')
+def UnitedNations(request):
+    return render(request, 'UnitedNations.html')
 
+
+#API's
 def get_Table(request):
     #connect to database
     conn = engine.connect()

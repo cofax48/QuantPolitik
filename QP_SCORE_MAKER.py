@@ -238,7 +238,6 @@ def main():
         QP_Final_Value[country] = (new_rank_percentile_rank_list_factored[count_num] * 4) - 200
 
     #To add prior to adding any of the data
-    #'''ALTER TABLE "QP_Score" ADD "{}";'''.format(datetime.datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y'))
     conn = engine.connect()
 
     todays_date = datetime.datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
@@ -249,11 +248,11 @@ def main():
     for w in sorted(QP_Final_Value, key=QP_Final_Value.get, reverse=True):
         conn.execute('''UPDATE "QP_Score" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_Final_Value[w]), w))
 
-        print(w, QP_Final_Value[w])
+        #print(w, QP_Final_Value[w])
     
     time2 = time.time()
     print("Total time to run ", int(time2 - time1), "seconds")
 
-main()
+
 
 
