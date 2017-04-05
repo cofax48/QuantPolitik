@@ -15,7 +15,7 @@ function onLoad() {
 
   //http://localhost:5000/api/QP_Score
   var whole_data = [{Country_Name:'placeHolder', value:0}];
-  d3.json('http://localhost:5000/api/QP_Score', function(error, incomingData) {
+  d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData) {
     for (var i in _.range(198)) {if (whole_data.length == 198) {mapDraw(), qpBarChart()}
     else {
       whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
