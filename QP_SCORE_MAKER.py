@@ -254,5 +254,5 @@ def main():
     print("Total time to run ", int(time2 - time1), "seconds")
 
 
-
+main()
 
