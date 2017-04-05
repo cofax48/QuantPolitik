@@ -278,7 +278,7 @@ function createDataViz() {
 
   function onchange() {
   	var selectValue = d3.select('select.select').property('value');
-    d3.json('http://localhost:5000/api/' + selectValue, function(error, incomingData) {
+    d3.json('http://www.quantpolitik.com/api/' + selectValue, function(error, incomingData) {
       incomingData = incomingData[0];
 
     var table_name = incomingData;
