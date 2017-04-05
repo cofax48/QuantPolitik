@@ -1,94 +1,87 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<title>QuantPolitik</title>
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>QuantPolitik's DataDashBoard</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../static/assets/css/dataDashBoard.css" />
+	</head>
+	<body>
 
-<!-- 1. IMPORT THE VISUALIZATIONS CSS STYLINGS -->
-<link rel="stylesheet" type="text/css" href="../static/css/style.css" media="screen" />
-<body>
-  <div id="chart">
-    <!-- 2. A hader with title and some explanatory info -->
-    <div id="title">Visualing and Quantifying America's Bilateral Relationships</div>
-    <div id="info">
-      This is an composite of data from numerous organizations, governmental datasets,
-      natively scraped public schedules, <a href='https://en.wikipedia.org/wiki/List_of_countries_by_population_(United_Nations)'>
-      'and other freely available data</a>. The data contained herein is updated
-      as often as possible and is mant to provide a quantitative value to a wholly
-      qualitative disicipline. The QuantPolitik score captures many variables and
-      influences, all that this score aims to do is provide a holistic numerical
-      value to for International Relations community.
-    </div>
-    <!-- 3. The placholders for our visual components -->
-    <div id="qpcore">
-      <!-- Begin Menu BAr -->
-      <div id="qpBubbles"></div>
-      <div id="qpBarChart"></div>
-      <div id="qpCoreChoroplethMap"></div>
-      <div id="ChoroplethMaplegend"></div>
-      <div id="controls" />
-      <div id="QP-Menu">
-        <div id="cat-select">
-          Category
-          <select></select>
-        </div>
-        <div id="individual-variable">
-          Individual variable
-          <select></select>
-        </div>
-        <div id="country-select">
-          Country
-          <select></select>
-        </div>
-        <div id='metric-radio'>
-          Country Data:&nbsp;
-          <form>
-            <label>Raw
-              <input type="radio" name="mode" value="0" checked>
-            </label>
-            <label>Percentile Rank-Relative Score
-              <input type="radio" name="mode" value="1">
-            </label>
-          </form>
-        </div>
-      </div>
-      <!--End Menu Bar-->
-      <!--Begin QP-Viz Components-->
-      <div id='chart-holder' class='_dev'>
-        <!-- Map of Prizes $$$$ nobel_time -->
+		<!-- Wrapper -->
+			<div id="wrapper" class="divided">
+				<div id="header-wrap">
+					<!-- Header -->
+					<header id="header" class="alt">
+						<nav id="nav">
+							<ul>
+								<li><a href="/">Home</a></li>
+								<li><a href="TheAlgorithm">The Algorithm</a></li>
+								<li><a href="about">About Us</a></li>
+								<li><a href="TheTech">QuantPolitik Tech</a></li>
+								<li><a href="AreasofAnalysis">Areas of Analysis</a></li>
+								<li><a href="datadashboard">Data Dashboard</a></li>
+							</ul>
+						</nav>
+					</header>
+				</div>
+        <br>
+        <br>
+        <div id="reportrange" class="pull-right" style="background: #fff; padding: 5px 10px; border: 1px solid #ccc"></div>
+        <br>
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <!-- top tiles -->
+          <div class="row tile_count">
+          </div>
+          <!-- /top tiles -->
 
-        </div>
-        <!-- Map and tooltip -->
-        <div id="qp-map">
-          <div id="map-tooltip">
-            <h2></h2>
-            <p></p>
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="dashboard_graph">
+
+                <div class="row x_title">
+                  <div class="col-md-6">
+                    <div id="controls" align="top"/>
+                  </div>
+                </div>
+
+                <div class="col-md-9 col-sm-9 col-xs-12">
+						      <span class="image featured"><svg id="ChoroplethMap" style="width:75%;height:60%;border:1px lightgray solid;" /></span>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-12 bg-white">
+                    <div id="ChoroplethMaplegend"></div>
+                  </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <br>
+          <label><input id="barsort" type="checkbox"> Sort values</label>
+          <br>
+          <div class="row">
+            <span class="image featured"><svg id="qpBarChart" style="width:75%;height:100%;border:1px lightgray solid;" /></span>
           </div>
         </div>
-        <!--Country QP Scores $$$ Nobel-List-->
-        <!-- QP Score BAr Chart $$$$ Nobl bar-->
+
+        <!--
+        <div class="col-md-4 col-sm-4 col-xs-12"></div>
+            <div id="qpBubbles"></div>
+        -->
+
+
+        </div>
       </div>
-      <!-- End QP Viz Components-->
-    </div>
-  </div>
-  <!-- 4. The Javascript Files -->
-  <!-- Third party javascript libraries, mainly d3-->
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
-	<script src="../static/assets/js/Queue.js"></script>
-  <!--
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter/1.3.12/crossfilter.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
-  -->
-  <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+
+    <!--CDN Stuff-->
+    <script src="../static/assets/js/d3.min.js"></script>
+		<script src="../static/assets/js/topojson.min.js"></script>
+		<!--<script href="//cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>-->
+		<script src=https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js></script>
+    <script src="../static/assets/js/colorbrewer.js"></script>
+    <script src="../static/assets/js/qp_bar_for_dataDashboard.js"></script>
 
 
-  <!--The javasript for ze graphing elments, ya?
-  <script src="../static/js/QPCoreChoroplethMap.js"></script>
-  <script src="../static/js/colorbrewer.js"></script>
-  <script src="../static/js/qp_bar.js"></script>
-  <script src="../static/js/john_java.js"></script>
-  -->
-	<script src="../static/assets/js/QPCoreChoroplethMap.js"></script>
-
-</body>
+  </body>
 </html>

@@ -1,25 +1,27 @@
+var today = new Date();
+var dd = today.getDate();
+var monthNames = ["January", "February", "March", "April", "May", "June",
+"July", "August", "September", "October", "November", "December"
+];
+var mm = today.getMonth(); //January is 0!
+var month_name = monthNames[mm]
+var yyyy = today.getFullYear();
+if(dd<10) {dd='0'+dd}
+if(mm<10) {mm='0'+mm}
+today = month_name+'-'+dd+'-'+yyyy;
+var column_to_use = today;
+
 function onLoad() {
-var all_data_for_map = ['place holder'];
-d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData) {
-  var today = new Date();
-  var dd = today.getDate();
-  var monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-  ];
-  var mm = today.getMonth(); //January is 0!
-  var month_name = monthNames[mm]
-  var yyyy = today.getFullYear();
-  if(dd<10) {dd='0'+dd}
-  if(mm<10) {mm='0'+mm}
-  today = month_name+'-'+dd+'-'+yyyy;
-  var column_to_use = today;
-  console.log(today);
-  for (var i in _.range(198)) {if (all_data_for_map.length == 198) {qpChoroplethMapMaker()}
-  else {
-    all_data_for_map.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
-}
-    });
-function qpChoroplethMapMaker() {
+
+  //http://localhost:5000/api/QP_Score
+  var whole_data = [{Country_Name:'placeHolder', value:0}];
+  d3.json('http://localhost:5000/api/QP_Score', function(error, incomingData) {
+    for (var i in _.range(198)) {if (whole_data.length == 198) {mapDraw(), qpBarChart()}
+    else {
+      whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
+  }
+      });
+  function mapDraw() {
 
   var width = 1600, height = 840;
 
@@ -30,6 +32,8 @@ function qpChoroplethMapMaker() {
   var svg = d3.select("svg#ChoroplethMap")
       .attr({ width: width, height: height })
       .call(zoom);
+  var mainGroup = svg.append("g");
+  mainGroup.style({ stroke: "white", "stroke-width": "2px", "stroke-opacity": 0.0 });
 
   var projection = d3.geo.mercator();
   var path = d3.geo.path().projection(projection);
@@ -40,151 +44,139 @@ function qpChoroplethMapMaker() {
       var countries = topojson.feature(world, world.objects.countries).features;
       var neighbors = topojson.neighbors(world.objects.countries.geometries);
 
-      qpChoroplethMapMaker.mapButtonClick = mapButtonClick;
+      var country_value_and_iso = {};
+      whole_data.forEach(function(d) {
+        country_value_and_iso[d.id] = +d.value;
+        country_value_and_iso[d.Country_Name] = +d.id;
+      });
+      var country_name_and_iso = {};
+      whole_data.forEach(function(d) {
+        country_name_and_iso[d.id] = d.Country_Name;
+      });
 
-        function mapButtonClick(datapoint) {
-          d3.select("svg#ChoroplethMap").selectAll("*").remove();//Removes prevoius ChoroplethMap svg canvas
-          svg.transition().duration(200);
 
-          console.log("stuff");
+      var maxValue = d3.max(whole_data, function(d) {
+        return parseFloat(d.value);})
 
-          var mainGroup = svg.append("g");
-          mainGroup.style({ stroke: "white", "stroke-width": "2px", "stroke-opacity": 0.0 });
+      var minValue = d3.min(whole_data, function(d) {
+            return parseFloat(d.value);})
 
-            var country_value_and_iso = {};
-            incomingData.forEach(function(d) {
-              country_value_and_iso[d["Iso3"]] = +d[datapoint];
-              country_value_and_iso[d.Country_Name] = +d.id;
-            });
-            var country_name_and_iso = {};
-            incomingData.forEach(function(d) {
-              country_name_and_iso[d["Iso3"]] = d.Country_Name;
-            });
+      var color_domain = [minValue,maxValue];
+      var colorQuantize = d3.scale.quantize()
+          .domain(color_domain)
+          .range(["#d7191c", "#d7411c", "#e76818", "#e79018", "#f29e2e", "#f9ad57", "#f9d057", "#f9dc8c", "#ffeb8c",
+          "#ffeb8c", "#c7eb9d", "#90eb9d", "#00ccbc", "#00a6ca", "#0060ca", "#0006ca"]);
 
-            var maxValue = d3.max(all_data_for_map, function(d) {
-              return parseFloat(d[datapoint]);});
+          //////////////////////////////////////////////////////////////////
+          ////
+          ////    Legend Legend Legend Legend Legend Legend Legend Legend
+          ////
+          //////////////////////////////////////////////////////////////////
 
-            var minValue = d3.min(all_data_for_map, function(d) {
-                  return parseFloat(d[datapoint]);})
+          var legendWidth = 140, legendHeight = 400;
+          var key = d3.select("svg#ChoroplethMap").append("svg")
+                       .attr("width", legendWidth)
+                       .attr("height", legendHeight);
 
-            var color_domain = [minValue,maxValue];
-            var colorQuantize = d3.scale.quantize()
-                .domain(color_domain)
-                .range(["#d7191c", "#d7411c", "#e76818", "#e79018", "#f29e2e", "#f9ad57", "#f9d057", "#f9dc8c", "#ffeb8c",
-                "#ffeb8c", "#c7eb9d", "#90eb9d", "#00ccbc", "#00a6ca", "#0060ca", "#0006ca"]);
+          //Append a linearGradient element to the defs
+          var legend = key.append("defs").append("svg:linearGradient")
+                            .attr("id", "gradient")
+                            .attr("x1", "100%")
+                            .attr("y1", "0%")
+                            .attr("x2", "100%")
+                            .attr("y2", "100%")
+                            .attr("spreadMethod", "pad");
 
-            //////////////////////////////////////////////////////////////////
-            ////
-            ////    Legend Legend Legend Legend Legend Legend Legend Legend
-            ////
-            //////////////////////////////////////////////////////////////////
+        //set the color for the beggining
+        legend.selectAll("stop")
+        .attr("offset", "0%")
+        .data([
+            {offset: "0%", color: "#0006ca"},
+            {offset: "6.25%", color: "#0060ca"},
+            {offset: "12.5%", color: "#00a6ca"},
+            {offset: "18.75%", color: "#00ccbc"},
+            {offset: "25%", color: "#00ccbc"},
+            {offset: "32.25%", color: "#48eb9d"},
+            {offset: "37.5%", color: "#90eb9d"},
+            {offset: "43.75%", color: "#c7eb9d"},
+            {offset: "50%", color: "#ffeb8c"},
+            {offset: "56.25%", color: "#f9dc8c"},
+            {offset: "62.5%", color: "#f9d057"},
+            {offset: "68.75%", color: "#f9ad57"},
+            {offset: "75%", color: "#f29e2e"},
+            {offset: "82.25%", color: "#e79018"},
+            {offset: "87.5%", color: "#e76818"},
+            {offset: "93.75%", color: "#d7411c"},
+            {offset: "100%", color: "#d7191c"}
+          ])
+          .enter().append("stop")
+          .attr("offset", function(d) { return d.offset; })
+          .attr("stop-color", function(d) { return d.color; })
+          .attr("stop-opacity", 1);
 
-            var legendWidth = 140, legendHeight = 400;
-            var key = d3.select("svg#ChoroplethMap").append("svg")
-                         .attr("width", legendWidth)
-                         .attr("height", legendHeight);
+          //Draw the rectangle and fill with gradient
+          key.append("rect")
+            .attr("id", "legendRect")
+            .attr("width", legendWidth - 100)
+            .attr("height", legendHeight -100)
+            .style("fill", "url(#gradient)")
+            .attr("transform", "translate(0,90)");
 
-            //Append a linearGradient element to the defs
-            var legend = key.append("defs").append("svg:linearGradient")
-                              .attr("id", "gradient")
-                              .attr("x1", "100%")
-                              .attr("y1", "0%")
-                              .attr("x2", "100%")
-                              .attr("y2", "100%")
-                              .attr("spreadMethod", "pad");
+          var legendY = d3.scale.linear()
+                          .range([300, 0])
+                          .domain([minValue,maxValue]);
 
-          //set the color for the beggining
-          legend.selectAll("stop")
-          .attr("offset", "0%")
-          .data([
-              {offset: "0%", color: "#0006ca"},
-              {offset: "6.25%", color: "#0060ca"},
-              {offset: "12.5%", color: "#00a6ca"},
-              {offset: "18.75%", color: "#00ccbc"},
-              {offset: "25%", color: "#00ccbc"},
-              {offset: "32.25%", color: "#48eb9d"},
-              {offset: "37.5%", color: "#90eb9d"},
-              {offset: "43.75%", color: "#c7eb9d"},
-              {offset: "50%", color: "#ffeb8c"},
-              {offset: "56.25%", color: "#f9dc8c"},
-              {offset: "62.5%", color: "#f9d057"},
-              {offset: "68.75%", color: "#f9ad57"},
-              {offset: "75%", color: "#f29e2e"},
-              {offset: "82.25%", color: "#e79018"},
-              {offset: "87.5%", color: "#e76818"},
-              {offset: "93.75%", color: "#d7411c"},
-              {offset: "100%", color: "#d7191c"}
-            ])
-            .enter().append("stop")
-            .attr("offset", function(d) { return d.offset; })
-            .attr("stop-color", function(d) { return d.color; })
-            .attr("stop-opacity", 1);
+          var yAxis = d3.svg.axis()
+                        .scale(legendY)
+                        .orient("right");
 
-            //Draw the rectangle and fill with gradient
-            key.append("rect")
-              .attr("id", "legendRect")
-              .attr("width", legendWidth - 100)
-              .attr("height", legendHeight -100)
-              .style("fill", "url(#gradient)")
-              .attr("transform", "translate(0,90)");
+          key
+          .append("g")
+          .attr("class", "y axis")
+          .attr("transform", "translate(41,90)")
+          .call(yAxis).append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 50)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Colored Scale for QuantPolitik");
 
-            var legendY = d3.scale.linear()
-                            .range([300, 0])
-                            .domain([minValue,maxValue]);
+          ///////////////////////////////////////////////////////////
+          ///End Legend End Legend End Legend End Legend End Legend
+          ///////////////////////////////////////////////////////////
 
-            var yAxis = d3.svg.axis()
-                          .scale(legendY)
-                          .orient("right");
 
-            key
-            .append("g")
-            .attr("class", "y axis")
-            .attr("transform", "translate(41,90)")
-            .call(yAxis).append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 50)
-            .attr("dy", ".71em")
-            .style("text-anchor", "end")
-            .text("Colored Scale for " + datapoint);
+      //Coloring of the world
+      mainGroup.selectAll("path", "countries")
+          .data(countries)
+          .enter().append("path")
+          .attr("d", path)
+          .style("fill", function (d) {
+              return colorQuantize(country_value_and_iso[d.id]);});
 
-            ///////////////////////////////////////////////////////////
-            ///End Legend End Legend End Legend End Legend End Legend
-            ///////////////////////////////////////////////////////////
+      // Define the div for the tooltip
+      var div = d3.select(".box .image.featured").append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 0);
 
-            //Coloring of the world
-            mainGroup.selectAll("path", "countries")
-                .data(countries)
-                .enter().append("path").transition().duration(1000)
-                .attr("d", path)
-                .style("fill", function (d) {
-                    return colorQuantize(country_value_and_iso[d.id]);});
-
-            // Define the div for the tooltip
-            var div = d3.select("svg#ChoroplethMap").append("div")
-                .attr("class", "tooltip")
-                .style("opacity", 0);
-
-            mainGroup
-                .selectAll("path")
-                .data(countries)
-                .on("mouseover", function (p) {
-                          div.transition()
-                              .duration(200)
-                              .style("opacity", .9);
-                          div	.html(country_value_and_iso[p.id])
-                              .style("left", (d3.event.pageX) + "px")
-                              .style("top", (d3.event.pageY - 28) + "px");
-                          div.html(country_name_and_iso[p.id] + ":" + "<br/>" + country_value_and_iso[p.id]);
-                    d3.select(this).style("stroke-opacity", 1.0);
-                });
-            mainGroup.selectAll("path")
-                .on("mouseout", function () {
-                    d3.select(this).style("stroke-opacity", 0.0);
-                    });
-
-          }//ButtonClick
-        });//d3json
-
+      mainGroup
+          .selectAll("path")
+          .data(countries)
+          .on("mouseover", function (p) {
+                    div.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    div	.html(country_value_and_iso[p.id])
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
+                    div.html(country_name_and_iso[p.id] + " 's QuantPolitik Score:" + "<br/>" + country_value_and_iso[p.id]);
+              d3.select(this).style("stroke-opacity", 1.0);
+          });
+      mainGroup.selectAll("path")
+          .on("mouseout", function () {
+              d3.select(this).style("stroke-opacity", 0.0);
+          });
+  });
 
   function moveAndZoom() {
       var t = d3.event.translate;
@@ -201,12 +193,73 @@ function qpChoroplethMapMaker() {
 
       mainGroup.style("stroke-width", ((1 / s) * 2) + "px");
       mainGroup.attr('transform', 'translate(' + x + ',' + y + ')scale(' + s + ')');
-  }//Move and zoom
-}//ChoroplethMapMaker
-qpChoroplethMapMaker();
-};
-onLoad();
-/*
+  }
+  }//MapDraw
+
+  function qpBarChart() {
+
+    var margin = {top: 20, right: 30, bottom: 40, left: 30},
+        width = 960 - margin.left - margin.right,
+        height = 5000 - margin.top - margin.bottom;
+
+    var x = d3.scale.linear()
+        .range([0, width]);
+
+    var y = d3.scale.ordinal()
+        .rangeRoundBands([0, height], 0.1);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .tickSize(0)
+        .tickPadding(6);
+
+    var svgbar = d3.select("svg#qpBarChart")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+      x.domain(d3.extent(whole_data, function(d) { return d.value; })).nice();
+      y.domain(whole_data.map(function(d) { return d.Country_Name; }));
+
+
+      svgbar.selectAll(".bar")
+          .data(whole_data)
+        .enter().append("rect")
+          .attr("class", function(d) { return "bar bar--" + (d.value < 0 ? "negative" : "positive"); })
+          .attr("x", function(d) { return x(Math.min(0, d.value)); })
+          .attr("y", function(d) { return y(d.Country_Name); })
+          .attr("width", function(d) { return Math.abs(x(d.value) - x(0)); })
+          .attr("height", y.rangeBand());
+
+      svgbar.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+      svgbar.append("g")
+          .attr("class", "y axis")
+          .attr("transform", "translate(" + x(0) + ",0)")
+          .call(yAxis);
+
+
+    function type(d) {
+      d.value = +d.value;
+      return d;
+    }
+
+    }//qpBarChart
+
+qpBarChart();
+
+}//ONLOAD
+
 function createDataViz() {
 
   var data_table_names = ["QP_Score", "UN", "Trade_Relations", "Security", "Business_Relations", "Country_Profile", "Cultural_Diffusion", "Governmental_Perspective", "Presidential_Exchange", "Prestige", "Sec_State_Bureaucratic_Exchange"];
@@ -215,7 +268,6 @@ function createDataViz() {
     .append('select')
     	.attr('class','select')
       .on('change',onchange);
-
 
   var options = select
     .selectAll('div#dashboard_graph')
@@ -235,7 +287,7 @@ function createDataViz() {
 
     //THIS REMOVES ANY PREVIOUS INITIALIZATION
     d3.select("div#qpBubbles").selectAll("*").remove();//Removes prevoius BubbleChart svg canvas
-    d3.select("div#qpBarChart").selectAll("*").remove();//Removes prevoius BarChart svg canvas
+    d3.select("svg#qpBarChart").selectAll("*").remove();//Removes prevoius BarChart svg canvas
     d3.select("svg#ChoroplethMap").selectAll("*").remove();//Removes prevoius ChoroplethMap svg canvas
     d3.select("#controls").selectAll("*").remove();
 
@@ -271,7 +323,7 @@ function createDataViz() {
       if (el === "Country_Name") {console.log("yay1")};
       else if (el === "Iso3") {console.log("yay2")};
       else {return el;}
-
+      */
 
 
 
@@ -389,8 +441,8 @@ function createDataViz() {
     function qpBarChart() {
       qpBarChart.barButtonClick = barButtonClick;
       //This creates the Bar Graph
-      var qpSVG = d3.select("div#qpBarChart").append("svg")
-          .attr({ width: 600, height: 400 })
+      var qpSVG = d3.select("svg#qpBarChart")
+          .attr({ width: '75%', height: '35%' })
           .style({ border: "lightgray solid", "stroke-width": "1px" })
           .append("g")
           .attr("id", "BarChart")
@@ -676,4 +728,4 @@ function createDataViz() {
 };
 
 createDataViz();
-*/
+onLoad();
