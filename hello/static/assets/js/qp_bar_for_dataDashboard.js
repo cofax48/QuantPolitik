@@ -1,3 +1,5 @@
+var aPITOUSE = 'http://www.quantpolitik.com/';
+//var aPITOUSE = 'http://localhost:5000/';
 var today = new Date();
 var dd = today.getDate();
 var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -15,7 +17,7 @@ function onLoad() {
 
   //http://localhost:5000/api/QP_Score
   var whole_data = [{Country_Name:'placeHolder', value:0}];
-  d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData) {
+  d3.json(aPITOUSE + 'api/QP_Score', function(error, incomingData) {
     for (var i in _.range(198)) {if (whole_data.length == 198) {mapDraw(), qpBarChart()}
     else {
       whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
@@ -95,7 +97,7 @@ function onLoad() {
             {offset: "6.25%", color: "#0060ca"},
             {offset: "12.5%", color: "#00a6ca"},
             {offset: "18.75%", color: "#00ccbc"},
-            {offset: "25%", color: "#00ccbc"},
+            {offset: "25%", color: "#23d7b1"},
             {offset: "32.25%", color: "#48eb9d"},
             {offset: "37.5%", color: "#90eb9d"},
             {offset: "43.75%", color: "#c7eb9d"},
@@ -278,7 +280,7 @@ function createDataViz() {
 
   function onchange() {
   	var selectValue = d3.select('select.select').property('value');
-    d3.json('http://www.quantpolitik.com/api/' + selectValue, function(error, incomingData) {
+    d3.json(aPITOUSE + 'api/' + selectValue, function(error, incomingData) {
       incomingData = incomingData[0];
 
     var table_name = incomingData;
@@ -439,10 +441,11 @@ function createDataViz() {
   //////////////////////////////////////////////////////////////////
 
     function qpBarChart() {
+
       qpBarChart.barButtonClick = barButtonClick;
-      //This creates the Bar Graph
+
       var qpSVG = d3.select("svg#qpBarChart")
-          .attr({ width: '75%', height: '35%' })
+          .attr({ width: '75%', height: '55%' })
           .style({ border: "lightgray solid", "stroke-width": "1px" })
           .append("g")
           .attr("id", "BarChart")
@@ -456,7 +459,8 @@ function createDataViz() {
             function (d,i) {return "translate(" + (i * 50) + ", 0)"} //This determines how far away each datapoint is
           );
 
-
+          var padding = 100;
+          var height = 20;
           var BarGraph = d3.selectAll("g.BarG");
           BarGraph
             .append("rect")
@@ -469,29 +473,33 @@ function createDataViz() {
             .attr("height", 20)
             .attr("width", 10)
             .style("stroke", "black")
-            .style("fill", "pink")
+            .style("fill", "green")
             .style("stroke-width", "1px");
 
             BarGraph
               .append("text")
               .style("text-anchor", "middle")
               .attr("y", -10)
-              .style("font-size", "10px")
+              .attr("text-anchor", "starts")
+              .attr("transform", "translate("+ (padding/2) +","+(height/2)+")rotate(-45)")
+              .style("font-size", "16px")
               .text(function(d) {return d.Country_Name;}); //This sets the Text
 
           function barButtonClick(datapoint) {
 
             // Define the div for the tooltip
-            var div = d3.select("body").append("div")
+            var div = d3.select("svg#qpBarChart").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
             var maxValue = d3.max(whole_data, function(d) {
               return parseFloat(d[datapoint]);
             });
+
             var colorQuantize = d3.scale.quantize()
-              .domain([0,maxValue]).range(colorbrewer.Greens[5]);
-            console.log(colorQuantize);
+              .domain([0,maxValue]).range(["#0006ca", "#0060ca", "#00a6ca", "#00ccbc", "#23d7b1", "32.25%", "#48eb9d", "#90eb9d", "#c7eb9d", "#ffeb8c",
+              "#f9dc8c", "#f9d057", "#f9ad57", "#f29e2e", "#e79018", "#e76818", "#d7411c", "#d7191c"]);
+
             var radiusScale = d3.scale.linear()
               .domain([0,maxValue]).range([2,30]);
             var yScale = d3.scale.linear()
@@ -616,7 +624,7 @@ function createDataViz() {
                     {offset: "6.25%", color: "#0060ca"},
                     {offset: "12.5%", color: "#00a6ca"},
                     {offset: "18.75%", color: "#00ccbc"},
-                    {offset: "25%", color: "#00ccbc"},
+                    {offset: "25%", color: "#23d7b1"},
                     {offset: "32.25%", color: "#48eb9d"},
                     {offset: "37.5%", color: "#90eb9d"},
                     {offset: "43.75%", color: "#c7eb9d"},

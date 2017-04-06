@@ -1311,7 +1311,7 @@
 
 	body {
 		background-color: #183026;
-		background-image: url("images/bg.jpg");
+		background-image: url("images/overlay.png"), url("images/bg.jpg");
 		background-repeat: repeat, no-repeat;
 		background-size: auto, cover;
 		background-position: top left, center 0;
@@ -2252,7 +2252,7 @@
 
 			body {
 				background-color: #203936;
-				background-image: url("images/bg-alt.jpg");
+				background-image: url("images/overlay.png"), url("images/bg-alt.jpg");
 				background-repeat: repeat, no-repeat;
 				background-size: auto, 100% auto;
 				background-position: top left, top center;
@@ -2454,16 +2454,7 @@
 		/* Header */
 
 			#header {
-				background: #444;
-				color: #bbb;
-				cursor: default;
-				height: 3.25em;
-				right: 20vw;
-				line-height: 3.25em;
-				position: fixed;
-				top: 0;
-				width: 100%;
-				z-index: 10000;
+				padding: 6em 0 6em 0;
 			}
 
 				#header header {
@@ -2472,30 +2463,9 @@
 				}
 
 					#header header h1 {
-						color: inherit;
-						height: inherit;
-						left: 1.25em;
-						line-height: inherit;
-						margin: 0;
-						padding: 0;
-						position: absolute;
-						top: 0;
+						font-size: 1.75em;
+						letter-spacing: 6px;
 					}
-
-					#header h1 a {
-						color: #fff;
-						font-weight: 400;
-						border: 0;
-					}
-
-				#header nav {
-					height: inherit;
-					line-height: inherit;
-					position: absolute;
-					right: 0.75em;
-					top: 0;
-					vertical-align: middle;
-				}
 
 				#header footer {
 					bottom: 4.5em;
