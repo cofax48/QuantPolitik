@@ -29,7 +29,7 @@ def gather_QP_Score():
     print('QP maker')
     q.enqueue(QP_Main)
 
-sched.add_job(gather_sec_state_schedule, 'cron', day_of_week='*', hour=7, minute=1, timezone='US/Eastern')
-sched.add_job(gather_Pres_schedule, 'cron', day_of_week='*', hour=7, minute=8, timezone='US/Eastern')
+sched.add_job(gather_sec_state_schedule, 'cron', day_of_week='*', hour=13, minute=11, timezone='US/Eastern')
+sched.add_job(gather_Pres_schedule, 'cron', day_of_week='*', hour=13, minute=13, timezone='US/Eastern')
 sched.add_job(gather_QP_Score, 'cron', day_of_week='*', hour=7, minute=15, timezone='US/Eastern')
 sched.start()

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 #! Data Grabber
-import time, datetime
+import time
 time1 = time.time()
+from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import numpy as np
@@ -15,22 +16,23 @@ engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d38
 QP_value = {}
 
 def getting_all_the_column_names_from_the_table(table_name):
-    column_name_list =  []   
+    column_name_list =  []
     #Table Grabber
     country_name = pd.read_sql('''SELECT "Country_Name" FROM "{}" ORDER BY "Country_Name";'''.format(table_name), engine)
     data_column = pd.read_sql('''SELECT * FROM "{}" ORDER BY "Country_Name";'''.format(table_name), engine)
     for column in data_column:
-        column_name_list.append(column)
-        
+        if column != 'Current_Military_Engagement':
+            column_name_list.append(column)
+
     country_name_list = []
     country_df = pd.DataFrame(country_name)
     for index, row in country_df.iterrows():
         country_name_list.append(row.to_string(index=False))
-        
+
     return {'column_name_list':column_name_list, 'country_name_list':country_name_list}
-                                      
+
 def percentile_ranking(column_name_list, country_name_list, table_name):
-        
+
     #Neg Rankings
     Business_Relations_neg_ranking = [
     'Ease of Doing Business Rank',
@@ -73,7 +75,7 @@ def percentile_ranking(column_name_list, country_name_list, table_name):
     ]
 
     country_and_percentile_rank_list = {}
-    
+
     for reg_column in column_name_list:
         data_column = pd.read_sql('SELECT "{}" FROM "{}" ORDER BY "Country_Name";'.format(str(reg_column), table_name), engine)
         df = pd.DataFrame(data_column)
@@ -88,10 +90,10 @@ def percentile_ranking(column_name_list, country_name_list, table_name):
                         whole_column_list.append(np.nan)
                     else:
                         whole_column_list.append(np.asscalar(np.float64(row)))
-            
+
             #makes the ranking of 1 to 198 negative so a low score is a higher percentile
             whole_column_list = [x * -1 for x in whole_column_list]
-            
+
             #prints the percentile rank for ach country
             column_percentile_list = []
             for a in whole_column_list:
@@ -117,7 +119,7 @@ def percentile_ranking(column_name_list, country_name_list, table_name):
                 column_percentile_list.append(stats.percentileofscore(whole_column_list, a, kind='rank'))
             zipped = list(zip(country_name_list, column_percentile_list))
             if str(reg_column) == str("Voting correlation in Percentage at UN with the US"):
-                from Governmental_Perspective_Formula_Maker import UN_Grabber 
+                from Governmental_Perspective_Formula_Maker import UN_Grabber
                 UN_Result = UN_Grabber(engine)['zipped_list']
                 country_and_percentile_rank_list[str(reg_column)] = UN_Result
             else:
@@ -130,14 +132,14 @@ def formula(country_name_list, country_and_percentile_rank_list, table_name):
         from Business_Relations_Formula_Maker import BRFM
         business_relations_aggregate_factored = BRFM(country_name_list, country_and_percentile_rank_list)['business_relations_aggregate_factored']
         QP_value['Business_Relations'] = business_relations_aggregate_factored
-        print(table_name, 'imported')        
+        print(table_name, 'imported')
     if table_name == 'Trade_Relations':
         from Trade_Relations_Formula_Maker import TRFM
         trade_relations_aggregate_factored = TRFM(country_name_list, country_and_percentile_rank_list)['trade_relations_aggregate_factored']
         QP_value['Trade_Relations'] = trade_relations_aggregate_factored
         print(table_name, 'imported')
     if table_name == 'Governmental_Perspective':
-        from Governmental_Perspective_Formula_Maker import GRFM, UN_Grabber 
+        from Governmental_Perspective_Formula_Maker import GRFM, UN_Grabber
         governmental_relations_aggregate_factored = GRFM(country_name_list, country_and_percentile_rank_list)['governmental_relations_aggregate_factored']
         QP_value['Governmental_Perspective'] = governmental_relations_aggregate_factored
         print(table_name, 'imported')
@@ -172,8 +174,8 @@ def formula(country_name_list, country_and_percentile_rank_list, table_name):
         from Vice_Presidential_Exchange_Formula_Maker import VPFM
         vp_rank_aggregate_factored = VPFM(country_name_list, country_and_percentile_rank_list)['VP_rank_aggregate_factored']
         from Joint_Meetings_List import JMFM
-        jm_rank_aggregate_factored = JMFM(country_name_list, country_and_percentile_rank_list)['JM_rank_aggregate_factored']        
-        
+        jm_rank_aggregate_factored = JMFM(country_name_list, country_and_percentile_rank_list)['JM_rank_aggregate_factored']
+
         Pres_VP_Joint_BEX = []
         for country in country_name_list:
             count_num = country_numberifier(country)
@@ -181,12 +183,12 @@ def formula(country_name_list, country_and_percentile_rank_list, table_name):
 
         Pres_VP_Joint_BEX_factored = []
         for a in Pres_VP_Joint_BEX:
-            Pres_VP_Joint_BEX_factored.append(stats.percentileofscore(Pres_VP_Joint_BEX, a, kind='rank'))            
+            Pres_VP_Joint_BEX_factored.append(stats.percentileofscore(Pres_VP_Joint_BEX, a, kind='rank'))
 
         QP_value['Presidential_Exchange'] = Pres_VP_Joint_BEX_factored
         print(table_name, 'imported')
 
-        
+
 def main():
     table_list = ['Business_Relations', 'Trade_Relations', 'Governmental_Perspective', 'Country_Profile', 'Security', 'Cultural_Diffusion', 'Prestige', 'Sec_State_Bureaucratic_Exchange', 'Presidential_Exchange']
     for tab in table_list:
@@ -203,22 +205,31 @@ def main():
             count_num = country_numberifier(country)
             table_name = tab
             if table_name == 'Sec_State_Bureaucratic_Exchange':
+                print('Sec_State_Bureaucratic_Exchange', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.8)
             if table_name == 'Presidential_Exchange':
-                temp_value_list.append(float(QP_value[table_name][count_num]) * 1.7)       
+                print('Presidential_Exchange', country, QP_value[table_name][count_num])
+                temp_value_list.append(float(QP_value[table_name][count_num]) * 1.7)
             if table_name == 'Business_Relations':
+                print('Business_Relations', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.6)
             if table_name == 'Trade_Relations':
+                print('Trade_Relations', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.5)
             if table_name == 'Governmental_Perspective':
+                print('Governmental_Perspective', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.4)
             if table_name == 'Prestige':
+                print('Prestige', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.3)
             if table_name == 'Security':
+                print('Security', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.2)
             if table_name == 'Cultural_Diffusion':
+                print('Cultural_Diffusion', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.1)
             if table_name == 'Country_Profile':
+                print('Country_Profile', country, QP_value[table_name][count_num])
                 temp_value_list.append(QP_value[table_name][count_num])
             if len(temp_value_list) == 9:
                 number_of_nan = int(sum([pd.isnull(i) for i in temp_value_list]))
@@ -227,32 +238,58 @@ def main():
                 num_sum = np.nansum(temp_value_list)
                 temp_value_list = num_sum / dvisible_number
                 QP_Final_Value_not_ranked.append(temp_value_list)
-                
+
     new_rank_percentile_rank_list_factored = []
     for v in QP_Final_Value_not_ranked:
         new_rank_percentile_rank_list_factored.append(stats.percentileofscore(QP_Final_Value_not_ranked, v, kind='rank'))
 
+    #To add prior to adding any of the data
+    conn = engine.connect()
+
+    #Current_Military_Engagement AKA ARE WE BOMBING YOU AND IF SO, HOW LONG AGO?
+    hostilities_query = conn.execute('''SELECT "Current_Military_Engagement" FROM "Security" ORDER BY "Country_Name";''')
+    hostilities_query_list = hostilities_query.cursor.fetchall()
+    country_name_query = conn.execute('''SELECT "Country_Name" FROM "Security" ORDER BY "Country_Name";''')
+    cnl = country_name_query.cursor.fetchall()
+    date_format = '%B-%d-%Y'
+    todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
+    score_to_subtract_dict = {}
+    for index, value in enumerate(hostilities_query_list):
+        if len(value[0]) > 2:
+            a = datetime.strptime(value[0], date_format)
+            b = datetime.strptime(todays_date, date_format)
+            delta = b - a
+            days_til_penalty_removed = 1000 - int(delta.days)
+            days_til_penalty_removed_as_percentage = days_til_penalty_removed / 1000
+            score_to_subtract = days_til_penalty_removed_as_percentage * 50
+            score_to_subtract_dict[cnl[index][0]] = score_to_subtract
+
+    print('score to subtract', score_to_subtract_dict)
     QP_Final_Value = {}
     for country in country_name_list:
         count_num = country_numberifier(country)
         QP_Final_Value[country] = (new_rank_percentile_rank_list_factored[count_num] * 4) - 200
+        print(country, score_to_subtract_dict.get(country))
+        if score_to_subtract_dict.get(country) != None:
+            print('yao 5656')
+            current_score = QP_Final_Value[country]
+            print(country, current_score)
+            QP_Final_Value[country] = current_score - score_to_subtract_dict[country]
+            print(country, QP_Final_Value[country])
 
-    #To add prior to adding any of the data
-    conn = engine.connect()
+    todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
 
-    todays_date = datetime.datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
-
+    conn.execute('''ALTER TABLE "QP_Score" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
     conn.execute('''ALTER TABLE "QP_Score" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
     conn.execute('''UPDATE "QP_Score" SET "{}" = 0;'''.format(str(todays_date)))
-    
+
     for w in sorted(QP_Final_Value, key=QP_Final_Value.get, reverse=True):
         conn.execute('''UPDATE "QP_Score" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_Final_Value[w]), w))
 
-        #print(w, QP_Final_Value[w])
-    
+        print(w, QP_Final_Value[w])
+
     time2 = time.time()
     print("Total time to run ", int(time2 - time1), "seconds")
 
 
 main()
-

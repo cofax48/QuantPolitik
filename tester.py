@@ -29,11 +29,51 @@ engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d38
 ABRV_table_name = 'Sec_State_Bureaucratic_Exchange'
 conn = engine.connect()
 
-
-#conn.execute('''UPDATE "QP_Score" SET "March-31-2017" = 0;''')
-conn.execute('''ALTER TABLE "QP_Score" DROP "March-31-2017";''')
+conn.execute('''UPDATE "Security" SET "US Military Bases Abroad" = 8  WHERE "Country_Name" = 'Italy';''')
 
 """
+from datetime import datetime
+import time
+
+
+
+score_to_subtract_dict = {'Syria': 49.95}
+country = 'Yemen'
+print(score_to_subtract_dict.get(country))
+print(score_to_subtract_dict.get('Syria'))
+if score_to_subtract_dict.get(country) != None:
+
+#Current_Military_Engagement AKA ARE WE BOMBING YOU AND IF SO, HOW LONG AGO?
+query = conn.execute('''SELECT "Current_Military_Engagement" FROM "Security" ORDER BY "Country_Name";''')
+query_list = query.cursor.fetchall()
+country_name_query = conn.execute('''SELECT "Country_Name" FROM "Security" ORDER BY "Country_Name";''')
+cnl = country_name_query.cursor.fetchall()
+date_format = '%B-%d-%Y'
+todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
+score_to_subtract_dict = {}
+for index, value in enumerate(query_list):
+    if len(value[0]) > 2:
+        a = datetime.strptime(value[0], date_format)
+        b = datetime.strptime(todays_date, date_format)
+        delta = b - a
+        days_til_penalty_removed = 1000 - int(delta.days)
+        days_til_penalty_removed_as_percentage = days_til_penalty_removed / 1000
+        score_to_subtract = days_til_penalty_removed_as_percentage * 50
+        score_to_subtract_dict[cnl[index][0]] = score_to_subtract
+
+if 'Syria' in score_to_subtract_dict:
+    print('yao')
+    print(score_to_subtract_dict['Syria'])
+    print()
+print(score_to_subtract_dict)
+#conn.execute('''ALTER TABLE "Security" ADD COLUMN "Current_Military_Engagement" VARCHAR;''')
+#conn.execute('''UPDATE "Security" SET "Current_Military_Engagement" = 0;''')
+#conn.execute('''UPDATE "Security" SET "Current_Military_Engagement" = 'April-06-2017'  WHERE "Country_Name" = 'Syria';''')
+
+#conn.execute('''UPDATE "QP_Score" SET "March-31-2017" = 0;''')
+#conn.execute('''ALTER TABLE "QP_Score" DROP "April-07-2017";''')
+#conn.execute('''ALTER TABLE "QP_Score" DROP COLUMN IF EXISTS "April-07-2017";''')
+
 list_return = []
 col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '{}';'''.format(ABRV_table_name))
 col_names = []

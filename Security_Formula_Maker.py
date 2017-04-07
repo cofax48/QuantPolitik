@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import scipy.stats as stats
 from country_to_number import country_numberifier
- 
+
 def SPFM(country_name_list, country_and_percentile_rank_list):
     military_power_percentile_rank_list = []
     foreign_power_percentile_rank_list = []
@@ -23,10 +23,10 @@ def SPFM(country_name_list, country_and_percentile_rank_list):
         real_len = int(len(Military_Power)/2)
         dvisible_number = int(real_len - number_of_nan)
         biz_sum = np.nansum(Military_Power[1::2])
-        Military_Power = biz_sum / dvisible_number       
+        Military_Power = biz_sum / dvisible_number
         military_power_percentile_rank_list.append(Military_Power)
 
-                                  
+
         Foreign_Power = (country_and_percentile_rank_list['Foreign Military Finance'][country] +
                                 country_and_percentile_rank_list['Personel in Standing Army'][country])
         #Factoring for number of missing data Fields and averaging the raw score
@@ -34,8 +34,8 @@ def SPFM(country_name_list, country_and_percentile_rank_list):
         real_len = int(len(Foreign_Power)/2)
         dvisible_number = int(real_len - number_of_nan)
         num_sum = np.nansum(Foreign_Power[1::2])
-        Foreign_Power = num_sum / dvisible_number
-        foreign_power_percentile_rank_list.append(Foreign_Power)
+        Foreign_Power_num = num_sum / dvisible_number
+        foreign_power_percentile_rank_list.append(Foreign_Power_num)
 
         Nuclear_Technology = (country_and_percentile_rank_list['Nuclear Technology'][country])
         #Factoring for number of missing data Fields and averaging the raw score
@@ -45,7 +45,7 @@ def SPFM(country_name_list, country_and_percentile_rank_list):
         num_sum = np.nansum(Nuclear_Technology[1::2])
         Nuclear_Technology = num_sum / dvisible_number
         nuclear_power_percentile_rank_list.append(Nuclear_Technology)
-        
+
         Alliance_Climate = (country_and_percentile_rank_list['Alliances'][country] +
                                 country_and_percentile_rank_list['Shared Multilateral Organizations'][country])
 
@@ -75,7 +75,7 @@ def SPFM(country_name_list, country_and_percentile_rank_list):
     foreign_power_percentile_rank_list_factored = []
 
     for a in military_power_percentile_rank_list:
-        military_power_percentile_rank_list_factored.append(stats.percentileofscore(military_power_percentile_rank_list, a, kind='rank'))            
+        military_power_percentile_rank_list_factored.append(stats.percentileofscore(military_power_percentile_rank_list, a, kind='rank'))
 
     for c in alliance_climate_percentile_rank_list:
         alliance_climate_percentile_rank_list_factored.append(stats.percentileofscore(alliance_climate_percentile_rank_list, c, kind='rank'))
@@ -83,15 +83,15 @@ def SPFM(country_name_list, country_and_percentile_rank_list):
     for d in rank_percentile_rank_list:
         rank_percentile_rank_list_factored.append(stats.percentileofscore(rank_percentile_rank_list, d, kind='rank'))
 
-    for e in foreign_power_percentile_rank_list:
-        foreign_power_percentile_rank_list_factored.append(stats.percentileofscore(foreign_power_percentile_rank_list, e, kind='rank'))
-    
+    for j in foreign_power_percentile_rank_list:
+        foreign_power_percentile_rank_list_factored.append(stats.percentileofscore(foreign_power_percentile_rank_list, j, kind='rank'))
+
     # Weighting of Size more heavily
     """
     people_power_percentile_rank_list_factored = [i * 3 for i in people_power_percentile_rank_list_factored]
     """
     nuclear_power_percentile_rank_list = [i * 4 for i in nuclear_power_percentile_rank_list]
-    
+
     total_security_rank = {}
     for country in country_name_list:
         country_num = int(country_numberifier(country))
@@ -100,8 +100,8 @@ def SPFM(country_name_list, country_and_percentile_rank_list):
                                         alliance_climate_percentile_rank_list_factored[country_num],
                                         rank_percentile_rank_list_factored[country_num],
                                         foreign_power_percentile_rank_list_factored[country_num])
-        total_security_rank[str(country)] = security_rank_data_together                                        
-    
+        total_security_rank[str(country)] = security_rank_data_together
+
     security_rank_aggregate_factored = []
     for country in country_name_list:
         tbr = total_security_rank[country]
@@ -111,6 +111,7 @@ def SPFM(country_name_list, country_and_percentile_rank_list):
         dvisible_number = int(real_len - number_of_nan)
         num_sum = np.nansum(tbr)
         tbr = num_sum / dvisible_number
-        security_rank_aggregate_factored.append(tbr)
+        new_tbr = float(tbr) / 1.51
+        security_rank_aggregate_factored.append(new_tbr)
 
     return {'security_rank_aggregate_factored':security_rank_aggregate_factored}
