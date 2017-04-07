@@ -153,7 +153,6 @@ def PEFM(country_name_list, country_and_percentile_rank_list):
                                         Pres_2016_percentile_rank_list_factored[country_num],
                                         Pres_2017_percentile_rank_list_factored[country_num],
                                         Total_Pres_percentile_rank_list_factored[country_num])
-        print(country, Pres_rank_data_together)
         total_Pres_rank[str(country)] = Pres_rank_data_together
 
     Pres_rank_aggregate_factored = []

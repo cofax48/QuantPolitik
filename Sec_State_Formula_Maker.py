@@ -153,7 +153,6 @@ def SSFM(country_name_list, country_and_percentile_rank_list):
                                         Sec_of_State_2016_percentile_rank_list_factored[country_num],
                                         Sec_of_State_2017_percentile_rank_list_factored[country_num],
                                         Total_Sec_of_State_percentile_rank_list_factored[country_num])
-        print(country, sec_state_rank_data_together)
         total_sec_state_rank[str(country)] = sec_state_rank_data_together
 
     sec_state_rank_aggregate_factored = []

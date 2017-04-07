@@ -246,7 +246,9 @@ def main():
     #To add prior to adding any of the data
     conn = engine.connect()
 
+    ##########################################################################
     #Current_Military_Engagement AKA ARE WE BOMBING YOU AND IF SO, HOW LONG AGO?
+    ##########################################################################
     hostilities_query = conn.execute('''SELECT "Current_Military_Engagement" FROM "Security" ORDER BY "Country_Name";''')
     hostilities_query_list = hostilities_query.cursor.fetchall()
     country_name_query = conn.execute('''SELECT "Country_Name" FROM "Security" ORDER BY "Country_Name";''')
@@ -264,18 +266,18 @@ def main():
             score_to_subtract = days_til_penalty_removed_as_percentage * 50
             score_to_subtract_dict[cnl[index][0]] = score_to_subtract
 
-    print('score to subtract', score_to_subtract_dict)
     QP_Final_Value = {}
     for country in country_name_list:
         count_num = country_numberifier(country)
         QP_Final_Value[country] = (new_rank_percentile_rank_list_factored[count_num] * 4) - 200
         print(country, score_to_subtract_dict.get(country))
         if score_to_subtract_dict.get(country) != None:
-            print('yao 5656')
             current_score = QP_Final_Value[country]
-            print(country, current_score)
             QP_Final_Value[country] = current_score - score_to_subtract_dict[country]
-            print(country, QP_Final_Value[country])
+    ##########################################################################
+    #End Current_Military_Engagement
+    ##########################################################################
+
 
     todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
 
