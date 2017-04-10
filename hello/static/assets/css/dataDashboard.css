@@ -731,14 +731,169 @@ select {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
+/*
 button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    padding: 7px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 12px;
-}
+	padding: 50px;
+  transition: all 0.1s;
+  -webkit-transition: all 0.1s;
+   vertical-align: middle;
+   position: relative;
+   padding: 10px 40px;
+   margin: 0px 10px 10px 0px;
+   float: left;
+   border-radius: 8px;
+   font-family: 'Times', serif;
+   font-size: 15px;
+   color: #FFF;
+   text-decoration: none;
+   }
+*/
+   body {
+     background-color: #f5f5dc;
+ 		font-family: 'Source Sans Pro', sans-serif;
+ 		-webkit-text-stroke: 0.25px;
+   }
+
+   button {
+     vertical-align: middle;
+     position: relative;
+       display: inline-block;
+       margin: 0 auto;
+
+       -webkit-border-radius: 10px;
+
+       -webkit-box-shadow:
+           0px 3px rgba(128,128,128,1), /* gradient effects */
+           0px 4px rgba(118,118,118,1),
+           0px 5px rgba(108,108,108,1),
+           0px 6px rgba(98,98,98,1),
+           0px 7px rgba(88,88,88,1),
+           0px 8px rgba(78,78,78,1),
+           0px 14px 6px -1px rgba(128,128,128,1); /* shadow */
+
+       -webkit-transition: -webkit-box-shadow .1s ease-in-out;
+   }
+
+   button span {
+       background-color: #E8E8E8;
+
+       background-image:
+           /* gloss gradient */
+           -webkit-gradient(
+               linear,
+               left bottom,
+               left top,
+               color-stop(50%,rgba(255,255,255,0)),
+               color-stop(50%,rgba(255,255,255,0.3)),
+               color-stop(100%,rgba(255,255,255,0.2))),
+
+           /* dark outside gradient */
+           -webkit-gradient(
+               linear,
+               left top,
+               right top,
+               color-stop(0%,rgba(210,210,210,0.3)),
+               color-stop(20%,rgba(210,210,210,0)),
+               color-stop(80%,rgba(210,210,210,0)),
+               color-stop(100%,rgba(210,210,210,0.3))),
+
+           /* light inner gradient */
+           -webkit-gradient(
+               linear,
+               left top,
+               right top,
+               color-stop(0%,rgba(255,255,255,0)),
+               color-stop(20%,rgba(255,255,255,0.5)),
+               color-stop(80%,rgba(255,255,255,0.5)),
+               color-stop(100%,rgba(255,255,255,0))),
+
+           /* diagonal line pattern */
+           -webkit-gradient(
+               linear,
+               0% 100%,
+               100% 0%,
+               color-stop(0%,rgba(255,255,255,0)),
+               color-stop(40%,rgba(255,255,255,0)),
+               color-stop(40%,#D2D2D1),
+               color-stop(60%,#D2D2D1),
+               color-stop(60%,rgba(255,255,255,0)),
+               color-stop(100%,rgba(255,255,255,0)));
+
+           -webkit-box-shadow:
+               0px -1px #fff, /* top highlight */
+               0px 1px 1px #FFFFFF; /* bottom edge */
+
+       -webkit-background-size: 100%, 100%, 100%, 4px 4px;
+
+       -webkit-border-radius: 10px;
+       -webkit-transition: -webkit-transform .1s ease-in-out;
+
+       display: inline-block;
+       padding: 10px 40px 10px 40px;
+
+       color: #3A474D;
+       text-transform: uppercase;
+       font-family: 'Times', serif;
+       font-weight: 700;
+       font-size: 32px;
+
+       text-shadow: 0px 1px #fff, 0px -1px #262F33;
+   }
+
+   button:hover {
+       color: #FFF;
+       text-shadow: 0px -1px #97A63A;
+       cursor: pointer;
+   }
+
+      button:active {
+          -webkit-box-shadow:
+              0px 3px rgba(128,128,128,1),
+              0px 4px rgba(118,118,118,1),
+              0px 5px rgba(108,108,108,1),
+              0px 6px rgba(98,98,98,1),
+              0px 7px rgba(88,88,88,1),
+              0px 8px rgba(78,78,78,1),
+              0px 10px 2px 0px rgba(128,128,128,.6); /* shadow */
+      }
+
+      button:active {
+          -webkit-transform: translate(0, 5px); /* depth of button press */
+      }
+
+   button:after {
+
+      font-family: 'Cabin';
+      font-weight: 700;
+      color: #FFF;
+      text-shadow: 0px 1px #fff, 0px -1px #97A63A;
+      font-size: 26px;
+   }
+
+
+   div.tooltip {
+       position: absolute;
+       text-align: center;
+       display: inline-block;
+       padding: 2px;
+       font: 18px Times;
+       background: #F5F5DC;
+       border: 1px;
+       border-radius: 8px;
+       border-style: solid;
+       border-color: black;
+       pointer-events: none;
+   }
+/*
+button:hover {
+   border-top-color: #2a71c7;
+   background: #2a71c7;
+   color: #fcfcfc;
+   }
+button:active {
+   border-top-color: #28475c;
+   background: #28475c;
+   }
+
+
+*/

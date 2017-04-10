@@ -157,9 +157,9 @@ function onLoad() {
               return colorQuantize(country_value_and_iso[d.id]);});
 
       // Define the div for the tooltip
-      var div = d3.select(".box .image.featured").append("div")
+      var div = d3.select("body").append("div")
           .attr("class", "tooltip")
-          .style("opacity", 0);
+          .style("opacity", .9);
 
       mainGroup
           .selectAll("path")
@@ -171,14 +171,15 @@ function onLoad() {
                     div	.html(country_value_and_iso[p.id])
                         .style("left", (d3.event.pageX) + "px")
                         .style("top", (d3.event.pageY - 28) + "px");
-                    div.html(country_name_and_iso[p.id] + " 's QuantPolitik Score:" + "<br/>" + country_value_and_iso[p.id]);
+                    var num = country_value_and_iso[p.id]
+                    div.html(country_name_and_iso[p.id] + " 's QP Score:" + "<br/>" + num.toFixed(2));
               d3.select(this).style("stroke-opacity", 1.0);
-          });
-      mainGroup.selectAll("path")
+          })
           .on("mouseout", function () {
               d3.select(this).style("stroke-opacity", 0.0);
           });
   });
+
 
   function moveAndZoom() {
       var t = d3.event.translate;
@@ -292,22 +293,48 @@ function createDataViz() {
     d3.select("svg#qpBarChart").selectAll("*").remove();//Removes prevoius BarChart svg canvas
     d3.select("svg#ChoroplethMap").selectAll("*").remove();//Removes prevoius ChoroplethMap svg canvas
     d3.select("#controls").selectAll("*").remove();
+    d3.selectAll("div.tooltip").remove();
 
     for (i in whole_data) {
-    var dataKeys = d3.keys(all_data_for_map[i]).filter(function(el) {return el;});
-    }
-      /*
-      else if (el === "Iso3") {}
+    var dataKeys = d3.keys(all_data_for_map[i]).filter(function(el) {
+      if (el === "Country_Name") {console.log("yay1")}
+      else if (el === "Iso3") {console.log("yay2")}
       else if (el === "Economic Freedom Raw 2016 Score") {}
       else if (el === "Change in Yearly Score from 2015") {}
       else if (el === "Change in Property Rights from 2015") {}
       else if (el === "Change in Fiscal Freedom from 2015") {}
+      else if (el === "Change in Trade Freedom from 2015") {}
       else if (el === "Change in Government Spending from 2015") {}
       else if (el === "Change in Business Freedom from 2015") {}
       else if (el === "Change in Labor Freedom from 2015") {}
       else if (el === "Change in Monetary Freedom from 2015") {}
       else if (el === "Change in Investment Freedom from 2015") {}
       else if (el === "Change in Financial Freedom from 2015") {}
+      else if (el === "Exports from the United States in 2014") {}
+      else if (el === "Imports to the United States in 2014") {}
+      else if (el === "Trade Balance with the United States in 2014") {}
+      else if (el === "Exports from the United States in 2013") {}
+      else if (el === "Imports to the United States in 2013") {}
+      else if (el === "Trade Balance with the United States in 2013") {}
+      else if (el === "Exports from the United States in 2012") {}
+      else if (el === "Imports to the United States in 2012") {}
+      else if (el === "Trade Balance with the United States in 2012") {}
+      else if (el === "Exports from the United States in 2011") {}
+      else if (el === "Imports to the United States in 2011") {}
+      else if (el === "Trade Balance with the United States in 2011") {}
+      else if (el === "Exports from the United States in 2010") {}
+      else if (el === "Imports to the United States in 2010") {}
+      else if (el === "Trade Balance with the United States in 2010") {}
+      else if (el === "Exports from the United States in 2009") {}
+      else if (el === "Imports to the United States in 2009") {}
+      else if (el === "Trade Balance with the United States in 2009") {}
+      else {return el;}
+      });
+    }
+
+
+      /*
+      else if (el === "Iso3") {}
       else if (el === "Iso3") {}
       else if (el === "Iso3") {}
       else if (el === "Iso3") {}
@@ -343,6 +370,7 @@ function createDataViz() {
       qpChoroplethMapMaker.mapButtonClick(d);
     })
     .html(function(d) {return d;});
+
 
     //////////////////////////////////////////////////////////////////
     ////
@@ -567,9 +595,11 @@ function createDataViz() {
 
               function mapButtonClick(datapoint) {
                 d3.select("svg#ChoroplethMap").selectAll("*").remove();//Removes prevoius ChoroplethMap svg canvas
+                d3.selectAll("div.tooltip").remove();
                 svg.transition().duration(200);
 
                 console.log("stuff");
+                console.log(datapoint);
 
                 var mainGroup = svg.append("g");
                 mainGroup.style({ stroke: "white", "stroke-width": "2px", "stroke-opacity": 0.0 });
@@ -683,9 +713,9 @@ function createDataViz() {
                           return colorQuantize(country_value_and_iso[d.id]);});
 
                   // Define the div for the tooltip
-                  var div = d3.select("svg#ChoroplethMap").append("div")
+                  var div = d3.select("body").append("div")
                       .attr("class", "tooltip")
-                      .style("opacity", 0);
+                      .style("opacity", .9);
 
                   mainGroup
                       .selectAll("path")
@@ -697,13 +727,13 @@ function createDataViz() {
                                 div	.html(country_value_and_iso[p.id])
                                     .style("left", (d3.event.pageX) + "px")
                                     .style("top", (d3.event.pageY - 28) + "px");
-                                div.html(country_name_and_iso[p.id] + ":" + "<br/>" + country_value_and_iso[p.id]);
+                                var num = country_value_and_iso[p.id];
+                                div.html(country_name_and_iso[p.id] + " 's " + datapoint + "<br/>" + num.toFixed(2));
                           d3.select(this).style("stroke-opacity", 1.0);
-                      });
-                  mainGroup.selectAll("path")
+                      })
                       .on("mouseout", function () {
                           d3.select(this).style("stroke-opacity", 0.0);
-                          });
+                      });
 
                 }//ButtonClick
               });//d3json
