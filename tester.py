@@ -24,13 +24,31 @@ print(str(datetime.tzinfo))
 """
 from sqlalchemy import create_engine
 import json
+from django.http import HttpResponse, JsonResponse
 from api.country_to_number import iso_numberifier
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
 ABRV_table_name = 'Sec_State_Bureaucratic_Exchange'
 conn = engine.connect()
+todays_date = "April-10-2017"
+ABRV_Country_name = "Afghanistan"
+#conn.execute('''UPDATE "Security" SET "US Military Bases Abroad" = 8  WHERE "Country_Name" = 'Italy';''')
+QP_Score_query = conn.execute('''SELECT "{}" FROM "QP_Score" WHERE "Country_Name" = '{}';'''.format(todays_date, ABRV_Country_name))
+QPSResult = QP_Score_query.cursor.fetchall()
+Population_query = conn.execute('''SELECT "Population in Millions" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+PQResult = Population_query.cursor.fetchall()
+GDP_query = conn.execute('''SELECT "GDP in Billions at PPP" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+GDPResult = GDP_query.cursor.fetchall()
+PerCapita_query = conn.execute('''SELECT "GDP per Capita in PPP" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+PerCapitaResult = PerCapita_query.cursor.fetchall()
+HDI_query = conn.execute('''SELECT "HDI" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+HDIResult = HDI_query.cursor.fetchall()
+size_query = conn.execute('''SELECT "Geographic Area including water" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+SizeResult = size_query.cursor.fetchall()
 
-conn.execute('''UPDATE "Security" SET "US Military Bases Abroad" = 8  WHERE "Country_Name" = 'Italy';''')
-
+Country_Name = ABRV_Country_name
+all_the_data = [{"Country Name":ABRV_Country_name}, {"QP_Score":QPSResult[0][0]}, {"Population in Millions":PQResult[0][0]}, {"GDP":GDPResult[0][0]}, {"GDP per Capita":PerCapitaResult[0][0]}, {"HDI":HDIResult[0][0]}, {"Size":SizeResult[0][0]}]
+print(all_the_data)
+print(JsonResponse(all_the_data, safe=False))
 """
 from datetime import datetime
 import time

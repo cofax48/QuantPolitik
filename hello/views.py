@@ -20,7 +20,7 @@ def aboutPage(request):
     return render(request, 'about.html')
 
 def dataDashBoard(request):
-    return render(request, 'dataDashBoard.html')
+    return render(request, 'extraNewDashboard.html')
 
 def originalHomePage(request):
     return render(request, 'homePage.html')
@@ -135,3 +135,36 @@ def get_Table_and_Column(request):
 
 
     return JsonResponse(country_and_data_list, safe=False)
+
+
+def get_Country_headline_data(request):
+    from datetime import datetime
+    import time
+    todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
+    #connect to database
+    conn = engine.connect()
+    #preform query and return json data
+
+    #Eliminate WSGI Get notation
+    ABRV_Country_name = str(request)[24:]
+    ABRV_Country_name = ABRV_Country_name[:-2]
+    ABRV_Country_name = ABRV_Country_name[10:]
+    ABRV_Country_name != 'favicon.ico'
+    ABRV_Country_name != '/favicon.ico'
+
+    QP_Score_query = conn.execute('''SELECT "{}" FROM "QP_Score" WHERE "Country_Name" = '{}';'''.format(todays_date, ABRV_Country_name))
+    QPSResult = QP_Score_query.cursor.fetchall()
+    Population_query = conn.execute('''SELECT "Population in Millions" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+    PQResult = Population_query.cursor.fetchall()
+    GDP_query = conn.execute('''SELECT "GDP in Billions at PPP" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+    GDPResult = GDP_query.cursor.fetchall()
+    PerCapita_query = conn.execute('''SELECT "GDP per Capita in PPP" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+    PerCapitaResult = PerCapita_query.cursor.fetchall()
+    HDI_query = conn.execute('''SELECT "HDI" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+    HDIResult = HDI_query.cursor.fetchall()
+    size_query = conn.execute('''SELECT "Geographic Area including water" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
+    SizeResult = size_query.cursor.fetchall()
+
+    Country_Name = ABRV_Country_name
+    all_the_data = [{"Country Name":ABRV_Country_name}, {"QP_Score":QPSResult[0][0]}, {"Population in Millions":PQResult[0][0]}, {"GDP":GDPResult[0][0]}, {"GDP per Capita":PerCapitaResult[0][0]}, {"HDI":HDIResult[0][0]}, {"Size":SizeResult[0][0]}]
+    return JsonResponse(all_the_data, safe=False)

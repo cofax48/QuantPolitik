@@ -752,6 +752,7 @@ button {
      background-color: #f5f5dc;
  		font-family: 'Source Sans Pro', sans-serif;
  		-webkit-text-stroke: 0.25px;
+    width: 100%;
    }
 
    button {
@@ -870,6 +871,22 @@ button {
       font-size: 26px;
    }
 
+    div.databox {
+      float: right;
+      position: absolute;
+      top: 350px;
+      width: 400px;
+      right: 15px;
+      text-align: center;
+      display: inline-block;
+      padding: 2px;
+      font: 18px Times;
+      background: #F5F5DC;
+      border: 1px;
+      border-radius: 8px;
+      border-style: solid;
+      border-color: black;
+    }
 
    div.tooltip {
        position: absolute;
@@ -877,7 +894,7 @@ button {
        display: inline-block;
        padding: 2px;
        font: 18px Times;
-       background: #F5F5DC;
+       background: #000000;
        border: 1px;
        border-radius: 8px;
        border-style: solid;
