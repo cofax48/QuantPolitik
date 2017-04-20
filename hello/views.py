@@ -19,6 +19,9 @@ def index(request):
 def aboutPage(request):
     return render(request, 'about.html')
 
+def areaOfAnalysis(request):
+    return render(request, 'areaOfAnalysis.html')
+
 def dataDashBoard(request):
     return render(request, 'extraNewDashboard.html')
 
@@ -27,6 +30,9 @@ def originalHomePage(request):
 
 
 #Areas of Analysis
+def BureaucraticExchange(request):
+    return render(request, 'BureaucraticExchange.html')
+
 def BusinessRelations(request):
     return render(request, 'BusinessRelations.html')
 
@@ -39,23 +45,14 @@ def CulturalDiffusion(request):
 def GovernmentalPerspective(request):
     return render(request, 'GovernmentalPerspective.html')
 
-def PresidentialExchange(request):
-    return render(request, 'PresidentialExchange.html')
-
 def Prestige(request):
     return render(request, 'Prestige.html')
-
-def SecretaryofStateExchange(request):
-    return render(request, 'SecretaryofStateExchange.html')
 
 def Security(request):
     return render(request, 'Security.html')
 
 def TradeRelations(request):
     return render(request, 'TradeRelations.html')
-
-def UnitedNations(request):
-    return render(request, 'UnitedNations.html')
 
 
 #API's

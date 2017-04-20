@@ -221,8 +221,9 @@ function createDataViz() {
   .html(function(d) {return d;});
 
   function mapDrawFromButton (selectValue) {
-    if (selectValue === "Security") {CategoryMapDraw("Security_SCORE")}
-    else if (selectValue === "Country Profile") {CategoryMapDraw("Country_Profile");}
+    if (selectValue === "Security") {CategoryMapDraw("Security_SCORE");}
+    else if (selectValue === "QP Score") {CategoryMapDraw("QP_Score");}
+    else if (selectValue === "Country Profile") {CategoryMapDraw("CProfile_SCORE");}
     else if (selectValue === "Business Relations") {CategoryMapDraw("BR_SCORE");}
     else if (selectValue === "Trade Relations") {CategoryMapDraw("Trade_SCORE");}
     else if (selectValue === "Cultural Diffusion") {CategoryMapDraw("CD_SCORE");}
