@@ -28,6 +28,9 @@ def dataDashBoard(request):
 def originalHomePage(request):
     return render(request, 'homePage.html')
 
+def theTech(request):
+    return render(request, 'TheTech.html')
+
 
 #Areas of Analysis
 def BureaucraticExchange(request):

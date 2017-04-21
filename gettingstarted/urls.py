@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^about', hello.views.aboutPage, name='aboutPage'),
     url(r'^AreasofAnalysis', hello.views.areaOfAnalysis, name='areaOfAnalysis'),
+    url(r'^TheTech', hello.views.theTech, name='TheTech'),
     #Areas of Analysis
     url(r'^BureaucraticExchange', hello.views.BureaucraticExchange, name='BureaucraticExchange'),
     url(r'^BusinessRelations', hello.views.BusinessRelations, name='BusinessRelations'),

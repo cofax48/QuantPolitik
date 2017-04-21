@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>The Tech</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../static/assets/css/Techmain.css" />
+	</head>
+	<body>
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="divided">
+				<div id="header-wrap">
+					<!-- Header -->
+					<header id="header" class="alt">
+						<nav id="nav">
+							<ul>
+								<li><a href="/">Home</a></li>
+								<li><a href="TheAlgorithm">The Algorithm</a></li>
+								<li><a href="about">About Us</a></li>
+								<li><a href="TheTech">QuantPolitik Tech</a></li>
+								<li><a id="Analysis" href="AreasofAnalysis"> &#8744; Areas of Analysis</a>
+								<ul class="maList" style="user-select: text; display: list-item; list-style-type: none; float: left;position: absolute; padding: 8px 5px 3px 5px; background-color: #034a7f;">
+									<li style="white-space: nowrap;"><a href="BureaucraticExchange">Bureaucratic Exchange</a></li>
+									<li style="white-space: nowrap;"><a href="BusinessRelations">Business Relations</a></li>
+									<li style="white-space: nowrap;"><a href="CountryProfile">Country Profile</a></li>
+									<li style="white-space: nowrap;"><a href="CulturalDiffusion">Cultural Diffusion</a></li>
+									<li style="white-space: nowrap;"><a href="GovernmentalPerspective">Gov Perspective</a></li>
+									<li style="white-space: nowrap;"><a href="Prestige">Prestige</a></li>
+									<li style="white-space: nowrap;"><a href="Security">Security</a></li>
+									<li style="white-space: nowrap;"><a href="TradeRelations">Trade Relations</a></li>
+								</ul>
+							</li>
+								<li><a href="datadashboard">Data Dashboard</a></li>
+							</ul>
+						</nav>
+					</header>
+				</div>
+
+				<div id="errythingElse">
+				<!-- One -->
+					<section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+						<div class="content">
+							<h1>The Tech</h1>
+							<p class="major"><!--[-->QuantPolitik is built on a polyglot platform of Postgres, Python (Pandas, Django), and JavaScript stack and hosted in the cloud, courtesy of Heroku.<!--]--></p>
+							<ul class="actions vertical">
+								<li><a href="references#Business Relations" class="button big wide smooth-scroll-middle">View the Sources</a></li>
+							</ul>
+						</div>
+						<div class="image">
+							<img src="../static/images/PythonLogo.png" alt="" />
+						</div>
+					</section>
+
+				<!-- Two -->
+					<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in" id="first">
+						<div class="content">
+							<h2>The Database (Postgres, SqlAlchemy, Redis):</h2>
+							<p>The database is built in Postgres, featuring 147 variables in 9 tables, with 10 additional tables that automatically update and store new values, but more on that later.  Each morning, at 7 am, a worker program, written in Python using the RQ library, launches a Redis server that runs 3 programs sequentially.</p>
+							<ul class="actions vertical">
+								<li><a href="#" class="button">Sources</a></li>
+							</ul>
+						</div>
+						<div class="image">
+							<img src="../static/images/EPythonJSTech.jpg" alt="" />
+						</div>
+					</section>
+
+				<!-- Three -->
+					<section class="spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
+						<div class="content">
+							<h2>The Quantification (Requests, Regex, SqlAlchemy):</h2>
+							<p>The first, “sec_state_schedule_quantifier,” goes the State Department’s website,
+								finds the index of every day’s schedule, using a custom built, regex determines which is today’s schedule,
+								and downloads the Secretary of State’s schedule using the requests library.
+								In memory, the program then begins parsing the Secretary’s schedule to determine who he met with (Prime Ministers, Presidents, Foreign Ministers, etc)
+								and from which country that emissary was from. The program then tallies every country that had a meeting, and assigns a point value for the interaction
+								based on who was in attendance (2 points for a Head of State/Government, 1 for a minister).
+								The program having quantified the Secretary’s daily schedule then takes its data and autonomously updates the Postgres database,
+								using the SqlAlchemy library, and SQL commands for all database interaction. The queue then launches another program that does the same lexical quantification,
+								but for the President and the Vice President.</p>
+						</div>
+						<div class="image">
+							<img src="../static/images/SQLALCHEMTech.png" alt="" />
+						</div>
+					</section>
+
+				<!-- Four -->
+					<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
+						<div class="content">
+							<h2>The Formula (SqlAlchemy, Pandas, Numpy, Stats):</h2>
+							<p>After both programs have run, another program, one that applies my QuantPolitik formula. This program pulls all of my data (147 columns * 198 countries),
+								applies and munges the data using Pandas to organize it and numpy in addition stats to apply the necessary mathematics upon it.
+								Having applied the math to the new data, the program updates my database once more, this time with its new score.</p>
+							<ul class="actions vertical">
+								<li><a href="#" class="button">Learn More</a></li>
+							</ul>
+						</div>
+						<div class="image">
+							<img src="../static/images/Pandas_logo.png" alt="" />
+						</div>
+					</section>
+
+				<!-- Five -->
+					<section class="spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
+						<div class="content">
+							<h2>The Server (Django):</h2>
+							<p>My server is built upon Django’s MVC framework and powers every webpage on the site.
+								While in testing, QuantPolitik relied upon Flask, the decision to move to Django was necessitated by the Heroku platform, and has increased the modularity and speed as a result.</p>
+							<ul class="actions vertical">
+								<li><a href="#" class="button">Sources</a></li>
+							</ul>
+						</div>
+						<div class="image">
+							<img src="../static/images/Django_logo.svg" alt="" />
+						</div>
+					</section>
+
+					<!-- Six -->
+						<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
+							<div class="content">
+								<h2>The API (Django, SqlAlchemy, and pure Python):</h2>
+								<p>The API which accesses my database is written as a “view” within my Django framework and relies on SqlAlchemy
+									to access the database and deliver customized results based on API received.
+									The API is able to apply this customizability using a regex that parses the request and passes it along to the database.
+									Once the database is accessed, the results are formatted into JSON,
+									and passed by the API to a specifically built page based on the request submitted. </p>
+								<ul class="actions vertical">
+									<li><a href="#" class="button">Learn More</a></li>
+								</ul>
+							</div>
+							<div class="image">
+								<img src="../static/images/API-Management-Products-1.png" alt="" />
+							</div>
+						</section>
+
+					<!-- Seven -->
+						<section class="spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
+							<div class="content">
+								<h2>The Maps (D3):</h2>
+								<p>The maps on the site are the major users of the API, (though there are other features that do use them),
+									on the data is propagated in JSON and returned view the API, the choropleth mapping program,
+									retrieves the data and using the D3 library builds SVGs representing a map of the world,
+									and colors the map based on the quantized-scale of the data received.
+									The D3 map is meant to be scalable and portable as the data constantly changes,
+									yet the scales are redrawn accordingly and the colors consistently shift. </p>
+								<ul class="actions vertical">
+									<li><a href="#" class="button">Sources</a></li>
+								</ul>
+							</div>
+							<div class="image">
+								<img src="../static/images/d3-js.jpg" alt="" />
+							</div>
+						</section>
+
+					<!-- Eight -->
+						<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
+							<div class="content">
+								<h2>The Site (HTML5, CSS3, JavaScript):</h2>
+								<p>The rest of the site, which holds and supports the Maps, relies on a standard mix of HTML5, CSS3, and where appropriate-JavaScript.
+									Aspects of the website are mobile optimized, and all work properly on a desktop.
+									The pages themselves were inspired by html5up.net, but all feature significant customization and personalization
+									(everything else-except the D3 map coordinates-was built from scratch by myself).
+									It should also be noted that the media is all open source from Wikimedia.
+									The dashboard-while initially inspired by a free design from html5up.net,
+									was engineered specifically to meet the needs of hosting a choropleth map visualization and for accessing
+									each data table independently, and each column within each table. </p>
+								<ul class="actions vertical">
+									<li><a href="#" class="button">Learn More</a></li>
+								</ul>
+							</div>
+							<div class="image">
+								<img src="../static/images/htmlcss.png" alt="" />
+							</div>
+						</section>
+
+				<!-- Nine -->
+					<section class="spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
+						<div class="content">
+							<h2>The Cloud (Heroku):</h2>
+							<p>While QuantPolitik was initially hosted on Amazon Web Servers, the fact that the “hobby” or lowest tier still wound up costing $20 a month,
+								whereas the Heroku bottom tier was free, it thus made the switch quite sensible from the financial perspective.
+								However, Heroku’s bottom tier does not provide for the dyno to continuously run, so during periods of inactivity,
+								accessing the web page takes considerably longer than preferable due to the dyno “going to sleep.”
+								But since it’s free, it’s hard to complain.
+								That said; Heroku hosts my django server, my redis server, my queue, and my entire Postgres database,
+								the site is being continuously updated and deployed to Heroku as needed. </p>
+							<ul class="actions vertical">
+								<li><a href="#" class="button">Sources</a></li>
+							</ul>
+						</div>
+						<div class="image">
+							<img src="../static/images/heroku.png" alt="" />
+						</div>
+					</section>
+
+				<!-- Footer -->
+					<footer class="wrapper style1 align-center">
+						<div class="inner">
+							<ul class="icons">
+								<li><a href="#" class="icon style2 fa-twitter"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon style2 fa-facebook"><span class="label">Facebook</span></a></li>
+								<li><a href="#" class="icon style2 fa-instagram"><span class="label">Instagram</span></a></li>
+								<li><a href="#" class="icon style2 fa-linkedin"><span class="label">LinkedIn</span></a></li>
+								<li><a href="#" class="icon style2 fa-envelope"><span class="label">Email</span></a></li>
+							</ul>
+							<p>&copy; 2017. QuantPolitik.</p>
+						</div>
+					</footer>
+
+				</div>
+			</div>
+
+	<script src="../static/assets/js/d3.min.js"></script>
+	<script src="../static/assets/js/DropdownButton.js"></script>
+	</body>
+</html>
+
+<!--
+	Inspired by HTML5 UP's Story html5up.net | @ajlkn Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
