@@ -1,7 +1,10 @@
 from django.conf.urls import include, url
+from django.views.generic.base import RedirectView
 
 from django.contrib import admin
 admin.autodiscover()
+
+favicon_view = RedirectView.as_view(url='../favicon.ico', permanent=True)
 
 import hello.views
 
@@ -30,4 +33,5 @@ urlpatterns = [
     url(r'^api/ByCountry/\w{2,40}', hello.views.get_Country_headline_data, name='Country_headline_data'),
     url(r'^api/\w{2,20}/\w{2,20}', hello.views.get_Table_and_Column, name='column_api'),
     url(r'^api/\w{2,20}', hello.views.get_Table, name='table_api'),
+    #url(r'^favicon\.ico$', favicon_view),
 ]

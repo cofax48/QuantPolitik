@@ -1,5 +1,5 @@
 d3.select("ul.maList")
-  .style("opacity", 0);
+  .style("visibility", "hidden");
 
 
 function button() {
@@ -11,7 +11,8 @@ function button() {
 
     function expand(d) {
       d3.select("ul.maList")
-        .style("opacity", .9);
+        .style("opacity", .9)
+        .style("visibility", "unset");
     }
 
   var listicles = d3.select("div#errythingElse");
@@ -39,7 +40,7 @@ function button() {
   function hide(d) {
     console.log("yayyyyyy");
     d3.select("ul.maList")
-      .style("opacity", 0);
+      .style("visibility", "hidden");
   }
 
 }
