@@ -24,12 +24,12 @@ print(str(datetime.tzinfo))
 """
 from sqlalchemy import create_engine
 import json
-from django.http import HttpResponse, JsonResponse
-from api.country_to_number import iso_numberifier
+#from django.http import HttpResponse, JsonResponse
+#from api.country_to_number import iso_numberifier
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
 conn = engine.connect()
 
-
+conn.execute('''UPDATE "Security" SET "Nuclear Technology" = '3'  WHERE "Country_Name" = 'India';''')
 
 """
 conn.execute('''INSERT INTO "CProfile_SCORE" ("Country_Name") VALUES ('Afghanistan');''')
