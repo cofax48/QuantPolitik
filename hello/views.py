@@ -31,6 +31,9 @@ def originalHomePage(request):
 def theTech(request):
     return render(request, 'TheTech.html')
 
+def theAlgorithm(request):
+    return render(request, 'TheAlgorithm.html')
+
 
 #Areas of Analysis
 def BureaucraticExchange(request):
