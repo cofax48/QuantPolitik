@@ -34,6 +34,9 @@ def theTech(request):
 def theAlgorithm(request):
     return render(request, 'TheAlgorithm.html')
 
+def drSchenkein(request):
+    return render(request, 'drSchenkein.html')
+
 
 #Areas of Analysis
 def BureaucraticExchange(request):

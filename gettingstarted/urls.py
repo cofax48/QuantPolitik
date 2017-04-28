@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^AreasofAnalysis', hello.views.areaOfAnalysis, name='areaOfAnalysis'),
     url(r'^TheTech', hello.views.theTech, name='TheTech'),
     url(r'^TheAlgorithm', hello.views.theAlgorithm, name='TheAlgorithm'),
+    url(r'^DrSchenkein', hello.views.drSchenkein, name='drSchenkein'),
     #Areas of Analysis
     url(r'^BureaucraticExchange', hello.views.BureaucraticExchange, name='BureaucraticExchange'),
     url(r'^BusinessRelations', hello.views.BusinessRelations, name='BusinessRelations'),
