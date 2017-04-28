@@ -37,6 +37,9 @@ def theAlgorithm(request):
 def drSchenkein(request):
     return render(request, 'drSchenkein.html')
 
+def JSResume(request):
+    return render(request, 'JSResume.html')
+
 
 #Areas of Analysis
 def BureaucraticExchange(request):

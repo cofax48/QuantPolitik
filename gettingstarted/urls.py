@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^TheTech', hello.views.theTech, name='TheTech'),
     url(r'^TheAlgorithm', hello.views.theAlgorithm, name='TheAlgorithm'),
     url(r'^DrSchenkein', hello.views.drSchenkein, name='drSchenkein'),
+    url(r'^JSResume', hello.views.JSResume, name='JSResume'),
     #Areas of Analysis
     url(r'^BureaucraticExchange', hello.views.BureaucraticExchange, name='BureaucraticExchange'),
     url(r'^BusinessRelations', hello.views.BusinessRelations, name='BusinessRelations'),
