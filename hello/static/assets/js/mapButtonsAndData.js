@@ -175,9 +175,11 @@ function onLoad() {
                     var num = country_value_and_iso[p.id]
                     div.html(country_name_and_iso[p.id] + "'s QP Score:" + "<br/>" + num.toFixed(2));
               d3.select(this).style("stroke-opacity", 1.0);
+              div.style("visibility", "visible");
           })
           .on("mouseout", function () {
               d3.select(this).style("stroke-opacity", 0.0);
+              div.style("visibility", "hidden");
           })
           .on("click", function(p) { //This triggers the country data section
             var CountryName = country_name_and_iso[p.id];
@@ -254,6 +256,7 @@ function createDataViz() {
     d3.select("div.databox").remove();
     d3.select("div.textarea").remove();
     d3.selectAll("div.tooltip").remove();
+
 
     for (i in whole_data) {
     var dataKeys = d3.keys(all_data_for_map[i]).filter(function(el) {
@@ -490,9 +493,11 @@ function createDataViz() {
                                 var num = country_value_and_iso[p.id];
                                 div.html(country_name_and_iso[p.id] + "'s " + datapoint + "<br/>" + num.toFixed(2));
                           d3.select(this).style("stroke-opacity", 1.0);
+                          div.style("visibility", "visible");
                       })
                       .on("mouseout", function () {
                           d3.select(this).style("stroke-opacity", 0.0);
+                          div.style("visibility", "hidden");
                       })
                       .on("click", function(p) { //This triggers the country data section
                         var CountryName = country_name_and_iso[p.id];
@@ -737,9 +742,11 @@ function CategoryMapDraw(categoryScore) {
                       var num = country_value_and_iso[p.id];
                       div.html(country_name_and_iso[p.id] + "'s " + categoryScore + "<br/>" + num.toFixed(2));
                 d3.select(this).style("stroke-opacity", 1.0);
+                div.style("visibility", "visible");
             })
             .on("mouseout", function () {
                 d3.select(this).style("stroke-opacity", 0.0);
+                div.style("visibility", "hidden");
             })
             .on("click", function(p) { //This triggers the country data section
               var CountryName = country_name_and_iso[p.id];
