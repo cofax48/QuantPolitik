@@ -45,7 +45,7 @@
 							<h1>The Tech</h1>
 							<p class="major"><!--[-->QuantPolitik is built on a polyglot platform of Postgres, Python (Pandas, Django), and JavaScript, and is hosted in the cloud, courtesy of Heroku.<!--]--></p>
 							<ul class="actions vertical">
-								<li><a href="references#Business Relations" class="button big wide smooth-scroll-middle">View the Sources</a></li>
+								<li><a href="https://github.com/cofax48/QuantPolitik" class="button big wide smooth-scroll-middle">View the Repo on GitHub</a></li>
 							</ul>
 						</div>
 						<div class="image">
@@ -59,7 +59,7 @@
 							<h2>The Database (Postgres, SqlAlchemy, Redis):</h2>
 							<p>The database is built in Postgres, featuring 147 variables in 9 tables, with 10 additional tables that automatically update and store new values, but more on that later.  Each morning, at 7 am, a worker program, written in Python using the RQ library, launches a Redis server that runs 3 programs sequentially.</p>
 							<ul class="actions vertical">
-								<li><a href="#" class="button">Sources</a></li>
+								<li><a href="https://github.com/cofax48/QuantPolitik/blob/master/clock.py" class="button">The Redis</a></li>
 							</ul>
 						</div>
 						<div class="image">
@@ -80,6 +80,9 @@
 								The program having quantified the Secretary’s daily schedule then takes its data and autonomously updates the Postgres database,
 								using the SqlAlchemy library, and SQL commands for all database interaction. The queue then launches another program that does the same lexical quantification,
 								but for the President and the Vice President.</p>
+							<ul class="actions vertical">
+								<li><a href="https://github.com/cofax48/QuantPolitik/blob/master/Formula_Maker/sec_state_schedule_quantifier.py" class="button">Quantifying Tillerson's Schedule</a></li>
+							</ul>
 						</div>
 						<div class="image">
 							<img src="../static/images/SQLALCHEMTech.png" alt="" />
@@ -94,7 +97,7 @@
 								applies and munges the data using Pandas to organize it and numpy in addition stats to apply the necessary mathematics upon it.
 								Having applied the math to the new data, the program updates my database once more, this time with its new score.</p>
 							<ul class="actions vertical">
-								<li><a href="#" class="button">Learn More</a></li>
+								<li><a href="https://github.com/cofax48/QuantPolitik/blob/master/Formula_Maker/QP_SCORE_MAKER.py" class="button">The Formula</a></li>
 							</ul>
 						</div>
 						<div class="image">
@@ -109,7 +112,7 @@
 							<p>My server is built upon Django’s MVC framework and powers every webpage on the site.
 								While in testing, QuantPolitik relied upon Flask, the decision to move to Django was necessitated by the Heroku platform, and has increased the modularity and speed as a result.</p>
 							<ul class="actions vertical">
-								<li><a href="#" class="button">Sources</a></li>
+								<li><a href="https://github.com/cofax48/QuantPolitik/blob/master/gettingstarted/urls.py" class="button">The Urls in Django</a></li>
 							</ul>
 						</div>
 						<div class="image">
@@ -127,7 +130,7 @@
 									Once the database is accessed, the results are formatted into JSON,
 									and passed by the API to a specifically built page based on the request submitted. </p>
 								<ul class="actions vertical">
-									<li><a href="#" class="button">Learn More</a></li>
+									<li><a href="https://github.com/cofax48/QuantPolitik/blob/master/hello/views.py" class="button">The API and the Views</a></li>
 								</ul>
 							</div>
 							<div class="image">
@@ -146,7 +149,7 @@
 									The D3 map is meant to be scalable and portable as the data constantly changes,
 									yet the scales are redrawn accordingly and the colors consistently shift. </p>
 								<ul class="actions vertical">
-									<li><a href="#" class="button">Sources</a></li>
+									<li><a href="https://github.com/cofax48/QuantPolitik/blob/master/hello/static/assets/js/mapButtonsAndData.js" class="button">The Javascript</a></li>
 								</ul>
 							</div>
 							<div class="image">
@@ -187,7 +190,7 @@
 								That said; Heroku hosts my django server, my redis server, my queue, and my entire Postgres database,
 								the site is being continuously updated and deployed to Heroku as needed. </p>
 							<ul class="actions vertical">
-								<li><a href="#" class="button">Sources</a></li>
+								<li><a href="https://github.com/cofax48/QuantPolitik/tree/master/hello/templates" class="button">The HTML</a></li>
 							</ul>
 						</div>
 						<div class="image">

@@ -137,7 +137,7 @@ def formula(country_name_list, country_and_percentile_rank_list, table_name):
         from Trade_Relations_Formula_Maker import TRFM
         trade_relations_aggregate_factored = TRFM(country_name_list, country_and_percentile_rank_list)['trade_relations_aggregate_factored']
         QP_value['Trade_Relations'] = trade_relations_aggregate_factored
-        print(table_name, 'imported')
+        print(table_name, 'imported') 
     if table_name == 'Governmental_Perspective':
         from Governmental_Perspective_Formula_Maker import GRFM, UN_Grabber
         governmental_relations_aggregate_factored = GRFM(country_name_list, country_and_percentile_rank_list)['governmental_relations_aggregate_factored']
@@ -251,6 +251,7 @@ def main():
         for tab in table_list:
             count_num = country_numberifier(country)
             table_name = tab
+            print(country, float(QP_value[table_name][count_num]))
             if table_name == 'Sec_State_Bureaucratic_Exchange':
                 conn.execute('''UPDATE "Sec_State_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
                 print('Sec_State_Bureaucratic_Exchange', country, QP_value[table_name][count_num])
@@ -295,7 +296,7 @@ def main():
                 conn.execute('''UPDATE "CD_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
                 print('Cultural_Diffusion', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.1)
-                
+
             if table_name == 'Country_Profile':
                 conn.execute('''UPDATE "CProfile_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
                 print('Country_Profile', country, QP_value[table_name][count_num])
@@ -351,6 +352,7 @@ def main():
     conn.execute('''UPDATE "QP_Score" SET "{}" = 0;'''.format(str(todays_date)))
 
     for w in sorted(QP_Final_Value, key=QP_Final_Value.get, reverse=True):
+        print(w, QP_Final_Value[w])
         conn.execute('''UPDATE "QP_Score" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_Final_Value[w]), w))
 
         print(w, QP_Final_Value[w])

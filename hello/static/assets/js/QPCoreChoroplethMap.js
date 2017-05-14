@@ -16,7 +16,7 @@ d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData
   today = month_name+'-'+dd+'-'+yyyy;
   var column_to_use = today;
   console.log(today);
-  for (var i in _.range(198)) {if (whole_data.length == 198) {mapDraw()}
+  for (var i in _.range(199)) {if (whole_data.length == 199) {mapDraw()}
   else {
     whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
 }
