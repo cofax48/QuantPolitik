@@ -17,7 +17,7 @@ def daily_sched_search():
 
     specific_day = datetime.datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
 
-    meeting_finder = re.compile("<li>.*?</li>", re.DOTALL)
+    meeting_finder = re.compile('''(?!AM:</strong>|PM:</strong>).*?</p>''', re.DOTALL)
     meeting_divider = meeting_finder.findall(str(president_schedule))
 
     SecState_daily_meetings_list = []
@@ -182,6 +182,11 @@ def meeting_search(SecState_daily_meetings_list, country_name_list):
                 pass
             elif 'hold a meeting on ' in str(a):
                 pass
+            elif 'call with' in str(a):
+                pass
+            elif 'Indiana' in str(a):
+                a = a.replace('Indiana', ' ')
+                bilateral_meetings_list.append(a)
             elif 'former President' in str(a):
                 a = a.replace('former President', 'former Prez')
                 bilateral_meetings_list.append(a)
@@ -251,6 +256,7 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
 
     #This tests countries by country name
     for meeting in eval(list_setter):
+        print(meeting)
         for leader in leader_list:
             for country in country_name_list:
                 if str(leader) in str(meeting):
@@ -798,7 +804,7 @@ def main():
 
 
     database_updater(country_name_list, new_list)
-    
+
     time2 = time.time()
     print("Total Time to run", time2-time1, 'seconds')
 main()
