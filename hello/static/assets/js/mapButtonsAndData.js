@@ -239,7 +239,7 @@ function createDataViz() {
 
   function onchange(selectValue) {
     console.log(selectValue);
-    var new_select = selectValue.replace(" ", "_");
+    var new_select = selectValue.replace(/ /g, "_");
     console.log(new_select);
     d3.json(aPITOUSE + 'api/' + new_select, function(error, incomingData) {
       incomingData = incomingData[0];
@@ -586,6 +586,7 @@ function CategoryMapDraw(categoryScore) {
   //http://localhost:5000/api/QP_Score
   var whole_data = [{Country_Name:'placeHolder', value:0}];
   d3.json(aPITOUSE + 'api/' + categoryScore, function(error, incomingData) {
+    console.log(categoryScore);
     for (var i in _.range(198)) {if (whole_data.length == 198) {mapDraw()}
     else {
       whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
