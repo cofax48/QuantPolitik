@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 #! Data Grabber
+
+#PCA = Tells me which variables are useful
+#Log transform = 
+#Decay Algorithm
+
 import time
 time1 = time.time()
 from datetime import datetime
@@ -137,7 +142,7 @@ def formula(country_name_list, country_and_percentile_rank_list, table_name):
         from Trade_Relations_Formula_Maker import TRFM
         trade_relations_aggregate_factored = TRFM(country_name_list, country_and_percentile_rank_list)['trade_relations_aggregate_factored']
         QP_value['Trade_Relations'] = trade_relations_aggregate_factored
-        print(table_name, 'imported') 
+        print(table_name, 'imported')
     if table_name == 'Governmental_Perspective':
         from Governmental_Perspective_Formula_Maker import GRFM, UN_Grabber
         governmental_relations_aggregate_factored = GRFM(country_name_list, country_and_percentile_rank_list)['governmental_relations_aggregate_factored']

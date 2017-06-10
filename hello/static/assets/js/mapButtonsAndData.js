@@ -1,5 +1,5 @@
-var aPITOUSE = 'http://www.quantpolitik.com/';
-//var aPITOUSE = 'http://localhost:5000/';
+//var aPITOUSE = 'http://www.quantpolitik.com/';
+var aPITOUSE = 'http://localhost:5000/';
 var today = new Date();
 var dd = today.getDate();
 var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -18,7 +18,7 @@ function onLoad() {
   //http://localhost:5000/api/QP_Score
   var whole_data = [{Country_Name:'placeHolder', value:0}];
   d3.json(aPITOUSE + 'api/QP_Score', function(error, incomingData) {
-    for (var i in _.range(199)) {if (whole_data.length == 199) {mapDraw()}
+    for (var i in _.range(incomingData[0].length)) {if (whole_data.length == 198) {mapDraw()}
     else {
       whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
   }
@@ -238,9 +238,7 @@ function createDataViz() {
   }
 
   function onchange(selectValue) {
-    console.log(selectValue);
     var new_select = selectValue.replace(/ /g, "_");
-    console.log(new_select);
     d3.json(aPITOUSE + 'api/' + new_select, function(error, incomingData) {
       incomingData = incomingData[0];
 
@@ -490,8 +488,28 @@ function createDataViz() {
                                 div	.html(country_value_and_iso[p.id])
                                     .style("left", (d3.event.pageX) + "px")
                                     .style("top", (d3.event.pageY - 28) + "px");
+
                                 var num = country_value_and_iso[p.id];
-                                div.html(country_name_and_iso[p.id] + "'s " + datapoint + "<br/>" + num.toFixed(2));
+
+                                if (datapoint === 'Sec_of_State_2017') {
+                                  meeting_list = []
+
+                                  d3.json(aPITOUSE + 'meetingjsonlist', function(error, incomingData) {
+                                    for (var i in _.range(incomingData[0].length)) {
+                                    if (incomingData[0][i]["Country Name"] === country_name_and_iso[p.id]) {
+                                      meeting_list.push("Met With " + country_name_and_iso[p.id] + "'s " + incomingData[0][i]["Leader"] + "<br/>" + "On " + incomingData[0][i]["Date"] + "<br/>");
+                                  }
+                                  else if (incomingData[0][i]["Country Name"] !== country_name_and_iso[p.id]) {
+                                    if (meeting_list.length > 0) {
+                                      var whole_blurb = country_name_and_iso[p.id] + "'s " + datapoint + "<br/>" + num.toFixed(2) + "<br/>" + meeting_list.join("");
+                                    div.html(whole_blurb);
+                                  }
+                                  else {
+                                    div.html(country_name_and_iso[p.id] + "'s " + datapoint + "<br/>" + num.toFixed(2))
+                                }}
+                              }});
+                              }
+                              else {div.html(country_name_and_iso[p.id] + "'s " + datapoint + "<br/>" + num.toFixed(2))}
                           d3.select(this).style("stroke-opacity", 1.0);
                           div.style("visibility", "visible");
                       })
@@ -586,8 +604,7 @@ function CategoryMapDraw(categoryScore) {
   //http://localhost:5000/api/QP_Score
   var whole_data = [{Country_Name:'placeHolder', value:0}];
   d3.json(aPITOUSE + 'api/' + categoryScore, function(error, incomingData) {
-    console.log(categoryScore);
-    for (var i in _.range(198)) {if (whole_data.length == 198) {mapDraw()}
+    for (var i in _.range(incomingData[0].length)) {if (whole_data.length == 198) {mapDraw()}
     else {
       whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
   }

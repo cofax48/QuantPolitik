@@ -831,6 +831,29 @@ def database_updater(country_name_list, new_list):
                                 print(str(country), 'ccc')
                                 processed_list.append(meeting)
 
+    #turns all dates/leaders/country into json
+    country_date_leader_dict = []
+    for i in new_list:
+        if i == "place holder":
+            pass
+        else:
+            date = i.split("\n")
+            print(date)
+            specific_day = date[0]
+            country = date[1].split("\t")
+            count = country[0]
+            minister = country[1]
+            if specific_day[0].islower() == True:
+                specific_day = specific_day[1:]
+                country_date_leader_dict.append({"Country Name":count, "Date":specific_day, "Leader":minister})
+            else:
+                country_date_leader_dict.append({"Country Name":count, "Date":specific_day, "Leader":minister})
+
+    with open("meeting_json_list.json", 'w') as meeting_json_list:
+        meeting_json_list.truncate()
+        json.dump(country_date_leader_dict, meeting_json_list)
+    meeting_json_list.close()
+
 
 def main():
     country_name_list = country_name_acquistion()['country_name_list']

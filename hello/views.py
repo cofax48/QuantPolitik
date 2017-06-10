@@ -1,4 +1,5 @@
 # coding=utf-8
+import json
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
@@ -68,6 +69,13 @@ def TradeRelations(request):
 
 
 #API's
+def meeting_json_list(request):
+    meeting_json_list_whole = []
+    with open("meeting_json_list.json") as f:
+        meeting_json_list = json.load(f)
+        meeting_json_list_whole.append(meeting_json_list)
+    return JsonResponse(meeting_json_list_whole, safe=False)
+
 def get_Table(request):
     #connect to database
     conn = engine.connect()

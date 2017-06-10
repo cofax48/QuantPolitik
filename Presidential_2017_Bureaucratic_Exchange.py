@@ -17,13 +17,14 @@ def daily_sched_search():
 
     specific_day = datetime.datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
 
-    meeting_finder = re.compile('''(?!AM:</strong>|PM:</strong>).*?</p>''', re.DOTALL)
+    meeting_finder = re.compile('''(?! AM:| PM:).*?</p>''', re.DOTALL)
     meeting_divider = meeting_finder.findall(str(president_schedule))
 
     SecState_daily_meetings_list = []
     for each_meeting in meeting_divider:
         whole_meet = str(specific_day + '\n' + each_meeting[13:])
         if whole_meet not in SecState_daily_meetings_list:
+            print('line 27', whole_meet)
             SecState_daily_meetings_list.append(whole_meet)
 
     return {'SecState_daily_meetings_list':SecState_daily_meetings_list}
@@ -256,7 +257,7 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
 
     #This tests countries by country name
     for meeting in eval(list_setter):
-        print(meeting)
+        print('line 260', meeting)
         for leader in leader_list:
             for country in country_name_list:
                 if str(leader) in str(meeting):
@@ -661,6 +662,7 @@ def database_updater(country_name_list, new_list):
 
     processed_list = ['place holder']
     for meeting in new_list:
+        print('line 665', meeting)
         for country in country_name_list:
             if str(country) in str(meeting):
                 for leader in Two_pt_leader_list:

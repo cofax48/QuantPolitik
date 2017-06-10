@@ -1,5 +1,69 @@
-
+first_digit = 1
+second_digit = 1
+third_digit = first_digit + second_digit
+print(first_digit)
+print(second_digit)
+print(third_digit)
+num_list = [first_digit, second_digit, third_digit]
+while len(str(first_digit)) <= 1000:
+    first_digit = third_digit
+    second_digit = first_digit + second_digit
+    third_digit = first_digit + second_digit
+    num_list.append(second_digit)
+    num_list.append(third_digit)
+    print(len(num_list))
+    if len(str(first_digit)) == 1000:
+        print(len(str(first_digit)))
+        print(first_digit)
+        print(len(num_list))
 """
+import json
+country_date_leader_dict = []
+for i in new_list:
+    if i == "place holder":
+        pass
+    else:
+        date = i.split("\n")
+        print(date)
+        specific_day = date[0]
+        country = date[1].split("\t")
+        count = country[0]
+        minister = country[1]
+        if specific_day[0].islower() == True:
+            specific_day = specific_day[1:]
+            country_date_leader_dict.append({"Country Name":count, "Date":specific_day, "Leader":minister})
+        else:
+            country_date_leader_dict.append({"Country Name":count, "Date":specific_day, "Leader":minister})
+with open("meeting_json_list.json", 'w') as outfile:
+    json.dump(country_date_leader_dict, outfile)
+outfile.close()
+
+for q in country_date_leader_dict:
+    if q["Country Name"] == "Saudi Arabia":
+        print(q)
+
+
+
+#({"Country Name":country, "Date":sd, "Leader":leader})
+
+meeting_json_list = open("meeting_json_list.json", 'w')
+SecState_daily_meetings_list = []
+specific_day = re.compile(r'\w{3,9} \d{1,2}, \d\d\d\d')
+
+yao = '''
+nAPRIL 11, 2017
+United Kingdom	Foreign Minister
+'''
+
+    sd_all_matches = specific_day.findall(meeting)
+    sd = sd_all_matches[0]
+country = 'United Kingdom'
+name_date_leader_json = str('{"Country": "{}", "Date": "{}", "Leader": "{}"}'.format(country, sd, leader))
+meeting_json_list.write(name_date_leader_json)
+meeting_json_list.close()
+
+
+
 from pytz import utc, timezone
 import time
 from datetime import datetime
@@ -21,7 +85,7 @@ print(nyc_dt)
 print(str(datetime.tzinfo))
 
 
-"""
+
 from sqlalchemy import create_engine
 import json
 #from django.http import HttpResponse, JsonResponse
@@ -29,10 +93,10 @@ import json
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
 conn = engine.connect()
 
-country = 'Israel'
+country = 'Colombia'
 conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = 2 WHERE "Country_Name" = '{}';'''.format(country))
 
-"""
+
 conn.execute('''INSERT INTO "CProfile_SCORE" ("Country_Name") VALUES ('Afghanistan');''')
 
 ABRV_table_name = 'Sec_State_Bureaucratic_Exchange'

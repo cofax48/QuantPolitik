@@ -25,6 +25,7 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
                                 country_and_percentile_rank_list['Property Rights'][country] +
                                 country_and_percentile_rank_list['Getting Credit'][country] +
                                 country_and_percentile_rank_list['Resolving Insolvency'][country])
+        print(country, Business_Climate)
         #Factoring for number of missing data Fields and averaging the raw score
         number_of_nan = int(sum([pd.isnull(i) for i in Business_Climate]))
         real_len = int(len(Business_Climate)/2)
@@ -32,7 +33,7 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
         biz_sum = np.nansum(Business_Climate[1::2])
         Business_Climate = biz_sum / dvisible_number
         business_climate_percentile_rank_list.append(Business_Climate)
-        
+
         Corporate_Climate = (country_and_percentile_rank_list['Paying Taxes'][country] +
                                 country_and_percentile_rank_list['Trading Across Borders'][country] +
                                 country_and_percentile_rank_list['Enforcing Contracts'][country] +
@@ -43,9 +44,9 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
         real_len = int(len(Corporate_Climate)/2)
         dvisible_number = int(real_len - number_of_nan)
         num_sum = np.nansum(Corporate_Climate[1::2])
-        Corporate_Climate = num_sum / dvisible_number           
+        Corporate_Climate = num_sum / dvisible_number
         corporate_climate_percentile_rank_list.append(Corporate_Climate)
-        
+
         Financial_Climate = (country_and_percentile_rank_list['Protecting Minority Investors'][country] +
                                 country_and_percentile_rank_list['Monetary Freedom'][country] +
                                 country_and_percentile_rank_list['Fiscal Freedom'][country] +
@@ -59,7 +60,7 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
         num_sum = np.nansum(Financial_Climate[1::2])
         Financial_Climate = num_sum / dvisible_number
         financial_climate_percentile_rank_list.append(Financial_Climate)
-        
+
         Composite_Indices = (country_and_percentile_rank_list['Ease of Doing Business Rank'][country] +
                                 country_and_percentile_rank_list['Economic Freedom World Rank'][country])
         #Factoring for number of missing data Fields and averaging the raw score
@@ -80,7 +81,7 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
 
 
     for a in business_climate_percentile_rank_list:
-        business_climate_percentile_rank_list_factored.append(stats.percentileofscore(business_climate_percentile_rank_list, a, kind='rank'))            
+        business_climate_percentile_rank_list_factored.append(stats.percentileofscore(business_climate_percentile_rank_list, a, kind='rank'))
 
     for b in corporate_climate_percentile_rank_list:
         corporate_climate_percentile_rank_list_factored.append(stats.percentileofscore(corporate_climate_percentile_rank_list, b, kind='rank'))
@@ -90,7 +91,7 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
 
     for d in composite_climate_percentile_rank_list:
         composite_climate_percentile_rank_list_factored.append(stats.percentileofscore(composite_climate_percentile_rank_list, d, kind='rank'))
-                                                               
+
     total_business_rank = {}
     for country in country_name_list:
         country_num = int(country_numberifier(country))
@@ -98,7 +99,7 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
                                         corporate_climate_percentile_rank_list_factored[country_num],
                                         financial_climate_percentile_rank_list_factored[country_num],
                                         composite_climate_percentile_rank_list_factored[country_num])
-        total_business_rank[str(country)] = business_rank_data_together                                         
+        total_business_rank[str(country)] = business_rank_data_together
 
     business_relations_aggregate_factored = []
     for country in country_name_list:
