@@ -11,7 +11,7 @@ var yyyy = today.getFullYear();
 if(dd<10) {dd='0'+dd}
 if(mm<10) {mm='0'+mm}
 today = month_name+'-'+dd+'-'+yyyy;
-var column_to_use = today;
+var column_to_use = 'June-30-2017';
 
 function onLoad() {
 

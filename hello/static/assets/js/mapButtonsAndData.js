@@ -1,5 +1,5 @@
-var aPITOUSE = 'http://www.quantpolitik.com/';
-//var aPITOUSE = 'http://localhost:5000/';
+//var aPITOUSE = 'http://www.quantpolitik.com/';
+var aPITOUSE = 'http://localhost:5000/';
 var today = new Date();
 var dd = today.getDate();
 var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -11,14 +11,14 @@ var yyyy = today.getFullYear();
 if(dd<10) {dd='0'+dd}
 if(mm<10) {mm='0'+mm}
 today = month_name+'-'+dd+'-'+yyyy;
-var column_to_use = today;
+var column_to_use = 'June-30-2017';
 
 function onLoad() {
 
   //http://localhost:5000/api/QP_Score
   var whole_data = [{Country_Name:'placeHolder', value:0}];
   d3.json(aPITOUSE + 'api/QP_Score', function(error, incomingData) {
-    for (var i in _.range(incomingData[0].length)) {if (whole_data.length == 198) {mapDraw()}
+    for (var i in _.range(199)) {if (whole_data.length == 199) {mapDraw()}
     else {
       whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
   }
@@ -497,7 +497,10 @@ function createDataViz() {
                                   d3.json(aPITOUSE + 'meetingjsonlist', function(error, incomingData) {
                                     for (var i in _.range(incomingData[0].length)) {
                                     if (incomingData[0][i]["Country Name"] === country_name_and_iso[p.id]) {
-                                      meeting_list.push("Met With " + country_name_and_iso[p.id] + "'s " + incomingData[0][i]["Leader"] + "<br/>" + "On " + incomingData[0][i]["Date"] + "<br/>");
+                                      var lowerCaseBlurb = incomingData[0][i]["Date"].slice(1).toLowerCase();
+                                      var upperCaseBlub = incomingData[0][i]["Date"].slice(0,1);
+                                      var formattedDate = upperCaseBlub + lowerCaseBlurb;
+                                      meeting_list.push("Met With " + country_name_and_iso[p.id] + "'s " + incomingData[0][i]["Leader"] + "<br/>" + "On " + formattedDate + "<br/>");
                                   }
                                   else if (incomingData[0][i]["Country Name"] !== country_name_and_iso[p.id]) {
                                     if (meeting_list.length > 0) {
@@ -604,7 +607,8 @@ function CategoryMapDraw(categoryScore) {
   //http://localhost:5000/api/QP_Score
   var whole_data = [{Country_Name:'placeHolder', value:0}];
   d3.json(aPITOUSE + 'api/' + categoryScore, function(error, incomingData) {
-    for (var i in _.range(incomingData[0].length)) {if (whole_data.length == 198) {mapDraw()}
+    console.log(categoryScore);
+    for (var i in _.range(199)) {if (whole_data.length == 199) {mapDraw()}
     else {
       whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
   }

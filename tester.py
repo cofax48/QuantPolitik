@@ -1,21 +1,16 @@
 first_digit = 1
 second_digit = 1
 third_digit = first_digit + second_digit
-print(first_digit)
-print(second_digit)
-print(third_digit)
 num_list = [first_digit, second_digit, third_digit]
-while len(str(first_digit)) <= 1000:
+while len(str(num_list[-1])) <= 1000:
     first_digit = third_digit
     second_digit = first_digit + second_digit
     third_digit = first_digit + second_digit
     num_list.append(second_digit)
     num_list.append(third_digit)
-    print(len(num_list))
-    if len(str(first_digit)) == 1000:
-        print(len(str(first_digit)))
-        print(first_digit)
-        print(len(num_list))
+    if len(str(num_list[-1])) == 1000:
+        print('Index position is', len(num_list) -1 )
+
 """
 import json
 country_date_leader_dict = []
