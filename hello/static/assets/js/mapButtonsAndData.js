@@ -11,7 +11,7 @@ var yyyy = today.getFullYear();
 if(dd<10) {dd='0'+dd}
 if(mm<10) {mm='0'+mm}
 today = month_name+'-'+dd+'-'+yyyy;
-var column_to_use = 'June-30-2017';
+var column_to_use = today;
 
 function onLoad() {
 
@@ -223,17 +223,17 @@ function createDataViz() {
   .html(function(d) {return d;});
 
   function mapDrawFromButton (selectValue) {
-    if (selectValue === "Security") {CategoryMapDraw("Security_SCORE");}
+    if (selectValue === "Security") {CategoryMapDraw("Security_SCORE2");}
     else if (selectValue === "QP Score") {CategoryMapDraw("QP_Score");}
-    else if (selectValue === "Country Profile") {CategoryMapDraw("CProfile_SCORE");}
-    else if (selectValue === "Business Relations") {CategoryMapDraw("BR_SCORE");}
-    else if (selectValue === "Trade Relations") {CategoryMapDraw("Trade_SCORE");}
-    else if (selectValue === "Cultural Diffusion") {CategoryMapDraw("CD_SCORE");}
-    else if (selectValue === "Governmental Perspective") {CategoryMapDraw("GP_SCORE");}
-    else if (selectValue === "Presidential Exchange") {CategoryMapDraw("Presidential_SCORE");}
+    else if (selectValue === "Country Profile") {CategoryMapDraw("CProfile_SCORE2");}
+    else if (selectValue === "Business Relations") {CategoryMapDraw("BR_SCORE2");}
+    else if (selectValue === "Trade Relations") {CategoryMapDraw("Trade_SCORE2");}
+    else if (selectValue === "Cultural Diffusion") {CategoryMapDraw("CD_SCORE2");}
+    else if (selectValue === "Governmental Perspective") {CategoryMapDraw("GP_SCORE2");}
+    else if (selectValue === "Presidential Exchange") {CategoryMapDraw("Presidential_SCORE2");}
     else if (selectValue === "UN") {CategoryMapDraw("UN");}
-    else if (selectValue === "Prestige") {CategoryMapDraw("Prestige_SCORE");}
-    else if (selectValue === "Sec State Bureaucratic Exchange") {CategoryMapDraw("Sec_State_SCORE");}
+    else if (selectValue === "Prestige") {CategoryMapDraw("Prestige_SCORE2");}
+    else if (selectValue === "Sec State Bureaucratic Exchange") {CategoryMapDraw("Sec_State_SCORE2");}
     else {return selectValue;}
   }
 

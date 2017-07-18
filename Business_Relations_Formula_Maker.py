@@ -46,6 +46,7 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
         num_sum = np.nansum(Corporate_Climate[1::2])
         Corporate_Climate = num_sum / dvisible_number
         corporate_climate_percentile_rank_list.append(Corporate_Climate)
+        print(country, Corporate_Climate)
 
         Financial_Climate = (country_and_percentile_rank_list['Protecting Minority Investors'][country] +
                                 country_and_percentile_rank_list['Monetary Freedom'][country] +

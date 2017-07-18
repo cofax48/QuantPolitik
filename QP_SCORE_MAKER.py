@@ -2,7 +2,7 @@
 #! Data Grabber
 
 #PCA = Tells me which variables are useful
-#Log transform = 
+#Log transform =
 #Decay Algorithm
 
 import time
@@ -208,45 +208,26 @@ def main():
         formula(country_name_list, country_and_percentile_rank_list, table_name)
 
     country_exceptions_list = ['Nauru', 'Vatican City', 'Somalia', 'Andorra', 'Monaco', 'Cook Islands']
-
     #######################################################################################################
-    ##### COLUMN INITIALIZATION
+    ##### ROW INITIALIZATION
     #######################################################################################################
-    conn.execute('''ALTER TABLE "Sec_State_SCORE" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "Sec_State_SCORE" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "Sec_State_SCORE" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "Sec_State_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
-    conn.execute('''ALTER TABLE "Presidential_SCORE" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "Presidential_SCORE" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "Presidential_SCORE" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "Presidential_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
-    conn.execute('''ALTER TABLE "BR_SCORE" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "BR_SCORE" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "BR_SCORE" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "BR_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
-    conn.execute('''ALTER TABLE "Trade_SCORE" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "Trade_SCORE" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "Trade_SCORE" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "Trade_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
-    conn.execute('''ALTER TABLE "GP_SCORE" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "GP_SCORE" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "GP_SCORE" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "GP_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
-    conn.execute('''ALTER TABLE "Prestige_SCORE" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "Prestige_SCORE" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "Prestige_SCORE" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "Prestige_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
-    conn.execute('''ALTER TABLE "Security_SCORE" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "Security_SCORE" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "Security_SCORE" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "Security_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
-    conn.execute('''ALTER TABLE "CD_SCORE" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "CD_SCORE" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "CD_SCORE" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "CD_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
-    conn.execute('''ALTER TABLE "CProfile_SCORE" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "CProfile_SCORE" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "CProfile_SCORE" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "CProfile_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
 
 
@@ -258,12 +239,12 @@ def main():
             table_name = tab
             print(country, float(QP_value[table_name][count_num]))
             if table_name == 'Sec_State_Bureaucratic_Exchange':
-                conn.execute('''UPDATE "Sec_State_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
+                conn.execute('''UPDATE "Sec_State_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
                 print('Sec_State_Bureaucratic_Exchange', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.8)
 
             if table_name == 'Presidential_Exchange':
-                conn.execute('''UPDATE "Presidential_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
+                conn.execute('''UPDATE "Presidential_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
                 print('Presidential_Exchange', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.7)
 
@@ -272,38 +253,38 @@ def main():
                 if country in country_exceptions_list:
                     pass
                 else:
-                    conn.execute('''UPDATE "BR_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
+                    conn.execute('''UPDATE "BR_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
 
                 print('Business_Relations', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.6)
 
             if table_name == 'Trade_Relations':
-                conn.execute('''UPDATE "Trade_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
+                conn.execute('''UPDATE "Trade_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
                 print('Trade_Relations', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.5)
 
             if table_name == 'Governmental_Perspective':
-                conn.execute('''UPDATE "GP_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
+                conn.execute('''UPDATE "GP_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
                 print('Governmental_Perspective', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.4)
 
             if table_name == 'Prestige':
-                conn.execute('''UPDATE "Prestige_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
+                conn.execute('''UPDATE "Prestige_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
                 print('Prestige', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.3)
 
             if table_name == 'Security':
-                conn.execute('''UPDATE "Security_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
+                conn.execute('''UPDATE "Security_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
                 print('Security', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.2)
 
             if table_name == 'Cultural_Diffusion':
-                conn.execute('''UPDATE "CD_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
+                conn.execute('''UPDATE "CD_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
                 print('Cultural_Diffusion', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.1)
 
             if table_name == 'Country_Profile':
-                conn.execute('''UPDATE "CProfile_SCORE" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_value[table_name][count_num]), country))
+                conn.execute('''UPDATE "CProfile_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
                 print('Country_Profile', country, QP_value[table_name][count_num])
                 temp_value_list.append(QP_value[table_name][count_num])
 
@@ -351,14 +332,11 @@ def main():
     #End Current_Military_Engagement
     ##########################################################################
 
-
-    conn.execute('''ALTER TABLE "QP_Score" DROP COLUMN IF EXISTS "{}";'''.format(str(todays_date)))
-    conn.execute('''ALTER TABLE "QP_Score" ADD COLUMN "{}" VARCHAR;'''.format(str(todays_date)))
-    conn.execute('''UPDATE "QP_Score" SET "{}" = 0;'''.format(str(todays_date)))
+    conn.execute('''INSERT INTO "QP_SCORE2" VALUES ('{}');'''.format(todays_date))
 
     for w in sorted(QP_Final_Value, key=QP_Final_Value.get, reverse=True):
         print(w, QP_Final_Value[w])
-        conn.execute('''UPDATE "QP_Score" SET "{}" = "{}"::bigint + {} WHERE "Country_Name" = '{}';'''.format(todays_date, todays_date, float(QP_Final_Value[w]), w))
+        conn.execute('''UPDATE "QP_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
 
         print(w, QP_Final_Value[w])
 
