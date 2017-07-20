@@ -51,13 +51,15 @@ def daily_sched_search():
     #finds SecState's schedule within each particular day
     for i in each_day_schedule:
         sd_all_matches = specific_day.findall(i)
-        sd = sd_all_matches[0]
-        SecState_search = re.compile(r'((SECRETARY REX TILLERSON|SECRETARY TILLERSON)(.*?<span style=|.*?UNDER SECRETARY FOR|.*?ASSISTANT SECRETARY|.*?ACTING|.*?\*\*\*|.*?</div>))', re.DOTALL)
-        SecState_daily_meeting = SecState_search.findall(i)
-        for meets in SecState_daily_meeting:
-            whole_meet = '\n' + str(sd) + '\n' + str(meets)
-            if whole_meet not in SecState_daily_meetings_list:
-                SecState_daily_meetings_list.append(whole_meet)
+        sd = list(sd_all_matches)
+        if len(sd) == 1:
+            sd = sd[0]
+            SecState_search = re.compile(r'((SECRETARY REX TILLERSON|SECRETARY TILLERSON)(.*?<span style=|.*?UNDER SECRETARY FOR|.*?ASSISTANT SECRETARY|.*?ACTING|.*?\*\*\*|.*?</div>))', re.DOTALL)
+            SecState_daily_meeting = SecState_search.findall(i)
+            for meets in SecState_daily_meeting:
+                whole_meet = '\n' + str(sd) + '\n' + str(meets)
+                if whole_meet not in SecState_daily_meetings_list:
+                    SecState_daily_meetings_list.append(whole_meet)
 
     print('Searching the schedule')
 

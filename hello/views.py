@@ -190,7 +190,6 @@ def get_Dynamic_Table(request):
     bosnia = new_column_list[-2] #23
     stkitts = new_column_list[-1] #148
     new_new_column_list = new_column_list[:23] + [bosnia] + new_column_list[23:147] + [stkitts] + new_column_list[147:-2]
-    print(new_new_column_list)
 
     country_data_dictionary_in_json = {}
     for i in range(len(new_new_column_list)):
