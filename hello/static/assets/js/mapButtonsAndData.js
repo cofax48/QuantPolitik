@@ -17,10 +17,10 @@ function onLoad() {
 
   //http://localhost:5000/api/QP_Score
   var whole_data = [{Country_Name:'placeHolder', value:0}];
-  d3.json(aPITOUSE + 'api/QP_Score', function(error, incomingData) {
-    for (var i in _.range(199)) {if (whole_data.length == 199) {mapDraw()}
+  d3.json(aPITOUSE + 'apiDynamic/QP_SCORE2', function(error, incomingData) {
+    for (var i in COUNTRY_JSON_AUTHORITATIVE_list) {if (whole_data.length == 198) {mapDraw()}
     else {
-      whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
+      whole_data.push({Country_Name:COUNTRY_JSON_AUTHORITATIVE_list[i]["Country_Name"], id:COUNTRY_JSON_AUTHORITATIVE_list[i]["id"], value:incomingData[0][COUNTRY_JSON_AUTHORITATIVE_list[i]["Country_Name"]]});};
   }
       });
   function mapDraw() {
@@ -224,7 +224,7 @@ function createDataViz() {
 
   function mapDrawFromButton (selectValue) {
     if (selectValue === "Security") {CategoryMapDraw("Security_SCORE2");}
-    else if (selectValue === "QP Score") {CategoryMapDraw("QP_Score");}
+    else if (selectValue === "QP Score") {CategoryMapDraw("QP_SCORE2");}
     else if (selectValue === "Country Profile") {CategoryMapDraw("CProfile_SCORE2");}
     else if (selectValue === "Business Relations") {CategoryMapDraw("BR_SCORE2");}
     else if (selectValue === "Trade Relations") {CategoryMapDraw("Trade_SCORE2");}
@@ -240,6 +240,7 @@ function createDataViz() {
   function onchange(selectValue) {
     var new_select = selectValue.replace(/ /g, "_");
     d3.json(aPITOUSE + 'api/' + new_select, function(error, incomingData) {
+      console.log()
       incomingData = incomingData[0];
 
     var table_name = incomingData;
@@ -606,15 +607,13 @@ function CategoryMapDraw(categoryScore) {
 
   //http://localhost:5000/api/QP_Score
   var whole_data = [{Country_Name:'placeHolder', value:0}];
-  d3.json(aPITOUSE + 'api/' + categoryScore, function(error, incomingData) {
-    console.log(categoryScore);
-    for (var i in _.range(199)) {if (whole_data.length == 199) {mapDraw()}
+  d3.json(aPITOUSE + 'apiDynamic/' + categoryScore, function(error, incomingData) {
+    for (var i in COUNTRY_JSON_AUTHORITATIVE_list) {if (whole_data.length == 198) {mapDraw()}
     else {
-      whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
+      whole_data.push({Country_Name:COUNTRY_JSON_AUTHORITATIVE_list[i]["Country_Name"], id:COUNTRY_JSON_AUTHORITATIVE_list[i]["id"], value:incomingData[0][COUNTRY_JSON_AUTHORITATIVE_list[i]["Country_Name"]]});};
   }
       });
   function mapDraw() {
-
   var width = 850, height = 400;
 
   var zoom = d3.behavior.zoom()

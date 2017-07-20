@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 import time
-DATE = time.strftime("%m-%d-%Y")
+from datetime import datetime
 import json
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
 conn = engine.connect()
@@ -76,28 +76,57 @@ Data = 123
 #conn.execute('''ALTER TABLE "Scored_QP_NEW" ADD COLUMN "Row_Name" VARCHAR(50);''')
 
 #conn.execute('''ALTER TABLE "{}" RENAME "Bosnia and Herzegovina" TO "Bosnia and Herzegovina";'''.format(TABLE_NAME))
-with open('COUNTRY_JSON_AUTHORITATIVE.json') as f:
-    country_names = json.load(f)
-counter = 0
-truncate_table = ['Sec_State_SCORE2', 'Presidential_SCORE2', 'BR_SCORE2', 'Trade_SCORE2', 'GP_SCORE2', 'Prestige_SCORE2', 'Security_SCORE2', 'CD_SCORE2', 'CProfile_SCORE2']
-#truncate_table = ['QP_SCORE2']
-for TABLE_NAME in truncate_table:
-    print(TABLE_NAME)
-    conn.execute('''DELETE FROM "{}" WHERE "Date" = 'July-18-2017';'''.format(TABLE_NAME))
-    conn.execute('''ALTER TABLE "{}" RENAME "Saint Kitss and Nevis" TO "Saint Kitts and Nevis";'''.format(TABLE_NAME))
-    """
-    conn.execute('''CREATE TABLE "{}" ("Date" varchar(50) NOT NULL, PRIMARY KEY ("Date"));'''.format(TABLE_NAME))
-    conn.execute('''ALTER TABLE "{}" ADD COLUMN "Country_Name" VARCHAR(50);'''.format(TABLE_NAME))
-    conn.execute('''INSERT INTO "{}" VALUES ('{}');'''.format(TABLE_NAME, DATE))
-    print(TABLE_NAME)
+
+#conn.execute('''DELETE FROM "{}" WHERE "Date" = 'July-18-2017';'''.format('QP_SCORE2'))
+
+ABRV_table_name = 'QP_SCORE2'
+todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
+
+col_name = col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'QP_SCORE2';''')
+col_query = col_name.cursor.fetchall()
+date_and_country_name = col_query[:2]
+remaining_columns = col_query[2:]
+country_list = []
+for i in remaining_columns:
+    country_list.append(i[3])
+new_column_list = [date_and_country_name[0][3], date_and_country_name[1][3]] + country_list
+
+table_query = conn.execute('''SELECT * FROM "{}" WHERE "Date" = '{}';'''.format(ABRV_table_name, todays_date))
+query_list = table_query.cursor.fetchall()
+new_query_list = list(query_list[0])
+print(new_query_list)
+print(new_column_list)
+bosnia = new_column_list[-2] #23
+stkitts = new_column_list[-1] #148
+new_new_column_list = new_column_list[:23] + [bosnia] + new_column_list[23:147] + [stkitts] + new_column_list[147:-2]
+print(new_new_column_list)
+
+country_data_dictionary_in_json = {}
+for i in range(len(new_new_column_list)):
+    country_data_dictionary_in_json[new_new_column_list[i]] = new_query_list[i]
+print(country_data_dictionary_in_json)
+
+def function_stuff():
+    conn.execute('''ALTER TABLE "{}" RENAME "Bosnia and Herzgrovina" TO "Bosnia and Herzegovina";'''.format('QP_SCORE2'))
+    conn.execute('''ALTER TABLE "{}" RENAME "Saint Kitss and Nevis" TO "Saint Kitts and Nevis";'''.format('QP_SCORE2'))
+    truncate_table = ['QP_SCORE2', 'Sec_State_SCORE2', 'Presidential_SCORE2', 'BR_SCORE2', 'Trade_SCORE2', 'GP_SCORE2', 'Prestige_SCORE2', 'Security_SCORE2', 'CD_SCORE2', 'CProfile_SCORE2']
+    #truncate_table = ['QP_SCORE2']
+    for TABLE_NAME in truncate_table:
+        print(TABLE_NAME)
+        conn.execute('''DELETE FROM "{}" WHERE "Date" = 'July-19-2017';'''.format(TABLE_NAME))
+        """
+        conn.execute('''CREATE TABLE "{}" ("Date" varchar(50) NOT NULL, PRIMARY KEY ("Date"));'''.format(TABLE_NAME))
+        conn.execute('''ALTER TABLE "{}" ADD COLUMN "Country_Name" VARCHAR(50);'''.format(TABLE_NAME))
+        conn.execute('''INSERT INTO "{}" VALUES ('{}');'''.format(TABLE_NAME, DATE))
+        print(TABLE_NAME)
 
 
-    for country in country_names:
-        conn.execute('''ALTER TABLE "{}" ADD COLUMN "{}" VARCHAR(50);'''.format(TABLE_NAME, country["Country_Name"]))
-        #counter += 1
-        #conn.execute('''INSERT INTO "QuantPolitik_Score" VALUES ({});'''.format(counter))
-        print(country["Country_Name"])
-    """
+        for country in country_names:
+            conn.execute('''ALTER TABLE "{}" ADD COLUMN "{}" VARCHAR(50);'''.format(TABLE_NAME, country["Country_Name"]))
+            #counter += 1
+            #conn.execute('''INSERT INTO "QuantPolitik_Score" VALUES ({});'''.format(counter))
+            print(country["Country_Name"])
+        """
 """
 truncate_table = ['Sec_State_SCORE2', 'Presidential_SCORE2', 'BR_SCORE2', 'Trade_SCORE2', 'GP_SCORE2', 'Prestige_SCORE2', 'Security_SCORE2', 'CD_SCORE2', 'CProfile_SCORE2']
 for TABLE_NAME in truncate_table:
@@ -105,4 +134,24 @@ for TABLE_NAME in truncate_table:
     conn.execute('''CREATE TABLE "{}" ("Date" varchar(50) NOT NULL, PRIMARY KEY ("Date"));'''.format(TABLE_NAME))
     conn.execute('''ALTER TABLE "{}" ADD COLUMN "Country_Name" VARCHAR(50);'''.format(TABLE_NAME))
     conn.execute('''INSERT INTO "{}" VALUES ('{}');'''.format(TABLE_NAME, DATE))
+"""
+"""
+col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '{}';'''.format('Business_Relations'))
+col_names = []
+[col_names.append(q[3]) for q in col_query]
+query = conn.execute('SELECT * FROM "{}" ORDER BY "Country_Name";'.format('Business_Relations'))
+query_list = query.cursor.fetchall()
+iso3_codes = conn.execute('''SELECT "Iso3" FROM "QP_Score" ORDER BY "Country_Name";''')
+iso3_codes_list = iso3_codes.cursor.fetchall()
+
+country_and_data_dict = []
+for i in range(len(query_list)):
+    country = query_list[i][0]
+    temp_list = {}
+    for c in range(len(col_names)):
+        temp_list[col_names[c]] = query_list[i][c]
+    temp_list["Iso3"] = iso3_codes_list[i][0]
+    country_and_data_dict.append(temp_list)
+for i in country_and_data_dict:
+    print('{"Country_Name": "' + str(i["Country_Name"]) + '", "id": "'+str(i["Iso3"])+'"},')
 """

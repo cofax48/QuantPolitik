@@ -211,22 +211,31 @@ def main():
     #######################################################################################################
     ##### ROW INITIALIZATION
     #######################################################################################################
+    conn.execute('''DELETE FROM "Sec_State_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "Sec_State_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
+    conn.execute('''DELETE FROM "Presidential_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "Presidential_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
+    conn.execute('''DELETE FROM "BR_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "BR_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
+    conn.execute('''DELETE FROM "Trade_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "Trade_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
+    conn.execute('''DELETE FROM "GP_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "GP_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
+    conn.execute('''DELETE FROM "Prestige_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "Prestige_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
+    conn.execute('''DELETE FROM "Security_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "Security_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
+    conn.execute('''DELETE FROM "CD_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "CD_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
+    conn.execute('''DELETE FROM "CProfile_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "CProfile_SCORE2" VALUES ('{}');'''.format(todays_date))
     #######################################################################################################
 
@@ -332,13 +341,12 @@ def main():
     #End Current_Military_Engagement
     ##########################################################################
 
+    conn.execute('''DELETE FROM "QP_SCORE2" WHERE "Date" = '{}';'''.format(todays_date))
     conn.execute('''INSERT INTO "QP_SCORE2" VALUES ('{}');'''.format(todays_date))
 
     for w in sorted(QP_Final_Value, key=QP_Final_Value.get, reverse=True):
         print(w, QP_Final_Value[w])
-        conn.execute('''UPDATE "QP_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
-
-        print(w, QP_Final_Value[w])
+        conn.execute('''UPDATE "QP_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(w, float(QP_Final_Value[w]), todays_date))
 
     time2 = time.time()
     print("Total time to run ", int(time2 - time1), "seconds")

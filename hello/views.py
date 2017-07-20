@@ -1,5 +1,7 @@
 # coding=utf-8
 import json
+from datetime import datetime
+import time
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
@@ -91,6 +93,8 @@ def get_Table(request):
 
     if '/' in str(ABRV_table_name):
         get_Table_and_Column(request)
+    elif 'Dynamic' in str(ABRV_table_name):
+        get_Dynamic_Table(request)
     else:
 
         col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '{}';'''.format(ABRV_table_name))
@@ -151,8 +155,49 @@ def get_Table_and_Column(request):
     json_list_to_send.append(country_and_data_list)
 
 
-    return JsonResponse(country_and_data_list, safe=False)
+    return JsonResponse(json_list_to_send, safe=False)
 
+def get_Dynamic_Table(request):
+    #connect to database
+    conn = engine.connect()
+    #preform query and return json data
+
+    #Eliminate WSGI Get notation
+    print(request)
+    ABRV_table_name = str(request)[31:]
+    ABRV_table_name = ABRV_table_name[:-2]
+    ABRV_table_name != 'favicon.ico'
+    ABRV_table_name != '/favicon.ico'
+
+    list_return = []
+
+    print(ABRV_table_name)
+    todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
+
+    col_name = col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'QP_SCORE2';''')
+    col_query = col_name.cursor.fetchall()
+    date_and_country_name = col_query[:2]
+    remaining_columns = col_query[2:]
+    country_list = []
+    for i in remaining_columns:
+        country_list.append(i[3])
+    new_column_list = [date_and_country_name[0][3], date_and_country_name[1][3]] + country_list
+
+    table_query = conn.execute('''SELECT * FROM "{}" WHERE "Date" = '{}';'''.format(ABRV_table_name, todays_date))
+    query_list = table_query.cursor.fetchall()
+    new_query_list = list(query_list[0])
+
+    bosnia = new_column_list[-2] #23
+    stkitts = new_column_list[-1] #148
+    new_new_column_list = new_column_list[:23] + [bosnia] + new_column_list[23:147] + [stkitts] + new_column_list[147:-2]
+    print(new_new_column_list)
+
+    country_data_dictionary_in_json = {}
+    for i in range(len(new_new_column_list)):
+        country_data_dictionary_in_json[new_new_column_list[i]] = new_query_list[i]
+    list_return.append(country_data_dictionary_in_json)
+
+    return JsonResponse(list_return, safe=False)
 
 def get_Country_headline_data(request):
     from datetime import datetime

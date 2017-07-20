@@ -2,7 +2,7 @@
 
 //http://localhost:5000/api/QP_Score
 var whole_data = ['place holder'];
-d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData) {
+d3.json('http://www.quantpolitik.com/apiDynamic/QP_SCORE2', function(error, incomingData) {
   var today = new Date();
   var dd = today.getDate();
   var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -14,10 +14,10 @@ d3.json('http://www.quantpolitik.com/api/QP_Score', function(error, incomingData
   if(dd<10) {dd='0'+dd}
   if(mm<10) {mm='0'+mm}
   today = month_name+'-'+dd+'-'+yyyy;
-  var column_to_use = 'June-30-2017';
-  for (var i in _.range(199)) {if (whole_data.length == 199) {mapDraw()}
+  var column_to_use = today;
+  for (var i in COUNTRY_JSON_AUTHORITATIVE_list) {if (whole_data.length == 198) {mapDraw()}
   else {
-    whole_data.push({Country_Name:incomingData[0][i]["Country_Name"], id:incomingData[0][i]["Iso3"], value:incomingData[0][i][column_to_use]});};
+    whole_data.push({Country_Name:COUNTRY_JSON_AUTHORITATIVE_list[i]["Country_Name"], id:COUNTRY_JSON_AUTHORITATIVE_list[i]["id"], value:incomingData[0][COUNTRY_JSON_AUTHORITATIVE_list[i]["Country_Name"]]});};
 }
     });
 function mapDraw() {
