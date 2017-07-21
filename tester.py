@@ -1,3 +1,17 @@
+n = 10
+#3628800
+num = 1
+counter = 1
+while counter < n:
+    print(num)
+    new_num = counter * num
+    num += new_num
+    counter += 1
+
+print(num)
+
+
+"""
 first_digit = 1
 second_digit = 1
 third_digit = first_digit + second_digit
@@ -11,7 +25,7 @@ while len(str(num_list[-1])) <= 1000:
     if len(str(num_list[-1])) == 1000:
         print('Index position is', len(num_list) -1 )
 
-"""
+
 import json
 country_date_leader_dict = []
 for i in new_list:

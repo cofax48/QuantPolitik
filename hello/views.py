@@ -40,6 +40,9 @@ def theAlgorithm(request):
 def drSchenkein(request):
     return render(request, 'drSchenkein.html')
 
+def AngularTesting(request):
+    return render(request, 'AngularTesting.html')
+
 def JSResume(request):
     return render(request, 'JSResume.html')
 

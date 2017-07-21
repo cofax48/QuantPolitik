@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^$', hello.views.index, name='index'),
     url(r'^datadashboard', hello.views.dataDashBoard, name='dataDashBoard'),
     url(r'^originalHomePage', hello.views.originalHomePage, name='originalHomePage'),
+    url(r'^AngularTesting', hello.views.AngularTesting, name='AngularTesting'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^about', hello.views.aboutPage, name='aboutPage'),
     url(r'^AreasofAnalysis', hello.views.areaOfAnalysis, name='areaOfAnalysis'),
