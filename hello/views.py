@@ -37,11 +37,18 @@ def theTech(request):
 def theAlgorithm(request):
     return render(request, 'TheAlgorithm.html')
 
+####Angular Testing
+
 def drSchenkein(request):
     return render(request, 'drSchenkein.html')
 
 def AngularTesting(request):
     return render(request, 'AngularTesting.html')
+
+def SevenminWorkout(request):
+    return render(request, '7minWorkout.html')
+
+#########
 
 def JSResume(request):
     return render(request, 'JSResume.html')
@@ -216,7 +223,7 @@ def get_Country_headline_data(request):
     ABRV_Country_name != 'favicon.ico'
     ABRV_Country_name != '/favicon.ico'
 
-    QP_Score_query = conn.execute('''SELECT "{}" FROM "QP_Score" WHERE "Country_Name" = '{}';'''.format(todays_date, ABRV_Country_name))
+    QP_Score_query = conn.execute('''SELECT "{}" FROM "QP_SCORE2" WHERE "Country_Name" = '{}';'''.format(todays_date, ABRV_Country_name))
     QPSResult = QP_Score_query.cursor.fetchall()
     Population_query = conn.execute('''SELECT "Population in Millions" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
     PQResult = Population_query.cursor.fetchall()

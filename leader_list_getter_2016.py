@@ -49,10 +49,10 @@ def leader_name_list_getter():
                     if str(territory) not in str(country):
                         if country not in relvent_info:
                             relvent_info.append(country)
-                            
-            last_country = country_list[-1]                       
+
+            last_country = country_list[-1]
             country_and_leader_info[last_country] = relvent_info
-                            
+
 
     not_country_name_list = ['G-20', 'ASEAN', 'APEC', 'G-8', 'NATO', 'Gulf Cooperation Council', 'GCC', 'G-7', 'Summit of the Americas', 'East Asia Summit', 'Strategic and Economic Dialogue']
 
@@ -66,6 +66,10 @@ def leader_name_list_getter():
             pass
         elif 'Samoa' in str(country):
             pass
+        elif 'Cook Islands' in str(country):
+            pass
+        elif 'Kosovo' in str(country):
+            pass
         elif 'Switzerland' in str(country):
             pass
         elif 'South Sudan' in str(country):
@@ -77,19 +81,19 @@ def leader_name_list_getter():
         else:
             yao_length = len(country_and_leader_info[country])
             for i in range(yao_length):
-                whole_snippet = country_and_leader_info[country][i]      
+                whole_snippet = country_and_leader_info[country][i]
                 whole_snippet = whole_snippet.replace('"', '')
                 whole_snippet = whole_snippet.replace("'", '')
                 whole_snippet = whole_snippet.replace('</a>', '')
                 whole_snippet = whole_snippet.replace('>', '')
                 if len(str(country_and_leader_info[country][i])) > 40:
-                    whole_snippet = country_and_leader_info[country][i]      
+                    whole_snippet = country_and_leader_info[country][i]
                     extracted_title = re.sub('^(.*)(?=President)',"", whole_snippet)
                     extracted_title = str(extracted_title).replace('</a>', '')
                     temp_list.append(str(extracted_title))
                 if len(str(country_and_leader_info[country][i])) < 40:
                     temp_list.append(str(whole_snippet))
-                    
+
                 if i == int(yao_length - 1):
                     yao = temp_list[0]
                     newest_country_and_list_thats_useable.append(str(yao))
@@ -112,7 +116,7 @@ def leader_name_list_getter():
         elif name == 'Australia':
             countries[3] = ''
             countries[4] = ''
-            countries[5] = ''            
+            countries[5] = ''
         elif name == 'United Kingdom':
             countries[3] = ''
             countries[4] = 'Prime Minister'
@@ -129,7 +133,7 @@ def leader_name_list_getter():
             countries[2] = ''
         elif name == 'Switzerland':
             countries[1] = 'President'
-            countries[2] = 'Doris Leuthard'            
+            countries[2] = 'Doris Leuthard'
         elif name == 'Saudi Arabia':
             countries[1] = ''
             countries[2] = 'King'
@@ -140,12 +144,6 @@ def leader_name_list_getter():
         elif name == 'San Marino':
             countries[1] = 'Captain Regent'
 
-    return {'newest_country_and_list_thats_useable': newest_country_and_list_thats_useable, 'new_country_leader_list':new_country_leader_list} 
-          
-leader_name_list_getter()['newest_country_and_list_thats_useable']
-            
-            
-    
-    
+    return {'newest_country_and_list_thats_useable': newest_country_and_list_thats_useable, 'new_country_leader_list':new_country_leader_list}
 
-    
+leader_name_list_getter()['newest_country_and_list_thats_useable']

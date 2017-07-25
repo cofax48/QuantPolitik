@@ -1,17 +1,17 @@
+"""
 n = 10
 #3628800
 num = 1
 counter = 1
 while counter < n:
-    print(num)
     new_num = counter * num
     num += new_num
     counter += 1
 
-print(num)
+return num
 
 
-"""
+
 first_digit = 1
 second_digit = 1
 third_digit = first_digit + second_digit
@@ -92,7 +92,7 @@ nyc_tz = timezone('US/Eastern')
 nyc_dt = utc_dt.astimezone(nyc_tz)
 print(nyc_dt)
 print(str(datetime.tzinfo))
-
+"""
 
 
 from sqlalchemy import create_engine
@@ -102,6 +102,37 @@ import json
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
 conn = engine.connect()
 
+
+ABRV_table_name = 'QP_SCORE2'
+todays_date = "07-21-2017"
+
+
+col_name = col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'QP_SCORE2';''')
+col_query = col_name.cursor.fetchall()
+date_and_country_name = col_query[:2]
+remaining_columns = col_query[2:]
+country_list = []
+for i in remaining_columns:
+    country_list.append(i[3])
+new_column_list = [date_and_country_name[0][3], date_and_country_name[1][3]] + country_list
+
+table_query = conn.execute('''SELECT * FROM "{}" WHERE "Date" = '{}';'''.format(ABRV_table_name, todays_date))
+query_list = table_query.cursor.fetchall()
+print(query_list)
+new_query_list = list(query_list[0])
+
+bosnia = new_column_list[-2] #23
+stkitts = new_column_list[-1] #148
+new_new_column_list = new_column_list[:23] + [bosnia] + new_column_list[23:147] + [stkitts] + new_column_list[147:-2]
+
+country_data_dictionary_in_json = {}
+for i in range(len(new_new_column_list)):
+    country_data_dictionary_in_json[new_new_column_list[i]] = new_query_list[i]
+list_return.append(country_data_dictionary_in_json)
+
+
+
+"""
 country = 'Colombia'
 conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = 2 WHERE "Country_Name" = '{}';'''.format(country))
 

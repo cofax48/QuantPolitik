@@ -16,12 +16,15 @@ urlpatterns = [
     url(r'^$', hello.views.index, name='index'),
     url(r'^datadashboard', hello.views.dataDashBoard, name='dataDashBoard'),
     url(r'^originalHomePage', hello.views.originalHomePage, name='originalHomePage'),
-    url(r'^AngularTesting', hello.views.AngularTesting, name='AngularTesting'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^about', hello.views.aboutPage, name='aboutPage'),
     url(r'^AreasofAnalysis', hello.views.areaOfAnalysis, name='areaOfAnalysis'),
     url(r'^TheTech', hello.views.theTech, name='TheTech'),
     url(r'^TheAlgorithm', hello.views.theAlgorithm, name='TheAlgorithm'),
+    #Testing with angular
+    url(r'^7minWorkout', hello.views.SevenminWorkout, name='SevenminWorkout'),
+    url(r'^AngularTesting', hello.views.AngularTesting, name='AngularTesting'),
+    #################
     url(r'^DrSchenkein', hello.views.drSchenkein, name='drSchenkein'),
     url(r'^JSResume', hello.views.JSResume, name='JSResume'),
     #Areas of Analysis

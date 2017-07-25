@@ -24,6 +24,8 @@ def daily_sched_search():
     for links in dsl:
         list_of_sched_links.append(links)
 
+    print('getting schedule links')
+
     sec_state_schedule_urls = []
     for l in list_of_sched_links:
         if len(str(l)) < 90:
@@ -701,26 +703,23 @@ def database_updater(country_name_list, new_list):
 
     processed_list = ['place holder']
     for meeting in new_list:
-        print(meeting)
+        print('updating database')
         for country in country_name_list:
             if str(country) in str(meeting):
                 for leader in Two_pt_leader_list:
                     if str(leader) in str(meeting):
                         if meeting not in processed_list:
-                            print(str(country), 'aaa')
                             conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                             processed_list.append(meeting)
                 for leader in One_pt_leader_list:
                     if str(leader) in str(meeting):
                         if meeting not in processed_list:
                             conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 1 WHERE "Country_Name" = '{}';'''.format(country))
-                            print(str(country), 'bbb')
                             processed_list.append(meeting)
                 for leader in half_pt_leader_list:
                     if str(leader) in str(meeting):
                         if meeting not in processed_list:
                             conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + .5 WHERE "Country_Name" = '{}';'''.format(country))
-                            print(str(country), 'ccc')
                             processed_list.append(meeting)
 
     caricom = ['Antigua and Barbuda', 'Bahamas, the', 'Barbados', 'Belize', 'Dominica', 'Grenada', 'Guyana', 'Haiti', 'Jamaica', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Suriname', 'Trinidad and Tobago']
@@ -817,20 +816,17 @@ def database_updater(country_name_list, new_list):
                     for leader in Two_pt_leader_list:
                         if str(leader) in str(meeting):
                             if meeting not in processed_list:
-                                print(str(country), 'aaa')
                                 conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                                 processed_list.append(meeting)
                     for leader in One_pt_leader_list:
                         if str(leader) in str(meeting):
                             if meeting not in processed_list:
                                 conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 1 WHERE "Country_Name" = '{}';'''.format(country))
-                                print(str(country), 'bbb')
                                 processed_list.append(meeting)
                     for leader in half_pt_leader_list:
                         if str(leader) in str(meeting):
                             if meeting not in processed_list:
                                 conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + .5 WHERE "Country_Name" = '{}';'''.format(country))
-                                print(str(country), 'ccc')
                                 processed_list.append(meeting)
 
     #turns all dates/leaders/country into json
@@ -840,7 +836,6 @@ def database_updater(country_name_list, new_list):
             pass
         else:
             date = i.split("\n")
-            print(date)
             specific_day = date[0]
             country = date[1].split("\t")
             count = country[0]
