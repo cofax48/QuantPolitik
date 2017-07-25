@@ -687,6 +687,7 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
 
 def database_updater(country_name_list, new_list):
 
+    print('updating database')
     engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
     conn = engine.connect()
 
@@ -703,7 +704,6 @@ def database_updater(country_name_list, new_list):
 
     processed_list = ['place holder']
     for meeting in new_list:
-        print('updating database')
         for country in country_name_list:
             if str(country) in str(meeting):
                 for leader in Two_pt_leader_list:

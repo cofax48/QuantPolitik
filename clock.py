@@ -20,7 +20,7 @@ q = Queue(connection=conn)
 def gather_sec_state_schedule():
     print('starting sec_state')
     q.enqueue(SECMain)
-
+"""
 def gather_Pres_schedule():
     print('starting pres')
     q.enqueue(PresMain)
@@ -28,8 +28,10 @@ def gather_Pres_schedule():
 def gather_QP_Score():
     print('QP maker')
     q.enqueue(QP_Main)
-
-sched.add_job(gather_sec_state_schedule, 'cron', day_of_week='*', hour=15, minute=20, timezone='US/Eastern')
+"""
+sched.add_job(gather_sec_state_schedule, 'cron', day_of_week='*', hour=15, minute=40, timezone='US/Eastern')
+"""
 sched.add_job(gather_Pres_schedule, 'cron', day_of_week='*', hour=15, minute=25, timezone='US/Eastern')
 sched.add_job(gather_QP_Score, 'cron', day_of_week='*', hour=15, minute=30, timezone='US/Eastern')
+"""
 sched.start()
