@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import datetime, time
-from time import sleep
 time1 = time.time()
 import re
 import requests
@@ -11,59 +10,25 @@ from sqlalchemy import create_engine
 from unidecode import unidecode
 
 def daily_sched_search():
-    url_list = []
-    res = requests.get('https://www.state.gov/r/pa/prs/appt/2017/index.htm')
-    for chunk in res.iter_content(100000):
-        url_list.append(chunk)
+    new_res = requests.get('http://www.whitehousedossier.com/category/trump-schedule/')
+    president_schedule = []
+    for new_chunk in new_res.iter_content(100000):
+        president_schedule.append(new_chunk)
 
-
-    daily_schedule_links = re.compile('<a href=".*?">Public Schedule: ', re.DOTALL)
-    dsl = daily_schedule_links.findall(str(url_list))
-
-    list_of_sched_links = []
-    for links in dsl:
-        list_of_sched_links.append(links)
-
-    print('getting schedule links')
-
-    sec_state_schedule_urls = []
-    for l in list_of_sched_links:
-        if len(str(l)) < 90:
-            new_L = str(l).replace('<a href="', 'https://www.state.gov')
-            newest_L = str(new_L).replace('">Public Schedule: ', '')
-            sec_state_schedule_urls.append(newest_L)
-
-    sec_state_schedule = []
-    for url in sec_state_schedule_urls:
-        new_res = requests.get(url)
-
-        for new_chunk in new_res.iter_content(100000):
-            sec_state_schedule.append(new_chunk)
-
-    schedule_block = re.compile('<!-- CENTERBLOCK START -->.*?<!-- CENTERBLOCK END -->', re.DOTALL)
-    sb = schedule_block.findall(str(sec_state_schedule))
-
-    each_day_schedule = []
-    for eds in sb:
-        each_day_schedule.append(eds)
-
-    SecState_daily_meetings_list = []
     specific_day = re.compile(r'\w{3,9} \d{1,2}, \d\d\d\d')
 
-    #finds SecState's schedule within each particular day
-    for i in each_day_schedule:
-        sd_all_matches = specific_day.findall(i)
-        sd = list(sd_all_matches)
-        if len(sd) == 1:
-            sd = sd[0]
-            SecState_search = re.compile(r'((SECRETARY REX TILLERSON|SECRETARY TILLERSON)(.*?<span style=|.*?UNDER SECRETARY FOR|.*?ASSISTANT SECRETARY|.*?ACTING|.*?\*\*\*|.*?</div>))', re.DOTALL)
-            SecState_daily_meeting = SecState_search.findall(i)
-            for meets in SecState_daily_meeting:
-                whole_meet = '\n' + str(sd) + '\n' + str(meets)
-                if whole_meet not in SecState_daily_meetings_list:
-                    SecState_daily_meetings_list.append(whole_meet)
+    meeting_finder = re.compile(r'''rel="bookmark">Trump Schedule.*?rel="category tag">Trump Schedule</a>''', re.DOTALL)
+    meeting_divider = meeting_finder.findall(str(president_schedule))
 
-    print('Searching the schedule')
+    SecState_daily_meetings_list = []
+    for each_meeting in meeting_divider:
+        sd_all_matches = specific_day.findall(each_meeting)
+        sd = list(sd_all_matches)
+        if len(sd) >= 1:
+            sd = sd[0]
+            whole_meet = str(str(sd) + '\n' + each_meeting[13:])
+            if whole_meet not in SecState_daily_meetings_list:
+                SecState_daily_meetings_list.append(whole_meet)
 
     return {'SecState_daily_meetings_list':SecState_daily_meetings_list}
 
@@ -105,166 +70,172 @@ def meeting_search(SecState_daily_meetings_list, country_name_list):
 
     bilateral_meetings_list = []
     for a in SecState_daily_meetings_list:
-        if 'Northern Ireland' in str(a):
-            a = a.replace('Northern Ireland', '')
-            bilateral_meetings_list.append(a)
-        elif 'Port of Spain' in str(a):
-            a = a.replace('Port of Spain', '')
-            bilateral_meetings_list.append(a)
-        elif "Cote d’Ivoire" in str(a):
-            a = a.replace("Cote d’Ivoire", 'Ivory Coast')
-            bilateral_meetings_list.append(a)
-        elif "Côte d'Ivoire" in str(a):
-            a = a.replace("Côte d'Ivoire", 'Ivory Coast')
-            bilateral_meetings_list.append(a)
-        elif 'Deputy Crown Prince' in str(a):
-            a = a.replace("Deputy Crown Prince", 'Deputy CroPri')
-            bilateral_meetings_list.append(a)
-        elif 'Holy See' in str(a):
-            a = a.replace('Holy See', 'Vatican City')
-            bilateral_meetings_list.append(a)
-        elif 'Special Envoy for ' in str(a):
-            a = re.sub(r'Special Envoy for \w{0,15}', '', a, count=2)
-            bilateral_meetings_list.append(a)
-        elif "Timor-Leste" in str(a):
-            a = a.replace("Timor-Leste", 'East Timor')
-            bilateral_meetings_list.append(a)
-        elif 'Secretary of Defense Ashton Carter' in str(a):
-            a = a.replace("Secretary of Defense Ashton Carter", '')
-            bilateral_meetings_list.append(a)
-        elif 'Environment Minister' in str(a):
-            a = a.replace('Environment Minister', 'Minister of Environment')
-            bilateral_meetings_list.append(a)
-        elif 'Minister of Defense' in str(a):
-            a = a.replace('Minister of Defense', 'Defense Minister')
-            bilateral_meetings_list.append(a)
-        elif 'Foreign Secretary' in str(a):
-            a = a.replace('Foreign Secretary', 'Foreign Minister')
-            bilateral_meetings_list.append(a)
-        elif 'Climate Change Secretary' in str(a):
-            a = a.replace('Climate Change Secretary', 'Minister of Environment')
-            bilateral_meetings_list.append(a)
-        elif 'working lunch' in str(a):
-            a = a.replace('working lunch', 'working dinner')
-            bilateral_meetings_list.append(a)
-        elif "European Commission President" in str(a):
-            a = a.replace("European Commission President", '')
-            bilateral_meetings_list.append(a)
-        elif 'Democratic Congo, Republic of the' in str(a):
-            a = a.replace("Democratic Congo, Republic of the", 'Democratic Republic of the Congo')
-            bilateral_meetings_list.append(a)
-        elif "The Bahamas" in str(a):
-            a = a.replace("The Bahamas", 'Bahamas, The')
-            bilateral_meetings_list.append(a)
-        elif 'on Syria' in str(a):
-            a = a.replace("on Syria", '')
-            bilateral_meetings_list.append(a)
-        elif 'Chairman and General Secretary of the National League of Democracy' in str(a):
-            a = a.replace("Chairman and General Secretary of the National League of Democracy", 'Opposition Leader of Myanmar')
-            bilateral_meetings_list.append(a)
-        elif 'The Gambia' in str(a):
-            a = a.replace("The Gambia", 'Gambia, The')
-            bilateral_meetings_list.append(a)
-        elif 'Israeli-Palestinian Negotiations' in str(a):
-            a = a.replace('Israeli-Palestinian Negotiations', '')
-            bilateral_meetings_list.append(a)
-        elif 'Director for North Africa and Yemen' in str(a):
-            a = a.replace('Director for North Africa and Yemen', '')
-            if 'Special Envoy for Libya' in str(a):
-                a = a.replace('Special Envoy for Libya', '')
+        if 'title="Trump Schedule' in str(a):
+            if 'Northern Ireland' in str(a):
+                a = a.replace('Northern Ireland', '')
                 bilateral_meetings_list.append(a)
-            else:
+            elif 'Port of Spain' in str(a):
+                a = a.replace('Port of Spain', '')
                 bilateral_meetings_list.append(a)
-        elif 'UN Envoy for Syria' in str(a):
-            a = a.replace('UN Envoy for Syria', '')
-            bilateral_meetings_list.append(a)
-        elif 'Panel for Sudan and South Sudan' in str(a):
-            a = a.replace('Panel for Sudan and South Sudan', '')
-            if 'former President' in str(a):
+            elif "Cote d’Ivoire" in str(a):
+                a = a.replace("Cote d’Ivoire", 'Ivory Coast')
+                bilateral_meetings_list.append(a)
+            elif "Côte d'Ivoire" in str(a):
+                a = a.replace("Côte d'Ivoire", 'Ivory Coast')
+                bilateral_meetings_list.append(a)
+            elif 'Deputy Crown Prince' in str(a):
+                a = a.replace("Deputy Crown Prince", 'Deputy CroPri')
+                bilateral_meetings_list.append(a)
+            elif 'Holy See' in str(a):
+                a = a.replace('Holy See', 'Vatican City')
+                bilateral_meetings_list.append(a)
+            elif 'Special Envoy for ' in str(a):
+                a = re.sub(r'Special Envoy for \w{0,15}', '', a, count=2)
+                bilateral_meetings_list.append(a)
+            elif "Timor-Leste" in str(a):
+                a = a.replace("Timor-Leste", 'East Timor')
+                bilateral_meetings_list.append(a)
+            elif 'Secretary of Defense Ashton Carter' in str(a):
+                a = a.replace("Secretary of Defense Ashton Carter", '')
+                bilateral_meetings_list.append(a)
+            elif 'Environment Minister' in str(a):
+                a = a.replace('Environment Minister', 'Minister of Environment')
+                bilateral_meetings_list.append(a)
+            elif 'Minister of Defense' in str(a):
+                a = a.replace('Minister of Defense', 'Defense Minister')
+                bilateral_meetings_list.append(a)
+            elif 'Foreign Secretary' in str(a):
+                a = a.replace('Foreign Secretary', 'Foreign Minister')
+                bilateral_meetings_list.append(a)
+            elif 'Climate Change Secretary' in str(a):
+                a = a.replace('Climate Change Secretary', 'Minister of Environment')
+                bilateral_meetings_list.append(a)
+            elif 'working lunch' in str(a):
+                a = a.replace('working lunch', 'working dinner')
+                bilateral_meetings_list.append(a)
+            elif "European Commission President" in str(a):
+                a = a.replace("European Commission President", '')
+                bilateral_meetings_list.append(a)
+            elif 'Democratic Congo, Republic of the' in str(a):
+                a = a.replace("Democratic Congo, Republic of the", 'Democratic Republic of the Congo')
+                bilateral_meetings_list.append(a)
+            elif "The Bahamas" in str(a):
+                a = a.replace("The Bahamas", 'Bahamas, The')
+                bilateral_meetings_list.append(a)
+            elif 'on Syria' in str(a):
+                a = a.replace("on Syria", '')
+                bilateral_meetings_list.append(a)
+            elif 'Chairman and General Secretary of the National League of Democracy' in str(a):
+                a = a.replace("Chairman and General Secretary of the National League of Democracy", 'Opposition Leader of Myanmar')
+                bilateral_meetings_list.append(a)
+            elif 'The Gambia' in str(a):
+                a = a.replace("The Gambia", 'Gambia, The')
+                bilateral_meetings_list.append(a)
+            elif 'Israeli-Palestinian Negotiations' in str(a):
+                a = a.replace('Israeli-Palestinian Negotiations', '')
+                bilateral_meetings_list.append(a)
+            elif 'Director for North Africa and Yemen' in str(a):
+                a = a.replace('Director for North Africa and Yemen', '')
+                if 'Special Envoy for Libya' in str(a):
+                    a = a.replace('Special Envoy for Libya', '')
+                    bilateral_meetings_list.append(a)
+                else:
+                    bilateral_meetings_list.append(a)
+            elif 'UN Envoy for Syria' in str(a):
+                a = a.replace('UN Envoy for Syria', '')
+                bilateral_meetings_list.append(a)
+            elif 'Panel for Sudan and South Sudan' in str(a):
+                a = a.replace('Panel for Sudan and South Sudan', '')
+                if 'former President' in str(a):
+                    a = a.replace('former President', 'former Prez')
+                    bilateral_meetings_list.append(a)
+                else:
+                    bilateral_meetings_list.append(a)
+            elif "Sao Tome" in str(a):
+                a = a.replace("Sao Tome and Principal", "São Tomé and Príncipal")
+                bilateral_meetings_list.append(a)
+            elif 'Republic of the Congo' in str(a):
+                a = a.replace('Republic of the Congo', 'Congo, Republic of the')
+                bilateral_meetings_list.append(a)
+            elif 'St.' in str(a):
+                a = a.replace('St.', 'Saint')
+                bilateral_meetings_list.append(a)
+            elif 'Secretary of Defense' in str(a):
+                if 'Chuck Hagel' in str(a):
+                    a = a.replace('Secretary of Defense Chuck Hagel', '')
+                    bilateral_meetings_list.append(a)
+                elif 'Ash Carter' in str(a):
+                    a = a.replace('Secretary of Defense Ash Carter', '')
+                    bilateral_meetings_list.append(a)
+                else:
+                    bilateral_meetings_list.append(a)
+            elif 'Secretary of State' in str(a):
+                if 'Hillary Clinton' in str(a):
+                    a = a.replace('Secretary of State Hillary Clinton', '')
+                    bilateral_meetings_list.append(a)
+            elif 'will depart' in str(a):
+                pass
+            elif 'upcoming trip to ' in str(a):
+                pass
+            elif 'briefing to preview' in str(a):
+                pass
+            elif 'Ambassador to ' in str(a):
+                a = re.sub(r'\w{0,10} Ambassador to \w{0,15}', '', a, count=20)
+                bilateral_meetings_list.append(a)
+            elif 'meets with his national security team' in str(a):
+                pass
+            elif 'hold a meeting on ' in str(a):
+                pass
+            elif 'call with' in str(a):
+                pass
+            elif 'Indiana' in str(a):
+                a = a.replace('Indiana', ' ')
+                bilateral_meetings_list.append(a)
+            elif 'former President' in str(a):
                 a = a.replace('former President', 'former Prez')
                 bilateral_meetings_list.append(a)
+            elif 'G8' in str(a):
+                a = a.replace('G8', 'G-8')
+                bilateral_meetings_list.append(a)
+            elif 'G20' in str(a):
+                a = a.replace('G20', 'G-20')
+                bilateral_meetings_list.append(a)
+            elif 'Vice Premier' in str(a):
+                a = a.replace('Vice Premier', 'Vice-Premeir')
+                bilateral_meetings_list.append(a)
+            elif 'former Prime Minister' in str(a):
+                a = a.replace('former Prime Minister', 'former PM')
+                bilateral_meetings_list.append(a)
+            elif 'former British Prime Minister' in str(a):
+                a = a.replace('former British Prime Minister', 'former PM of the United Kingdom')
+                bilateral_meetings_list.append(a)
+            elif 'ASEAN-' in str(a):
+                a = a.replace('-', '')
+                bilateral_meetings_list.append(a)
+            elif 'Burma' in str(a):
+                a = a.replace('Burma', 'Myanmar')
+                bilateral_meetings_list.append(a)
+            elif 'will remain' in str(a):
+                pass
+            elif 'Secretary of Defense Leon Panetta' in str(a):
+                a = a.replace('Secretary of Defense Leon Panetta', '')
+                bilateral_meetings_list.append(a)
+            elif 'U.S. Secretary of Defense' in str(a):
+                a = a.replace('U.S. Secretary of Defense', '')
+                bilateral_meetings_list.append(a)
+            elif 'Vice President Biden' in str(a):
+                a = a.replace('Vice President Biden', '')
+                bilateral_meetings_list.append(a)
+            elif 'President Obama' in str(a):
+                a = a.replace('President Obama', '')
+                bilateral_meetings_list.append(a)
+            elif 'ideo conference' in str(a):
+                pass
+            elif 'Deputy Prime Minister' in str(a):
+                a = a.replace('Deputy Prime Minister', 'Deputy PM')
+                bilateral_meetings_list.append(a)
             else:
                 bilateral_meetings_list.append(a)
-        elif "Sao Tome" in str(a):
-            a = a.replace("Sao Tome and Principal", "São Tomé and Príncipal")
-            bilateral_meetings_list.append(a)
-        elif 'Republic of the Congo' in str(a):
-            a = a.replace('Republic of the Congo', 'Congo, Republic of the')
-            bilateral_meetings_list.append(a)
-        elif 'St.' in str(a):
-            a = a.replace('St.', 'Saint')
-            bilateral_meetings_list.append(a)
-        elif 'Secretary of Defense' in str(a):
-            if 'Chuck Hagel' in str(a):
-                a = a.replace('Secretary of Defense Chuck Hagel', '')
-                bilateral_meetings_list.append(a)
-            elif 'Ash Carter' in str(a):
-                a = a.replace('Secretary of Defense Ash Carter', '')
-                bilateral_meetings_list.append(a)
-            else:
-                bilateral_meetings_list.append(a)
-        elif 'Secretary of State' in str(a):
-            if 'Hillary Clinton' in str(a):
-                a = a.replace('Secretary of State Hillary Clinton', '')
-                bilateral_meetings_list.append(a)
-        elif 'will depart' in str(a):
-            pass
-        elif 'upcoming trip to ' in str(a):
-            pass
-        elif 'briefing to preview' in str(a):
-            pass
-        elif 'Ambassador to ' in str(a):
-            a = re.sub(r'\w{0,10} Ambassador to \w{0,15}', '', a, count=20)
-            bilateral_meetings_list.append(a)
-        elif 'meets with his national security team' in str(a):
-            pass
-        elif 'hold a meeting on ' in str(a):
-            pass
-        elif 'former President' in str(a):
-            a = a.replace('former President', 'former Prez')
-            bilateral_meetings_list.append(a)
-        elif 'G8' in str(a):
-            a = a.replace('G8', 'G-8')
-            bilateral_meetings_list.append(a)
-        elif 'G20' in str(a):
-            a = a.replace('G20', 'G-20')
-            bilateral_meetings_list.append(a)
-        elif 'Vice Premier' in str(a):
-            a = a.replace('Vice Premier', 'Vice-Premeir')
-            bilateral_meetings_list.append(a)
-        elif 'former Prime Minister' in str(a):
-            a = a.replace('former Prime Minister', 'former PM')
-            bilateral_meetings_list.append(a)
-        elif 'former British Prime Minister' in str(a):
-            a = a.replace('former British Prime Minister', 'former PM of the United Kingdom')
-            bilateral_meetings_list.append(a)
-        elif 'ASEAN-' in str(a):
-            a = a.replace('-', '')
-            bilateral_meetings_list.append(a)
-        elif 'Burma' in str(a):
-            a = a.replace('Burma', 'Myanmar')
-            bilateral_meetings_list.append(a)
-        elif 'will remain' in str(a):
-            pass
-        elif 'Secretary of Defense Leon Panetta' in str(a):
-            a = a.replace('Secretary of Defense Leon Panetta', '')
-            bilateral_meetings_list.append(a)
-        elif 'U.S. Secretary of Defense' in str(a):
-            a = a.replace('U.S. Secretary of Defense', '')
-            bilateral_meetings_list.append(a)
-        elif 'Vice President Biden' in str(a):
-            a = a.replace('Vice President Biden', '')
-            bilateral_meetings_list.append(a)
-        elif 'President Obama' in str(a):
-            a = a.replace('President Obama', '')
-            bilateral_meetings_list.append(a)
-        elif 'ideo conference' in str(a):
-            pass
-        elif 'Deputy Prime Minister' in str(a):
-            a = a.replace('Deputy Prime Minister', 'Deputy PM')
-            bilateral_meetings_list.append(a)
-        else:
-            bilateral_meetings_list.append(a)
 
 
     new_PRES_MEETING_LIST = bilateral_meetings_list
@@ -289,6 +260,7 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
 
     #This tests countries by country name
     for meeting in eval(list_setter):
+        print('line 260', meeting)
         for leader in leader_list:
             for country in country_name_list:
                 if str(leader) in str(meeting):
@@ -297,8 +269,8 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                             if str(country) != 'American':
                                 new_meeting = re.sub(r', in \w{}, {}.\.'.format("{1,30}", (country), re.IGNORECASE), '', str(meeting), count=10)
                                 specific_day = re.compile(r'\w{3,9} \d{1,2}, \d\d\d\d')
-                                sd_all_matches = specific_day.findall(new_meeting)
-                                sd = sd_all_matches[0]
+                                sd_all_matches = specific_day.findall(meeting)
+                                sd = str(sd_all_matches[0])
                                 yao = sd + '\n' + country + '\t' + leader + '\n'
                                 searcher = re.compile(r'{}\W+(?:\w+\W+){}?{}(?!\.)'.format(str(leader), "{0,9}", str(country), re.IGNORECASE))
                                 backwards_searcher = re.compile(r'{}\W+(?:\w+\W+){}?{}'.format(str(country), "{0,5}", str(leader), re.IGNORECASE))
@@ -325,17 +297,18 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
         else:
             leader_country = str(foreign_min_country[countries][0])
             leader_name = str(foreign_min_country[countries][2])
-            specific_day = re.compile(r'\w{3,9} \d{1,2}, \d\d\d\d')
             for meeting in eval(list_setter):
+                specific_day = re.compile(r'\w{3,9} \d{1,2}, \d\d\d\d')
                 sd_all_matches = specific_day.findall(meeting)
                 sd = sd_all_matches[0]
                 if str(leader_name) in str(meeting):
                     if leader_country in dual_leader_list:
                         pass
                     else:
-                        yao = sd + '\n' + leader_country + '\t' + 'Foreign Minister' + '\n'
+                        yao = str(sd) + '\n' + leader_country + '\t' + 'Foreign Minister' + '\n'
                         if yao not in total_meeting_list:
                             total_meeting_list.append(yao)
+
 
     roman_numeral_list = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'EFI', 'Prime Minister', 'President', 'Sultan', 'Sabah Al-Ahmad Al-Jaber Al-Sabah', 'le', 'Ao', 'Malo']
     asian_country_last_name_first_list = ['China', 'South Korea', 'Taiwan', 'Vietnam', 'North Korea', 'Singapore', 'Japan']
@@ -371,15 +344,14 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
         else:
             if leader_name != other_leader:
                 for meeting in eval(list_setter):
-                    specific_day = re.compile(r'\w{3,9} \d{1,2}, \d\d\d\d')
                     sd_all_matches = specific_day.findall(meeting)
                     sd = sd_all_matches[0]
                     if str(leader_name) in str(meeting):
-                        yao = sd + '\n' + diff_country + '\t' + leader_title + '\n'
+                        yao = str(sd) + '\n' + diff_country + '\t' + leader_title + '\n'
                         if yao not in total_meeting_list:
                             total_meeting_list.append(yao)
                     elif str(other_leader) in str(meeting):
-                        yao = sd + '\n' + diff_country + '\t' + other_leader_title + '\n'
+                        yao = str(sd) + '\n' + diff_country + '\t' + other_leader_title + '\n'
                         if yao not in total_meeting_list:
                             total_meeting_list.append(yao)
             else:
@@ -388,7 +360,9 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                         searcher = re.compile(r'{}\W+(?:\w+\W+){}?{}'.format(str(leader_title), "{0,5}", str(leader_last_name), re.IGNORECASE))
                         exact_match = searcher.findall(meeting)
                         for match in exact_match:
-                            yao = sd + '\n' + diff_country + '\t' + leader_title + '\n'
+                            sd_all_matches = specific_day.findall(meeting)
+                            sd = sd_all_matches[0]
+                            yao = str(sd) + '\n' + diff_country + '\t' + leader_title + '\n'
                             if yao not in total_meeting_list:
                                 if any(country in meeting for country in country_name_list):
                                     for country in country_name_list:
@@ -401,7 +375,9 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                         searcher = re.compile(r'{}\W+(?:\w+\W+){}?{}'.format(str(other_leader_title), "{0,5}", str(other_leader_last_name), re.IGNORECASE))
                         exact_match = searcher.findall(meeting)
                         for match in exact_match:
-                            yao = sd + '\n' + diff_country + '\t' + other_leader_title + '\n'
+                            sd_all_matches = specific_day.findall(match)
+                            sd = sd_all_matches[0]
+                            yao = str(sd) + '\n' + diff_country + '\t' + other_leader_title + '\n'
                             if yao not in total_meeting_list:
                                 if any(country in meeting for country in country_name_list):
                                     for country in country_name_list:
@@ -414,7 +390,9 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                         searcher = re.compile(r'{}\W+(?:\w+\W+){}?{}'.format(str(leader_title), "{0,5}", str(asian_leader_last_name), re.IGNORECASE))
                         exact_match = searcher.findall(meeting)
                         for match in exact_match:
-                            yao = sd + '\n' + diff_country + '\t' + leader_title + '\n'
+                            sd_all_matches = specific_day.findall(match)
+                            sd = sd_all_matches[0]
+                            yao = str(sd) + '\n' + diff_country + '\t' + leader_title + '\n'
                             if yao not in total_meeting_list:
                                 if any(country in meeting for country in country_name_list):
                                     for country in country_name_list:
@@ -427,7 +405,9 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                         searcher = re.compile(r'{}\W+(?:\w+\W+){}?{}'.format(str(other_leader_title), "{0,5}", str(asian_other_leader_last_name), re.IGNORECASE))
                         exact_match = searcher.findall(meeting)
                         for match in exact_match:
-                            yao = sd + '\n' + diff_country + '\t' + other_leader_title + '\n'
+                            sd_all_matches = specific_day.findall(match)
+                            sd = sd_all_matches[0]
+                            yao = str(sd) + '\n' + diff_country + '\t' + other_leader_title + '\n'
                             if yao not in total_meeting_list:
                                 if any(country in meeting for country in country_name_list):
                                     for country in country_name_list:
@@ -440,10 +420,11 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                         searcher = re.compile(r'{}\W+(?:\w+\W+){}?{}'.format(str('attend'), "{0,80}", str('a toast'), re.IGNORECASE))
                         exact_match = searcher.findall(meeting)
                         for match in exact_match:
-                            yao = sd + '\n' + match + '\n'
+                            sd_all_matches = specific_day.findall(match)
+                            sd = sd_all_matches[0]
+                            yao = str(sd) + '\n' + match + '\n'
                             if yao not in total_meeting_list:
                                 total_meeting_list.append(yao)
-
 
     additional_filtration_list = []
     multilateral_country_list = ['G-20', 'G20', 'G8', 'G7', 'ASEAN', 'ASEAN-', 'APEC', 'G-8', 'Arctic Council', 'NATO', 'CARICOM', 'Gulf Cooperation Council', 'GCC', 'G-7', 'Summit of the Americas', 'East Asia Summit', 'Strategic and Economic Dialogue']
@@ -618,8 +599,7 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                     if str(leader) in str(a):
                         specific_day = re.compile(r'\w{3,9} \d{1,2}, \d\d\d\d')
                         sd_all_matches = specific_day.findall(a)
-                        sd = sd_all_matches[0]
-                        all_in_one = sd + '\n' + str(country[0]) + '\t' + str(leader) + '\n'
+                        all_in_one = str(sd[0]) + '\n' + str(country[0]) + '\t' + str(leader) + '\n'
                         if all_in_one not in new_list:
                             if any(str(event) in str(all_in_one) for event in multilateral_event_list):
                                 pass
@@ -682,16 +662,13 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                     if str(diff_count) in str(a):
                         if a not in new_list:
                             new_list.append(a)
-
+    print(new_list)
     return {'new_list':new_list}
 
 def database_updater(country_name_list, new_list):
 
-    print('updating database')
     engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
     conn = engine.connect()
-
-    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = 0;''')
 
     Two_pt_leader_list = ['President', 'Prime Minister', 'Prime Minster', 'King', 'Chancellor', 'Taoiseach', 'Queen', 'Amir', 'Emperor', 'Pope', 'Sultan']
     One_pt_leader_list = ['CEO', 'Crown Prince', 'Defense Minister', 'Deputy Crown Prince', 'Deputy PM', 'Finance Minister', 'Secretary of State',
@@ -704,22 +681,26 @@ def database_updater(country_name_list, new_list):
 
     processed_list = ['place holder']
     for meeting in new_list:
+        print('line 665', meeting)
         for country in country_name_list:
             if str(country) in str(meeting):
                 for leader in Two_pt_leader_list:
                     if str(leader) in str(meeting):
                         if meeting not in processed_list:
-                            conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                            print(str(country), 'aaa')
+                            conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                             processed_list.append(meeting)
                 for leader in One_pt_leader_list:
                     if str(leader) in str(meeting):
                         if meeting not in processed_list:
-                            conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 1 WHERE "Country_Name" = '{}';'''.format(country))
+                            conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 1 WHERE "Country_Name" = '{}';'''.format(country))
+                            print(str(country), 'bbb')
                             processed_list.append(meeting)
                 for leader in half_pt_leader_list:
                     if str(leader) in str(meeting):
                         if meeting not in processed_list:
-                            conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + .5 WHERE "Country_Name" = '{}';'''.format(country))
+                            conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + .5 WHERE "Country_Name" = '{}';'''.format(country))
+                            print(str(country), 'ccc')
                             processed_list.append(meeting)
 
     caricom = ['Antigua and Barbuda', 'Bahamas, the', 'Barbados', 'Belize', 'Dominica', 'Grenada', 'Guyana', 'Haiti', 'Jamaica', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Suriname', 'Trinidad and Tobago']
@@ -741,74 +722,74 @@ def database_updater(country_name_list, new_list):
             for country in country_name_list:
                 if str(country) in str(meeting):
                     if meeting not in processed_list:
-                        conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 5 WHERE "Country_Name" = '{}';'''.format(country))
+                        conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 5 WHERE "Country_Name" = '{}';'''.format(country))
                         processed_list.append(meeting)
         #Bilateal Events
         if str('Strategic and Economic Dialogue') in str(meeting):
             if meeting not in processed_list:
-                conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = 'China';''')
+                conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = 'China';''')
                 processed_list.append(meeting)
         if str('Her Majesty the Queen') in str(meeting):
             if meeting not in processed_list:
-                conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = 'United Kingdom';''')
+                conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = 'United Kingdom';''')
                 processed_list.append(meeting)
         # Multilateal Events
         if str('G-20') in str(meeting):
             if meeting not in processed_list:
                 for country in G_20_List:
-                    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                    conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                 processed_list.append(meeting)
         if str('Arctic Council') in str(meeting):
             if meeting not in processed_list:
                 for country in Artic_Council_List:
-                    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                    conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                 processed_list.append(meeting)
         if str('CARICOM') in str(meeting):
             if meeting not in processed_list:
                 for country in caricom:
-                    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                    conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                 processed_list.append(meeting)
         if str('Summit of the Americas') in str(meeting):
             if meeting not in processed_list:
                 for country in Summit_of_the_Americas:
-                    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                    conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                 processed_list.append(meeting)
         if str('NATO') in str(meeting):
             if meeting not in processed_list:
                 for country in NATO:
-                    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                    conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                 processed_list.append(meeting)
         if str('Gulf Cooperation Council') in str(meeting):
             if meeting not in processed_list:
                 for country in GCC:
-                    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                    conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                 processed_list.append(meeting)
         if str('G-8') in str(meeting):
             if meeting not in processed_list:
                 if 'Prime Minister' not in str(meeting):
                     for country in G_8_List:
-                        conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                        conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                     processed_list.append(meeting)
         if str('ASEAN') in str(meeting):
             if meeting not in processed_list:
                 for country in ASEAN:
-                    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                    conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                 processed_list.append(meeting)
         if str('East Asia Summit') in str(meeting):
             if meeting not in processed_list:
                 for country in East_asia_summit:
-                    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                    conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                 processed_list.append(meeting)
         if str('G-7') in str(meeting):
             if meeting not in processed_list:
                 if 'Prime Minister' not in str(meeting):
                     for country in G_7_List:
-                        conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                        conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                     processed_list.append(meeting)
         if str('APEC') in str(meeting):
             if meeting not in processed_list:
                 for country in apec:
-                    conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                    conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                 processed_list.append(meeting)
         else:
             for country in country_name_list:
@@ -816,43 +797,21 @@ def database_updater(country_name_list, new_list):
                     for leader in Two_pt_leader_list:
                         if str(leader) in str(meeting):
                             if meeting not in processed_list:
-                                conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
+                                print(str(country), 'aaa')
+                                conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 2 WHERE "Country_Name" = '{}';'''.format(country))
                                 processed_list.append(meeting)
                     for leader in One_pt_leader_list:
                         if str(leader) in str(meeting):
                             if meeting not in processed_list:
-                                conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + 1 WHERE "Country_Name" = '{}';'''.format(country))
+                                conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 1 WHERE "Country_Name" = '{}';'''.format(country))
+                                print(str(country), 'bbb')
                                 processed_list.append(meeting)
                     for leader in half_pt_leader_list:
                         if str(leader) in str(meeting):
                             if meeting not in processed_list:
-                                conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = "Sec_of_State_2017"::int + .5 WHERE "Country_Name" = '{}';'''.format(country))
+                                conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + .5 WHERE "Country_Name" = '{}';'''.format(country))
+                                print(str(country), 'ccc')
                                 processed_list.append(meeting)
-
-    #turns all dates/leaders/country into json
-    country_date_leader_dict = []
-    for i in new_list:
-        if i == "place holder":
-            pass
-        else:
-            date = i.split("\n")
-            specific_day = date[0]
-            country = date[1].split("\t")
-            count = country[0]
-            minister = country[1]
-            if specific_day[0].islower() == True:
-                specific_day = specific_day[1:]
-                country_date_leader_dict.append({"Country Name":count, "Date":specific_day, "Leader":minister})
-            else:
-                country_date_leader_dict.append({"Country Name":count, "Date":specific_day, "Leader":minister})
-
-    with open("meeting_json_list.json", 'w') as meeting_json_list:
-        meeting_json_list.truncate()
-        json.dump(country_date_leader_dict, meeting_json_list)
-    meeting_json_list.close()
-
-    DB_COMPLETE = True
-    return {'DB_COMPLETE':DB_COMPLETE}
 
 
 def main():
@@ -865,9 +824,8 @@ def main():
     new_list = country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_dem_list)['new_list']
 
 
-    DB_COMPLETE = database_updater(country_name_list, new_list)['DB_COMPLETE']
+    database_updater(country_name_list, new_list)
 
     time2 = time.time()
     print("Total Time to run", time2-time1, 'seconds')
-
 main()
