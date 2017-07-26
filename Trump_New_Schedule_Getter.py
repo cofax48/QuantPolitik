@@ -677,7 +677,8 @@ def database_updater(country_name_list, new_list):
                           'Defense Minister', 'Minister for Foreign Affairs', 'Minister of Foreign Affairs', 'Minister of Finance', 'Minister of Foreign Trade', 'Deputy CroPri',
                           'Minister of Environment', 'Minister of Natural Resources', 'Secretary of Interior', 'Secretary of Finance', 'Secretary of Foreign Relations', 'State Councilor', 'Premier of the State Council', 'Minister of Enviornment',
                           'Minister of Power', 'Minister of State for Foreign Affairs','Vice Prez', 'Vice Premier', 'Vice-Premeir']
-    half_pt_leader_list = ['former Prez', 'former PM', 'President-elect', 'speaks with']
+    half_pt_leader_list = ['former Prez', 'former PM', 'President-elect']
+
 
     processed_list = ['place holder']
     for meeting in new_list:
