@@ -25,7 +25,7 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
                                 country_and_percentile_rank_list['Property Rights'][country] +
                                 country_and_percentile_rank_list['Getting Credit'][country] +
                                 country_and_percentile_rank_list['Resolving Insolvency'][country])
-        print(country, Business_Climate)
+        #print(country, Business_Climate)
         #Factoring for number of missing data Fields and averaging the raw score
         number_of_nan = int(sum([pd.isnull(i) for i in Business_Climate]))
         real_len = int(len(Business_Climate)/2)
@@ -46,7 +46,7 @@ def BRFM(country_name_list, country_and_percentile_rank_list):
         num_sum = np.nansum(Corporate_Climate[1::2])
         Corporate_Climate = num_sum / dvisible_number
         corporate_climate_percentile_rank_list.append(Corporate_Climate)
-        print(country, Corporate_Climate)
+        #print(country, Corporate_Climate)
 
         Financial_Climate = (country_and_percentile_rank_list['Protecting Minority Investors'][country] +
                                 country_and_percentile_rank_list['Monetary Freedom'][country] +

@@ -246,15 +246,15 @@ def main():
         for tab in table_list:
             count_num = country_numberifier(country)
             table_name = tab
-            print(country, float(QP_value[table_name][count_num]))
+            #print(country, float(QP_value[table_name][count_num]))
             if table_name == 'Sec_State_Bureaucratic_Exchange':
                 conn.execute('''UPDATE "Sec_State_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
-                print('Sec_State_Bureaucratic_Exchange', country, QP_value[table_name][count_num])
+                #print('Sec_State_Bureaucratic_Exchange', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.8)
 
             if table_name == 'Presidential_Exchange':
                 conn.execute('''UPDATE "Presidential_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
-                print('Presidential_Exchange', country, QP_value[table_name][count_num])
+                #print('Presidential_Exchange', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.7)
 
             if table_name == 'Business_Relations':
@@ -264,37 +264,37 @@ def main():
                 else:
                     conn.execute('''UPDATE "BR_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
 
-                print('Business_Relations', country, QP_value[table_name][count_num])
+                #print('Business_Relations', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.6)
 
             if table_name == 'Trade_Relations':
                 conn.execute('''UPDATE "Trade_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
-                print('Trade_Relations', country, QP_value[table_name][count_num])
+                #print('Trade_Relations', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.5)
 
             if table_name == 'Governmental_Perspective':
                 conn.execute('''UPDATE "GP_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
-                print('Governmental_Perspective', country, QP_value[table_name][count_num])
+                #print('Governmental_Perspective', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.4)
 
             if table_name == 'Prestige':
                 conn.execute('''UPDATE "Prestige_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
-                print('Prestige', country, QP_value[table_name][count_num])
+                #print('Prestige', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.3)
 
             if table_name == 'Security':
                 conn.execute('''UPDATE "Security_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
-                print('Security', country, QP_value[table_name][count_num])
+                #print('Security', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.2)
 
             if table_name == 'Cultural_Diffusion':
                 conn.execute('''UPDATE "CD_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
-                print('Cultural_Diffusion', country, QP_value[table_name][count_num])
+                #print('Cultural_Diffusion', country, QP_value[table_name][count_num])
                 temp_value_list.append(float(QP_value[table_name][count_num]) * 1.1)
 
             if table_name == 'Country_Profile':
                 conn.execute('''UPDATE "CProfile_SCORE2" SET "{}" = '{}' WHERE "Date" = '{}';'''.format(country, float(QP_value[table_name][count_num]), todays_date))
-                print('Country_Profile', country, QP_value[table_name][count_num])
+                #print('Country_Profile', country, QP_value[table_name][count_num])
                 temp_value_list.append(QP_value[table_name][count_num])
 
             if len(temp_value_list) == 9:
@@ -333,7 +333,7 @@ def main():
     for country in country_name_list:
         count_num = country_numberifier(country)
         QP_Final_Value[country] = (new_rank_percentile_rank_list_factored[count_num] * 4) - 200
-        print(country, score_to_subtract_dict.get(country))
+        #print(country, score_to_subtract_dict.get(country))
         if score_to_subtract_dict.get(country) != None:
             current_score = QP_Final_Value[country]
             QP_Final_Value[country] = current_score - score_to_subtract_dict[country]
@@ -350,6 +350,3 @@ def main():
 
     time2 = time.time()
     print("Total time to run ", int(time2 - time1), "seconds")
-
-
-main()

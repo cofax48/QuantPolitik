@@ -9,6 +9,80 @@ from Foreign_minister_getter_2016 import foreign_minister_list_getter
 from sqlalchemy import create_engine
 from unidecode import unidecode
 
+#Meets with United Kingdom Prime Minister Theresa May 1/27/17
+# Meets with Prime Minister Justin Trudeau 2/13/17
+# KIng Abdullah of Jordan 4/5/17
+# President Xi of China 4/7/17 and 4/8/17
+# Meets with Crown Prince Muhammad bin Zayid Al Nuhayyan of Abu Dhabi 3/15/17
+# bilateral meeting, between the United States and Saudi Arabia King 5/20/17
+# Trump GCC 5/21/17
+# Israel Prime Minister 5/22
+#Palestine President 5/23
+#Change italy pope to Vatican
+# Belgium King Philippe and Queen Mathilde and hold a bilateral session with Belgium Prime Minister Charles Michel. 5/24/17
+#NATO Summit 5/25/17
+# G7 5/27 and 5/26
+#Drop Vietnam Presdient
+# Drop June 27, 2017 Ireland	Prime Minister
+#g-20 7/7 and 7/8
+#President Donald J. Trump’s Meeting with President Kolinda Grabar-Kitarovic of Croatia 7/6/17
+"""
+ Afghanistan: President Ashraf Ghani
+ Albania
+ Algeria: Abdelkader Bensalah, President of the Council of the Nation[22]
+ Azerbaijan: President Ilham Aliev
+ Bahrain: King Hamad bin Isa Al Khalifa
+ Bangladesh: Prime Minister Sheikh Hasina
+ Benin : President Patrice Talon
+ Brunei: Sultan Hassanal Bolkiah
+ Burkina Faso: President Roch Marc Kabore[23]
+ Cameroon
+ Chad: President Idriss Déby
+ Comoros
+ Djibouti
+ Egypt: President Abdel Fattah el-Sisi
+ Gabon: President Ali Bongo Ondimba
+ The Gambia: President Adama Barrow[24]
+ Guinea: President Alpha Condé
+ Guinea-Bissau: President José Mário Vaz
+ Guyana
+ Indonesia: President Joko Widodo
+ Iraq: President Fuad Masum[25]
+ Ivory Coast: President Alassane Ouattara
+ Jordan: King Abdullah II
+ Kazakhstan: President Nursultan Nazarbayev
+ Kuwait: Emir Sabah Al-Ahmad Al-Jaber Al-Sabah
+ Kyrgyzstan
+ Lebanon: Prime Minister Saad Hariri
+ Libya
+ Malaysia: Prime Minister Najib Razak
+ Maldives: President Abdulla Yameen
+ Mali: President Ibrahim Boubacar Keïta
+ Mauritania: President Mohamed Ould Abdel Aziz
+ Morocco: Minister of Foreign Affairs Nasser Bourita[26]
+ Mozambique:
+ Niger: President Mahamadou Issoufou
+ Nigeria
+ Oman: Deputy Prime Minister Fahd bin Mahmoud al Said[27]
+ Pakistan: Prime Minister Nawaz Sharif
+ State of Palestine: President Mahmoud Abbas
+ Qatar: Emir Tamim bin Hamad Al Thani
+ Senegal: President Macky Sall
+ Sierra Leone:
+ Somalia: President Mohamed Abdullahi Mohamed
+ Sudan: Minister of State Taha al-Hussein[28]
+ Suriname
+ Tajikistan: President Emomali Rahmon[23]
+ Togo
+ Tunisia: President Beji Caid Essebsi
+ Turkey: Minister of Foreign Affairs Mevlut Cavusoglu
+ Turkmenistan
+ Uganda
+ Uzbekistan: President Shavkat Mirziyoyev[29]
+ Yemen
+ United Arab Emirates: Crown Prince of Abu Dhabi Mohammed bin Zayed Al Nahyan
+ """
+
 def daily_sched_search():
     new_res = requests.get('http://www.whitehousedossier.com/category/trump-schedule/')
     president_schedule = []
@@ -17,8 +91,10 @@ def daily_sched_search():
 
     specific_day = re.compile(r'\w{3,9} \d{1,2}, \d\d\d\d')
 
-    meeting_finder = re.compile(r'''rel="bookmark">Trump Schedule.*?rel="category tag">Trump Schedule</a>''', re.DOTALL)
+    meeting_finder = re.compile(r'''title="Trump Schedule.*?rel="category tag">Trump Schedule</a>''', re.DOTALL)
     meeting_divider = meeting_finder.findall(str(president_schedule))
+
+    individual_Meeting = re.compile(r'''(\|\||\|)(.*?\||.*?<a href="http://www.whitehousedossier.com)''', re.DOTALL)
 
     SecState_daily_meetings_list = []
     for each_meeting in meeting_divider:
@@ -27,8 +103,11 @@ def daily_sched_search():
         if len(sd) >= 1:
             sd = sd[0]
             whole_meet = str(str(sd) + '\n' + each_meeting[13:])
-            if whole_meet not in SecState_daily_meetings_list:
-                SecState_daily_meetings_list.append(whole_meet)
+            specific_meeting = individual_Meeting.findall(whole_meet)
+            for event in specific_meeting:
+                actual_whole_meeting = str(sd) + str(event[1]) + '\n'
+                if actual_whole_meeting not in SecState_daily_meetings_list:
+                    SecState_daily_meetings_list.append(actual_whole_meeting)
 
     return {'SecState_daily_meetings_list':SecState_daily_meetings_list}
 
@@ -64,13 +143,15 @@ def meeting_search(SecState_daily_meetings_list, country_name_list):
 
     meeting_name_list = ['met', 'mets', 'meet', 'meets', 'host', 'addresses', 'greets', 'welcomed', 'accompanies',
                          'greet', 'greeted', 'address', 'attend', 'attends', 'meeting', 'meetings', 'joins', 'has an audience with',
-                         'joined', 'welcome', 'welcomes', 'welcomed', 'participates', 'deliver statements', 'delivers remarks',
+                         'joined', 'welcome', 'welcomes', 'Welcomes', 'welcomed', 'participates', 'deliver statements', 'delivers remarks',
                          'lunch', 'State Dinner']
 
+    todays_date = datetime.datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
 
     bilateral_meetings_list = []
     for a in SecState_daily_meetings_list:
-        if 'title="Trump Schedule' in str(a):
+        if str(todays_date) in str(a):
+            print(todays_date, a)
             if 'Northern Ireland' in str(a):
                 a = a.replace('Northern Ireland', '')
                 bilateral_meetings_list.append(a)
@@ -80,6 +161,10 @@ def meeting_search(SecState_daily_meetings_list, country_name_list):
             elif "Cote d’Ivoire" in str(a):
                 a = a.replace("Cote d’Ivoire", 'Ivory Coast')
                 bilateral_meetings_list.append(a)
+            elif 'peaks with' in str(a):
+                pass
+            elif 'elephone' in str(a):
+                pass
             elif "Côte d'Ivoire" in str(a):
                 a = a.replace("Côte d'Ivoire", 'Ivory Coast')
                 bilateral_meetings_list.append(a)
@@ -548,6 +633,10 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                 if str('Germany') in str(dup):
                     if dup not in new_duplicate_sorting:
                         new_duplicate_sorting.append(dup)
+                elif str('German') in str(dup):
+                    dup = dup.replace("German", "Germany")
+                    if dup not in new_duplicate_sorting:
+                        new_duplicate_sorting.append(dup)
                 elif str('Merkel') in str(dup):
                     if dup not in new_duplicate_sorting:
                         new_duplicate_sorting.append(dup)
@@ -599,7 +688,8 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                     if str(leader) in str(a):
                         specific_day = re.compile(r'\w{3,9} \d{1,2}, \d\d\d\d')
                         sd_all_matches = specific_day.findall(a)
-                        all_in_one = str(sd[0]) + '\n' + str(country[0]) + '\t' + str(leader) + '\n'
+                        sd = sd_all_matches[0]
+                        all_in_one = str(sd) + '\n' + str(country[0]) + '\t' + str(leader) + '\n'
                         if all_in_one not in new_list:
                             if any(str(event) in str(all_in_one) for event in multilateral_event_list):
                                 pass
@@ -682,7 +772,7 @@ def database_updater(country_name_list, new_list):
 
     processed_list = ['place holder']
     for meeting in new_list:
-        print('line 665', meeting)
+        print('line 694', meeting)
         for country in country_name_list:
             if str(country) in str(meeting):
                 for leader in Two_pt_leader_list:
@@ -814,6 +904,38 @@ def database_updater(country_name_list, new_list):
                                 print(str(country), 'ccc')
                                 processed_list.append(meeting)
 
+    #turns all dates/leaders/country into json
+    country_date_leader_dict = []
+    for i in new_list:
+        if i == "place holder":
+            pass
+        else:
+            date = i.split("\n")
+            specific_day = date[0]
+            country = date[1].split("\t")
+            count = country[0]
+            minister = country[1]
+            if specific_day[0].islower() == True:
+                specific_day = specific_day[1:]
+                country_date_leader_dict.append({"Country Name":count, "Date":specific_day, "Leader":minister})
+            else:
+                country_date_leader_dict.append({"Country Name":count, "Date":specific_day, "Leader":minister})
+
+
+    with open("Presidential_meeting_json_list.json") as og_meeting_json_list:
+        original_meeting_json_list = json.load(og_meeting_json_list)
+        for original in original_meeting_json_list:
+            country_date_leader_dict.append(original)
+        og_meeting_json_list.close()
+
+    with open("Presidential_meeting_json_list.json", 'w') as meeting_json_list:
+        meeting_json_list.truncate()
+        json.dump(country_date_leader_dict, meeting_json_list)
+        meeting_json_list.close()
+
+    DB_COMPLETE = True
+    return {'DB_COMPLETE':DB_COMPLETE}
+
 
 def main():
     country_name_list = country_name_acquistion()['country_name_list']
@@ -824,9 +946,7 @@ def main():
     new_PRES_MEETING_LIST = meeting_search(kerry_daily_meetings_list, country_name_list)['new_PRES_MEETING_LIST']
     new_list = country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_dem_list)['new_list']
 
-
-    database_updater(country_name_list, new_list)
+    DB_COMPLETE = database_updater(country_name_list, new_list)['DB_COMPLETE']
 
     time2 = time.time()
     print("Total Time to run", time2-time1, 'seconds')
-main()

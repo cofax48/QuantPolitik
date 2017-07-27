@@ -97,11 +97,233 @@ print(str(datetime.tzinfo))
 
 from sqlalchemy import create_engine
 import json
+from unidecode import unidecode
 #from django.http import HttpResponse, JsonResponse
 #from api.country_to_number import iso_numberifier
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
 conn = engine.connect()
 
+from datetime import datetime
+import time
+ABRV_table_name = 'QP_SCORE2'
+print(ABRV_table_name)
+todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
+print(todays_date)
+
+conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int + 4 WHERE "Country_Name" = '{}';'''.format('France'))
+
+
+
+"""
+{"Country Name":"France", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"France", "Date":"July 14, 2017", "Leader":"President"},
+{"Country Name":"Lebanon", "Date":"July 25, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Germany", "Date":"July 6, 2017", "Leader":"Chancellor"},
+{"Country Name":"Poland", "Date":"July 6, 2017", "Leader":"President"},
+{"Country Name":"Russia", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"China", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Panama", "Date":"June 19, 2017", "Leader":"President"},
+{"Country Name":"India", "Date":"June 26, 2017", "Leader":"President"},
+{"Country Name":"South Korea", "Date":"June 29, 2017", "Leader":"President"},
+{"Country Name":"Romania", "Date":"June 9, 2017", "Leader":"President"},
+{"Country Name":"Vietnam", "Date":"May 31, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Russia", "Date":"May 10, 2017", "Leader":"Minister of Foreign Affairs"},
+{"Country Name":"Turkey", "Date":"May 16, 2017", "Leader":"President"},
+{"Country Name":"Colombia", "Date":"May 18, 2017", "Leader":"President"},
+{"Country Name":"Italy", "Date":"May 24, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Vatican City", "Date":"May 24, 2017", "Leader":"Pope"},
+{"Country Name":"Palestine", "Date":"May 3, 2017", "Leader":"President"},
+{"Country Name":"Australia", "Date":"May 4, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Italy", "Date":"April 20, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Argentina", "Date":"April 27, 2017", "Leader":"President"},
+{"Country Name":"Egypt", "Date":"April 3, 2017", "Leader":"President"},
+{"Country Name":"Denmark", "Date":"March 30, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Saudi Arabia", "Date":"March 14, 2017", "Leader":"Deputy Crown Prince"},
+{"Country Name":"Ireland", "Date":"Mach 16, 2017", "Leader":"Taoiseach"},
+
+
+
+for country in lister:
+    print('''{"Country Name":"''' + country + '''", "Date":"May 25, 2017", "Leader":"President"},''')
+
+
+###########Change italy pope to Vatican
+########## Drop June 27, 2017 Ireland	Prime Minister
+###########Drop Vietnam Presdient
+
+New_list = [
+{"Country Name":"Japan", "Date":"February 10, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Peru", "Date":"February 24, 2017", "Leader":"President"},
+{"Country Name":"Israel", "Date":"February 15, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Iraq", "Date":"March 20, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Germany", "Date":"March 17, 2017", "Leader":"Chancellor"},
+{"Country Name":"Ireland", "Date":"March 16, 2017", "Leader":"Taoiseach"},
+{"Country Name":"France", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"France", "Date":"July 14, 2017", "Leader":"President"},
+{"Country Name":"Lebanon", "Date":"July 25, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Germany", "Date":"July 6, 2017", "Leader":"Chancellor"},
+{"Country Name":"Poland", "Date":"July 6, 2017", "Leader":"President"},
+{"Country Name":"Russia", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"China", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Panama", "Date":"June 19, 2017", "Leader":"President"},
+{"Country Name":"India", "Date":"June 26, 2017", "Leader":"President"},
+{"Country Name":"South Korea", "Date":"June 29, 2017", "Leader":"President"},
+{"Country Name":"Romania", "Date":"June 9, 2017", "Leader":"President"},
+{"Country Name":"Vietnam", "Date":"May 31, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Russia", "Date":"May 10, 2017", "Leader":"Minister of Foreign Affairs"},
+{"Country Name":"Turkey", "Date":"May 16, 2017", "Leader":"President"},
+{"Country Name":"Colombia", "Date":"May 18, 2017", "Leader":"President"},
+{"Country Name":"Italy", "Date":"May 24, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Vatican City", "Date":"May 24, 2017", "Leader":"Pope"},
+{"Country Name":"Palestine", "Date":"May 3, 2017", "Leader":"President"},
+{"Country Name":"Australia", "Date":"May 4, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Italy", "Date":"April 20, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Argentina", "Date":"April 27, 2017", "Leader":"President"},
+{"Country Name":"Egypt", "Date":"April 3, 2017", "Leader":"President"},
+{"Country Name":"Denmark", "Date":"March 30, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Saudi Arabia", "Date":"March 14, 2017", "Leader":"Deputy Crown Prince"},
+{"Country Name":"Ireland", "Date":"Mach 16, 2017", "Leader":"Taoiseach"},
+{"Country Name":"Albania", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Belgium", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Bulgaria", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Canada", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Croatia", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Czech Republic", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Denmark", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Estonia", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"France", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Germany", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Greece", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Hungary", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Iceland", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Italy", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Latvia", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Lithuania", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Luxembourg", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Netherlands", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Norway", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Poland", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Portugal", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Romania", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Slovakia", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Slovenia", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Spain", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"Turkey", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"United Kingdom", "Date":"May 25, 2017", "Leader":"President"},
+{"Country Name":"United Kingdom", "Date":"May 27, 2017", "Leader":"President"},
+{"Country Name":"United Kingdom", "Date":"May 26, 2017", "Leader":"President"},
+{"Country Name":"France", "Date":"May 27, 2017", "Leader":"President"},
+{"Country Name":"France", "Date":"May 26, 2017", "Leader":"President"},
+{"Country Name":"Italy", "Date":"May 27, 2017", "Leader":"President"},
+{"Country Name":"Italy", "Date":"May 26, 2017", "Leader":"President"},
+{"Country Name":"Canada", "Date":"May 27, 2017", "Leader":"President"},
+{"Country Name":"Canada", "Date":"May 26, 2017", "Leader":"President"},
+{"Country Name":"Germany", "Date":"May 27, 2017", "Leader":"President"},
+{"Country Name":"Germany", "Date":"May 26, 2017", "Leader":"President"},
+{"Country Name":"Japan", "Date":"May 27, 2017", "Leader":"President"},
+{"Country Name":"Japan", "Date":"May 26, 2017", "Leader":"President"},
+{"Country Name":"Argentina", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Argentina", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Australia", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Australia", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Brazil", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Brazil", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Canada", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Canada", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"China", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"China", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"France", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"France", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Germany", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Germany", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"India", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"India", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Indonesia", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Indonesia", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Italy", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Italy", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Japan", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Japan", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"South Korea", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"South Korea", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Mexico", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Mexico", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Russia", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Russia", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Saudi Arabia", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Saudi Arabia", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"South Africa", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"South Africa", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Turkey", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"Turkey", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"United Kingdom", "Date":"July 7, 2017", "Leader":"President"},
+{"Country Name":"United Kingdom", "Date":"July 8, 2017", "Leader":"President"},
+{"Country Name":"Bahrain", "Date":"May 21, 2017", "Leader":"President"},
+{"Country Name":"Kuwait", "Date":"May 21, 2017", "Leader":"President"},
+{"Country Name":"Oman", "Date":"May 21, 2017", "Leader":"President"},
+{"Country Name":"Qatar", "Date":"May 21, 2017", "Leader":"President"},
+{"Country Name":"Saudi Arabia", "Date":"May 21, 2017", "Leader":"President"},
+{"Country Name":"United Arab Emirates", "Date":"May 21, 2017", "Leader":"President"},
+{"Country Name":"United Kingdom", "Date":"January 27, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Canada", "Date":"February 13, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Jordan", "Date":"April 5, 2017", "Leader":"King"},
+{"Country Name":"China", "Date":"April 7, 2017", "Leader":"President"},
+{"Country Name":"China", "Date":"April 8, 2017", "Leader":"President"},
+{"Country Name":"United Arab Emirates", "Date":"March 15, 2017", "Leader":"Crown Prince"},
+{"Country Name":"Israel", "Date":"May 22, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Palestine", "Date":"May 23, 2017", "Leader":"President"},
+{"Country Name":"Belgium", "Date":"May 24, 2017", "Leader":"King"},
+{"Country Name":"Belgium", "Date":"May 24, 2017", "Leader":"Queen"},
+{"Country Name":"Belgium", "Date":"May 24, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Croatia", "Date":"July 6, 2017", "Leader":"President"},
+{"Country Name":"Afghanistan", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Algeria", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Azerbaijan", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Bahrain", "Date":"July 13, 2017", "Leader":"King"},
+{"Country Name":"Bangladesh", "Date":"July 13, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Benin", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Brunei", "Date":"July 13, 2017", "Leader":"Sultan"},
+{"Country Name":"Burkina Faso", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Chad", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Egypt", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Gabon", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"The Gambia", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Guinea", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Guinea-Bissau", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Indonesia", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Iraq", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Ivory Coast", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Jordan", "Date":"July 13, 2017", "Leader":"King"},
+{"Country Name":"Kazakhstan", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Kuwait", "Date":"July 13, 2017", "Leader":"Emir"},
+{"Country Name":"Lebanon", "Date":"July 13, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Malaysia", "Date":"July 13, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Maldives", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Mali", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Mauritania", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Morocco", "Date":"July 13, 2017", "Leader":"Minister of Foreign Affairs"},
+{"Country Name":"Niger", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Oman", "Date":"July 13, 2017", "Leader":"Deputy Prime Minister"},
+{"Country Name":"Pakistan", "Date":"July 13, 2017", "Leader":"Prime Minister"},
+{"Country Name":"Palestine", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Qatar", "Date":"July 13, 2017", "Leader":"Emir"},
+{"Country Name":"Senegal", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Somalia", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Sudan", "Date":"July 13, 2017", "Leader":"Minister of State"},
+{"Country Name":"Tajikistan", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Tunisia", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"Turkey", "Date":"July 13, 2017", "Leader":"Minister of Foreign Affairs"},
+{"Country Name":"Uzbekistan", "Date":"July 13, 2017", "Leader":"President"},
+{"Country Name":"United Arab Emirates", "Date":"July 13, 2017", "Leader":"Crown Prince"}]
+
+#['United Arab Emirates', 'Sudan', 'Turkey', 'Oman', 'Morocco'] -1
+
+###########Change italy pope to Vatican
+########## Drop June 27, 2017 Ireland	Prime Minister
+###########Drop Vietnam Presdient
+
+
+conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::int - 2 WHERE "Country_Name" = '{}';'''.format('Ireland'))
 
 ABRV_table_name = 'QP_SCORE2'
 todays_date = "07-21-2017"
@@ -132,7 +354,7 @@ list_return.append(country_data_dictionary_in_json)
 
 
 
-"""
+
 country = 'Colombia'
 conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = 2 WHERE "Country_Name" = '{}';'''.format(country))
 

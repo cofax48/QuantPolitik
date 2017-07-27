@@ -869,5 +869,3 @@ def main():
 
     time2 = time.time()
     print("Total Time to run", time2-time1, 'seconds')
-
-main()
