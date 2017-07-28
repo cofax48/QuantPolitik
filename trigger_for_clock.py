@@ -7,12 +7,14 @@ def trigger_execution():
 
     def SecState():
         from sec_state_schedule_quantifier import main as SECMain
+        SECMain()
         print('SecState Run')
         return 'SecState Has Run'
     def QPMAIN():
         from QP_SCORE_MAKER import main as QP_Main
+        QP_Main()
         print('QP Score Maker Run')
         return 'QPMAIN has run'
-    
+
     return 'They have all run'
 trigger_execution()
