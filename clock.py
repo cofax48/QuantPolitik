@@ -20,7 +20,7 @@ def gather_trigger():
 
 if __name__ == '__main__':
     sched = BlockingScheduler()
-    sched.add_job(gather_trigger, 'cron', day_of_week='*', hour=12, minute=6, timezone='US/Eastern')
+    sched.add_job(gather_trigger, 'cron', day_of_week='*', hour=14, minute=7, timezone='US/Eastern')
 
     try:
         sched.start()
