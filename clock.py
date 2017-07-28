@@ -14,12 +14,13 @@ q = Queue(connection=conn)
 
 def gather_trigger():
     from trigger_for_clock import trigger_execution as trigger
+    trigger()
     print('Triggering')
     q.enqueue(trigger)
 
 if __name__ == '__main__':
     sched = BlockingScheduler()
-    sched.add_job(gather_trigger, 'cron', day_of_week='*', hour=13, minute=46, timezone='US/Eastern')
+    sched.add_job(gather_trigger, 'cron', day_of_week='*', hour=12, minute=6, timezone='US/Eastern')
 
     try:
         sched.start()
