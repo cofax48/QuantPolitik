@@ -846,6 +846,7 @@ def database_updater(country_name_list, new_list):
             else:
                 country_date_leader_dict.append({"Country Name":count, "Date":specific_day, "Leader":minister})
 
+    print(country_date_leader_dict)
     with open("meeting_json_list.json", 'w') as meeting_json_list:
         meeting_json_list.truncate()
         json.dump(country_date_leader_dict, meeting_json_list)

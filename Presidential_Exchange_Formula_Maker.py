@@ -127,7 +127,6 @@ def PEFM(country_name_list, country_and_percentile_rank_list):
         Pres_2016_percentile_rank_list_factored.append(stats.percentileofscore(Pres_2016_percentile_rank_list, f, kind='rank'))
 
     for h in Pres_2017_percentile_rank_list:
-        print(h)
         Pres_2017_percentile_rank_list_factored.append(stats.percentileofscore(Pres_2017_percentile_rank_list, h, kind='rank'))
 
     for g in Total_Pres_percentile_rank_list:

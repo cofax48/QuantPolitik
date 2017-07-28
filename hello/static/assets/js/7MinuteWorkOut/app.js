@@ -1,18 +1,18 @@
 angular.module('app', ['ngRoute', '7minWorkout']).
 config(function ($routeProvider) {
   $routeProvider.when('/start', {
-    templateUrl: 'partials/start.html'
+    templateUrl: '../templates/partials/start.html'
   });
   //accessible under http://<hostname>/index.html#/start
   $routeProvider.when('/workout', {
-    templateUrl: 'partials/workout.html',
+    templateUrl: '../templates/partials/workout.html',
     controller: 'WorkoutController'
   });
   $routeProvider.when('/finish', {
-    templateUrl: 'partials/finish.html'
+    templateUrl: '../templates/partials/finish.html'
   });
   $routeProvider.otherwise({
-    redirectTo: '/start'
+    redirectTo: '../templates/partials/start'
   });
 });
 
