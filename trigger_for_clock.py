@@ -15,3 +15,4 @@ def trigger_execution():
         return 'QPMAIN has run'
     """
     return 'They have all run'
+trigger_execution()
