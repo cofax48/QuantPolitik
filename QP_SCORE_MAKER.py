@@ -350,3 +350,4 @@ def main():
 
     time2 = time.time()
     print("Total time to run ", int(time2 - time1), "seconds")
+main()
