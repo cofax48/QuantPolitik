@@ -1,32 +1,30 @@
 # -*- coding: utf-8 -*-
-from pytz import utc
 from apscheduler.schedulers.blocking import BlockingScheduler
-from rq import Queue
-from worker import conn
-import os
 
-import logging
-import sys
-logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+sched = BlockingScheduler()
 
-
-q = Queue(connection=conn)
-
-def gather_trigger():
+@sched.scheduled_job('cron', day_of_week='*', hour=15, minute=10, timezone='US/Eastern')
+def President_Sched():
     from Trump_New_Schedule_Getter import main as PresMain
-    q.enqueue(PresMain)
+    PresMain()
     print('PresMain Run')
+
+@sched.scheduled_job('cron', day_of_week='*', hour=15, minute=16, timezone='US/Eastern')
+def President_Sched():
     from sec_state_schedule_quantifier import main as SECMain
-    q.enqueue(SECMain)
-    print('SecState Run')
+    SECMain()
+    print('SECMain Run')
+
+@sched.scheduled_job('cron', day_of_week='*', hour=15, minute=20, timezone='US/Eastern')
+def President_Sched():
     from QP_SCORE_MAKER import main as QP_Main
-    q.enqueue(QP_Main)
+    QP_Main()
     print('QP Score Maker Run')
 
-if __name__ == '__main__':
-    sched = BlockingScheduler()
-    sched.add_job(gather_trigger, 'cron', day_of_week='*', hour=13, minute=46, timezone='US/Eastern')
+sched.start()
 
+if __name__ == '__main__':
+    print('starting da trigger')
     try:
         sched.start()
     except (KeyboardInterrupt, SystemExit):
