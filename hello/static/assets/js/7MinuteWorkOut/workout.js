@@ -7,6 +7,14 @@ angular.module('7minWorkout')
           this.name = args.name;
           this.title = args.title;
           this.restBetweenExercise = args.restBetweenExercise;
+          this.totalWorkoutDuration = function () {
+              if (this.exercises.length == 0) return 0;
+              var total = 0;
+              angular.forEach(this.exercises, function (exercise) {
+                  total = total + exercise.duration;
+              });
+              return this.restBetweenExercise * (this.exercises.length - 1) + total;
+          }
       };
 
       function Exercise(args) {
@@ -21,9 +29,9 @@ angular.module('7minWorkout')
       }
 
       var restExercise;
-      var workoutPlan;
       var startWorkout = function () {
-          workoutPlan = createWorkout();
+          $scope.workoutPlan = createWorkout();
+          $scope.workoutTimeRemaining = $scope.workoutPlan.totalWorkoutDuration();
           restExercise = {
               details: new Exercise({
                   name: "rest",
@@ -31,9 +39,13 @@ angular.module('7minWorkout')
                   description: "Relax a bit!",
                   image: "img/rest.png",
               }),
-              duration: workoutPlan.restBetweenExercise
+              duration: $scope.workoutPlan.restBetweenExercise
           };
-          startExercise(workoutPlan.exercises.shift());
+          $interval(function () {
+              $scope.workoutTimeRemaining = $scope.workoutTimeRemaining - 1;
+          }, 1000, $scope.workoutTimeRemaining);
+
+          startExercise($scope.workoutPlan.exercises.shift());
       };
 
       var startExercise = function (exercisePlan) {
@@ -55,10 +67,10 @@ angular.module('7minWorkout')
       var getNextExercise = function (currentExercisePlan) {
           var nextExercise = null;
           if (currentExercisePlan === restExercise) {
-              nextExercise = workoutPlan.exercises.shift();
+              nextExercise = $scope.workoutPlan.exercises.shift();
           }
           else {
-              if (workoutPlan.exercises.length != 0) {
+              if ($scope.workoutPlan.exercises.length != 0) {
                   nextExercise = restExercise;
               }
           }
@@ -91,10 +103,10 @@ angular.module('7minWorkout')
                   image: "img/JumpingJacks.png",
                   videos: ["//www.youtube.com/embed/dmYwZH_BNd0", "//www.youtube.com/embed/BABOdJ-2Z6o", "//www.youtube.com/embed/c4DAnQ6DtF8"],
                   procedure: "Assume an erect position, with feet together and arms at your side.\
-                            Slightly bend your knees, and propel yourself a few inches into the air.\
-                            While in air, bring your legs out to the side about shoulder width or slightly wider.\
-                            As you are moving your legs outward, you should raise your arms up over your head; arms should be slightly bent throughout the entire in-air movement.\
-                            Your feet should land shoulder width or wider as your hands meet above your head with arms slightly bent"
+                            <br/>Slightly bend your knees, and propel yourself a few inches into the air.\
+                            <br/>While in air, bring your legs out to the side about shoulder width or slightly wider.\
+                            <br/>As you are moving your legs outward, you should raise your arms up over your head; arms should be slightly bent throughout the entire in-air movement.\
+                            <br/>Your feet should land shoulder width or wider as your hands meet above your head with arms slightly bent"
               }),
               duration: 30
           });
@@ -106,7 +118,7 @@ angular.module('7minWorkout')
                   image: "img/wallsit.png",
                   videos: ["//www.youtube.com/embed/y-wV4Venusw", "//www.youtube.com/embed/MMV3v4ap4ro"],
                   procedure: "Place your back against a wall with your feet shoulder width apart and a little ways out from the wall.\
-                              Then, keeping your back against the wall, lower your hips until your knees form right angles. "
+                              <br/>Then, keeping your back against the wall, lower your hips until your knees form right angles. "
               }),
               duration: 30
           });
