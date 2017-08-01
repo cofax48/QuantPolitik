@@ -48,6 +48,9 @@ def AngularTesting(request):
 def SevenminWorkout(request):
     return render(request, '7minWorkout.html')
 
+def DataByCountryAngularApp(request):
+    return render(request, 'DataByCountryAngularApp.html')
+
 #########
 
 def JSResume(request):

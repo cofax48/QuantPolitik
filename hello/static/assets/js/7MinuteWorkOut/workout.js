@@ -28,7 +28,6 @@ angular.module('7minWorkout')
           this.procedure = args.procedure;
       }
 
-      var restExercise;
       var startWorkout = function () {
           $scope.workoutPlan = createWorkout();
           $scope.workoutTimeRemaining = $scope.workoutPlan.totalWorkoutDuration();
@@ -102,11 +101,11 @@ angular.module('7minWorkout')
                   description: "A jumping jack or star jump, also called side-straddle hop is a physical jumping exercise.",
                   image: "img/JumpingJacks.png",
                   videos: ["//www.youtube.com/embed/dmYwZH_BNd0", "//www.youtube.com/embed/BABOdJ-2Z6o", "//www.youtube.com/embed/c4DAnQ6DtF8"],
-                  procedure: "Assume an erect position, with feet together and arms at your side.\
-                            <br/>Slightly bend your knees, and propel yourself a few inches into the air.\
-                            <br/>While in air, bring your legs out to the side about shoulder width or slightly wider.\
-                            <br/>As you are moving your legs outward, you should raise your arms up over your head; arms should be slightly bent throughout the entire in-air movement.\
-                            <br/>Your feet should land shoulder width or wider as your hands meet above your head with arms slightly bent"
+                  procedure: "Assume an erect position, with feet together and arms at your side.<br>\
+                            Slightly bend your knees, and propel yourself a few inches into the air.<br>\
+                            While in air, bring your legs out to the side about shoulder width or slightly wider.<br>\
+                            As you are moving your legs outward, you should raise your arms up over your head; arms should be slightly bent throughout the entire in-air movement.\
+                            Your feet should land shoulder width or wider as your hands meet above your head with arms slightly bent"
               }),
               duration: 30
           });
@@ -118,7 +117,7 @@ angular.module('7minWorkout')
                   image: "img/wallsit.png",
                   videos: ["//www.youtube.com/embed/y-wV4Venusw", "//www.youtube.com/embed/MMV3v4ap4ro"],
                   procedure: "Place your back against a wall with your feet shoulder width apart and a little ways out from the wall.\
-                              <br/>Then, keeping your back against the wall, lower your hips until your knees form right angles. "
+                              Then, keeping your back against the wall, lower your hips until your knees form right angles. "
               }),
               duration: 30
           });

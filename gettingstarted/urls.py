@@ -24,6 +24,7 @@ urlpatterns = [
     #Testing with angular
     url(r'^7minWorkout', hello.views.SevenminWorkout, name='SevenminWorkout'),
     url(r'^AngularTesting', hello.views.AngularTesting, name='AngularTesting'),
+    url(r'^DataByCountryAngularApp', hello.views.DataByCountryAngularApp, name='DataByCountryAngularApp'),
     #################
     url(r'^DrSchenkein', hello.views.drSchenkein, name='drSchenkein'),
     url(r'^JSResume', hello.views.JSResume, name='JSResume'),
