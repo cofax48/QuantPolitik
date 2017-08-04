@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^Security', hello.views.Security, name='Security'),
     url(r'^TradeRelations', hello.views.TradeRelations, name='TradeRelations'),
     url(r'^meetingjsonlist', hello.views.meeting_json_list, name='meetingjsonlist'),
+    url(r'^country_name_list', hello.views.country_name_list, name='country_name_list'),
     #Apis
     url(r'^apiDynamic/\w{2,20}', hello.views.get_Dynamic_Table, name='get_Dynamic_Table'),
     url(r'^api/ByCountry/\w{2,40}', hello.views.get_Country_headline_data, name='Country_headline_data'),

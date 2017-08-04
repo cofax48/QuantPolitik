@@ -11,12 +11,16 @@ from hello.country_to_number import country_numberifier
 from hello.country_to_number import codex
 from hello.country_to_number import iso_numberifier
 
-
+#Global Variables
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
+#57600 is 16 hours, which are subtracted so the server only requests date data
+#which is generated at 8am eastern or 16 hours after midnight UTC (server time)
+todays_date = datetime.fromtimestamp(int(time.time()) - 57600).strftime('%B-%d-%Y')
 
-# Create your views here.
+
+# My views go here.
 def index(request):
-    # return HttpResponse('Hello from Python!')
+    #My index page
     return render(request, 'index.html')
 
 def aboutPage(request):
@@ -91,6 +95,13 @@ def meeting_json_list(request):
         meeting_json_list_whole.append(meeting_json_list)
     return JsonResponse(meeting_json_list_whole, safe=False)
 
+def country_name_list(request):
+    country_name_list_whole = []
+    with open("COUNTRY_JSON_AUTHORITATIVE.json") as f:
+        country_name_list = json.load(f)
+        country_name_list_whole.append(country_name_list)
+    return JsonResponse(country_name_list_whole, safe=False)
+
 def get_Table(request):
     #connect to database
     conn = engine.connect()
@@ -142,30 +153,22 @@ def get_Table_and_Column(request):
     ABRV_table_name = str(request)[24:]
     ABRV_table_name = str(ABRV_table_name)[:-2]
 
+    country_name, table_name = ABRV_table_name.split("/")
+    country_name = country_name.replace('%20', ' ')
 
-    table_name, column_name = ABRV_table_name.split("/")
-    column_name = column_name.replace('%20', ' ')
-
-    query = conn.execute('SELECT "{}" FROM "{}" ORDER BY "Country_Name";'.format(column_name, table_name))
+    query = conn.execute('''SELECT "{}" FROM "{}";'''.format(country_name, table_name))
     query_list = query.cursor.fetchall()
 
+    date_query = conn.execute('''SELECT "Date" FROM "{}";'''.format(table_name))
+    date_query_list = date_query.cursor.fetchall()
 
-    country_names = conn.execute('SELECT "Country_Name" FROM "{}"; ORDER BY "Country_Name"'.format(table_name))
-    country_list = country_names.cursor.fetchall()
-
-    iso3_codes = conn.execute('SELECT "Iso3" FROM "QP_Score" ORDER BY "Country_Name";')
-    iso3_codes_list = iso3_codes.cursor.fetchall()
-
-    country_and_data_list = []
-    for i in range(len(query_list)):
-        country_and_data_dict = {}
-        country_and_data_dict['Country_Name']  = country_list[i][0]
-        country_and_data_dict['Iso3'] = iso3_codes_list[i][0]
-        country_and_data_dict[column_name] = query_list[i][0]
-        country_and_data_list.append(country_and_data_dict)
+    country_data_dict = {}
+    zipper = zip(query_list, date_query_list)
+    for z in zipper:
+        country_data_dict[z[1][0]] = z[0][0]
 
     json_list_to_send = []
-    json_list_to_send.append(country_and_data_list)
+    json_list_to_send.append(country_data_dict)
 
 
     return JsonResponse(json_list_to_send, safe=False)
@@ -185,7 +188,6 @@ def get_Dynamic_Table(request):
     list_return = []
 
     print(ABRV_table_name)
-    todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
 
     col_name = col_query = conn.execute('''SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'QP_SCORE2';''')
     col_query = col_name.cursor.fetchall()
@@ -212,9 +214,6 @@ def get_Dynamic_Table(request):
     return JsonResponse(list_return, safe=False)
 
 def get_Country_headline_data(request):
-    from datetime import datetime
-    import time
-    todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
     #connect to database
     conn = engine.connect()
     #preform query and return json data
@@ -226,7 +225,9 @@ def get_Country_headline_data(request):
     ABRV_Country_name != 'favicon.ico'
     ABRV_Country_name != '/favicon.ico'
 
-    QP_Score_query = conn.execute('''SELECT "{}" FROM "QP_SCORE2" WHERE "Country_Name" = '{}';'''.format(todays_date, ABRV_Country_name))
+    ABRV_Country_name = ABRV_Country_name.replace('%20', ' ')
+
+    QP_Score_query = conn.execute('''SELECT "{}" FROM "QP_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
     QPSResult = QP_Score_query.cursor.fetchall()
     Population_query = conn.execute('''SELECT "Population in Millions" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
     PQResult = Population_query.cursor.fetchall()
@@ -238,7 +239,28 @@ def get_Country_headline_data(request):
     HDIResult = HDI_query.cursor.fetchall()
     size_query = conn.execute('''SELECT "Geographic Area including water" FROM "Country_Profile" WHERE "Country_Name" = '{}';'''.format(ABRV_Country_name))
     SizeResult = size_query.cursor.fetchall()
+    Presidential_SCORE2 = conn.execute('''SELECT "{}" FROM "Presidential_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+    Presidential_SCORE2Result = Presidential_SCORE2.cursor.fetchall()
+    Prestige_SCORE2 = conn.execute('''SELECT "{}" FROM "Prestige_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+    Prestige_SCORE2Result = Prestige_SCORE2.cursor.fetchall()
+    GP_SCORE2 = conn.execute('''SELECT "{}" FROM "GP_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+    GP_SCORE2Result = GP_SCORE2.cursor.fetchall()
+    CD_SCORE2 = conn.execute('''SELECT "{}" FROM "CD_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+    CD_SCORE2Result = CD_SCORE2.cursor.fetchall()
+    Security_SCORE2 = conn.execute('''SELECT "{}" FROM "Security_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+    Security_SCORE2Result = Security_SCORE2.cursor.fetchall()
+    Sec_State_SCORE2 = conn.execute('''SELECT "{}" FROM "Sec_State_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+    Sec_State_SCORE2Result = Sec_State_SCORE2.cursor.fetchall()
+    CProfile_SCORE2 = conn.execute('''SELECT "{}" FROM "CProfile_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+    CProfile_SCORE2Result = CProfile_SCORE2.cursor.fetchall()
+    BR_SCORE2 = conn.execute('''SELECT "{}" FROM "BR_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+    BR_SCORE2Result = BR_SCORE2.cursor.fetchall()
+    Trade_SCORE2 = conn.execute('''SELECT "{}" FROM "Trade_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+    Trade_SCORE2Result = Trade_SCORE2.cursor.fetchall()
+
 
     Country_Name = ABRV_Country_name
-    all_the_data = [{"Country Name":ABRV_Country_name}, {"QP_Score":QPSResult[0][0]}, {"Population in Millions":PQResult[0][0]}, {"GDP":GDPResult[0][0]}, {"GDP per Capita":PerCapitaResult[0][0]}, {"HDI":HDIResult[0][0]}, {"Size":SizeResult[0][0]}]
+    all_the_data = [{"Country Name":ABRV_Country_name}, {"QP_Score":QPSResult[0][0]}, {"Population in Millions":PQResult[0][0]}, {"GDP":GDPResult[0][0]}, {"GDP per Capita":PerCapitaResult[0][0]}, {"HDI":HDIResult[0][0]}, {"Size":SizeResult[0][0]}, \
+    {"Presidential_SCORE2": Presidential_SCORE2Result[0][0]}, {"Prestige_SCORE2":Prestige_SCORE2Result[0][0]}, {"GP_SCORE2Result":GP_SCORE2Result[0][0]}, {"CD_SCORE2":CD_SCORE2Result[0][0]}, {"Security_SCORE2":Security_SCORE2Result[0][0]}, \
+    {"Sec_State_SCORE2":Sec_State_SCORE2Result[0][0]}, {"CProfile_SCORE2":CProfile_SCORE2Result[0][0]}, {"BR_SCORE2":BR_SCORE2Result[0][0]}, {"Trade_SCORE2":Trade_SCORE2Result[0][0]}]
     return JsonResponse(all_the_data, safe=False)

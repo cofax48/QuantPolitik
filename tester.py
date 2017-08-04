@@ -102,6 +102,56 @@ from unidecode import unidecode
 #from api.country_to_number import iso_numberifier
 engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
 conn = engine.connect()
+country_name = "France"
+table_name = "QP_SCORE2"
+
+from datetime import datetime
+import time
+import pytz
+
+todays_date = datetime.fromtimestamp(int(time.time()) - 57600).strftime('%B-%d-%Y')
+print(todays_date)
+print(int(time.time()))
+
+"""
+query = conn.execute('''SELECT "{}" FROM "{}";'''.format(country_name, table_name))
+query_list = query.cursor.fetchall()
+
+date_query = conn.execute('''SELECT "Date" FROM "{}";'''.format(table_name))
+date_query_list = date_query.cursor.fetchall()
+
+country_data_dict = {}
+zipper = zip(query_list, date_query_list)
+for z in zipper:
+    country_data_dict[z[1][0]] = z[0][0]
+
+json_list_to_send = []
+json_list_to_send.append(country_data_dict)
+print(json_list_to_send)
+
+
+meeting_json_list_whole = []
+with open("../static/assets/js/COUNTRY_JSON_AUTHORITATIVE.json") as f:
+    meeting_json_list = json.load(f)
+    meeting_json_list_whole.append(meeting_json_list)
+print(meeting_json_list_whole)
+
+from datetime import datetime
+import time
+todays_date = datetime.fromtimestamp(int(time.time())).strftime('%B-%d-%Y')
+print(todays_date)
+ABRV_Country_name = 'France'
+Presidential_SCORE2 = conn.execute('''SELECT "{}" FROM "Presidential_SCORE2" WHERE "Date" = '{}';'''.format(ABRV_Country_name, todays_date))
+Presidential_SCORE2Result = Presidential_SCORE2.cursor.fetchall()
+print(Presidential_SCORE2Result[0][0])
+
+table_list = ['Presidential_SCORE2', 'Prestige_SCORE2', 'GP_SCORE2', 'CD_SCORE2', 'Security_SCORE2', 'Sec_State_SCORE2', 'CProfile_SCORE2', 'BR_SCORE2', 'Trade_SCORE2', 'QP_SCORE2']
+for tab in table_list:
+    yao = conn.execute('''SELECT "France" FROM "{}";'''.format(tab))
+    for i in yao:
+        print(tab, i)
+
+
 
 from datetime import datetime
 import time
@@ -114,7 +164,7 @@ conn.execute('''UPDATE "Presidential_Exchange" SET "Pres_2017" = "Pres_2017"::in
 
 
 
-"""
+
 {"Country Name":"France", "Date":"July 13, 2017", "Leader":"President"},
 {"Country Name":"France", "Date":"July 14, 2017", "Leader":"President"},
 {"Country Name":"Lebanon", "Date":"July 25, 2017", "Leader":"Prime Minister"},

@@ -1,0 +1,74 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "flags-of-the-world",
+        "scope": null,
+        "escapedName": "flags-of-the-world",
+        "name": "flags-of-the-world",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/cofax48/python-getting-started"
+    ]
+  ],
+  "_from": "flags-of-the-world@latest",
+  "_id": "flags-of-the-world@1.0.0",
+  "_inCache": true,
+  "_location": "/flags-of-the-world",
+  "_nodeVersion": "4.2.0",
+  "_npmUser": {
+    "name": "kud",
+    "email": "m@kud.io"
+  },
+  "_npmVersion": "3.3.8",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "flags-of-the-world",
+    "scope": null,
+    "escapedName": "flags-of-the-world",
+    "name": "flags-of-the-world",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/flags-of-the-world/-/flags-of-the-world-1.0.0.tgz",
+  "_shasum": "f8f6840bf5b0bdb1cee45a86eb404552bcd877ff",
+  "_shrinkwrap": null,
+  "_spec": "flags-of-the-world",
+  "_where": "/Users/cofax48/python-getting-started",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/kud/flags-of-the-world/issues"
+  },
+  "dependencies": {},
+  "description": "Collection of every country's flag.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "f8f6840bf5b0bdb1cee45a86eb404552bcd877ff",
+    "tarball": "https://registry.npmjs.org/flags-of-the-world/-/flags-of-the-world-1.0.0.tgz"
+  },
+  "gitHead": "285f0298fa258be051f5dc7eb328ad0a43d7b3f6",
+  "homepage": "https://github.com/kud/flags-of-the-world#readme",
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "kud",
+      "email": "m@kud.io"
+    }
+  ],
+  "name": "flags-of-the-world",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kud/flags-of-the-world.git"
+  },
+  "scripts": {},
+  "version": "1.0.0"
+}
