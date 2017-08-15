@@ -12,7 +12,7 @@ from hello.country_to_number import codex
 from hello.country_to_number import iso_numberifier
 
 #Global Variables
-engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
+engine = create_engine('ma engine') #Not fo you , sorry!
 #57600 is 16 hours, which are subtracted so the server only requests date data
 #which is generated at 8am eastern or 16 hours after midnight UTC (server time)
 todays_date = datetime.fromtimestamp(int(time.time()) - 57600).strftime('%B-%d-%Y')
