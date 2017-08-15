@@ -693,7 +693,7 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
 def database_updater(country_name_list, new_list):
 
     print('updating database')
-    engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
+    engine = create_engine('ma engine') #Not fo you , sorry!
     conn = engine.connect()
 
     conn.execute('''UPDATE "Sec_State_Bureaucratic_Exchange" SET "Sec_of_State_2017" = 0;''')
