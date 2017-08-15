@@ -648,7 +648,7 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
 
 def database_updater(country_name_list, new_list):
 
-    engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
+    engine = create_engine('ma engine') #Not fo you , sorry!
     conn = engine.connect()
 
     Two_pt_leader_list = ['President', 'Prime Minister', 'Prime Minster', 'King', 'Chancellor', 'Taoiseach', 'Queen', 'Amir', 'Emperor', 'Pope', 'Sultan']
