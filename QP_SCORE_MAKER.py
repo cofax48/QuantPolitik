@@ -16,8 +16,7 @@ import scipy.stats as stats
 from country_to_number import country_numberifier
 
 #Engine Creator
-engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
-
+engine = create_engine('my engine') 
 QP_value = {}
 
 def getting_all_the_column_names_from_the_table(table_name):
