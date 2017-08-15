@@ -284,7 +284,7 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                           'Minister of Foreign Affairs', 'Minister of External Relations', 'Opposition Leader', 'Premier', 'former Prez', 'former PM', 'Sate Dinner', 'working dinner', 'working lunch', 'Ministerial Meeting', 'closing session', 'Deputy CroPri',
                           'Defense Minister', 'Minister of Defense', 'Minister for Foreign Affairs', 'Minister of Foreign Affairs', 'Minister of Finance', 'Minister of Foreign Trade', 'Vice-Premeir', 'State Counselor',
                           'Minister of Environment', 'Minister of Natural Resources', 'Secretary of Foreign Relations', 'State Councilor', 'Secretary of Interior', 'Secretary of Finance',
-                          'Minister of Power', 'Minister of State for Foreign Affairs','Vice Prez', 'Vice Premier']
+                          'Minister of Power', 'Minister of State', 'Minister of State for Foreign Affairs','Vice Prez', 'Vice Premier']
     total_meeting_list = ['place holder']
 
     #This tests countries by country name
@@ -448,7 +448,7 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
     additional_filtration_list = []
     multilateral_country_list = ['G-20', 'G20', 'G8', 'G7', 'ASEAN', 'ASEAN-', 'APEC', 'G-8', 'Arctic Council', 'NATO', 'CARICOM', 'Gulf Cooperation Council', 'GCC', 'G-7', 'Summit of the Americas', 'East Asia Summit', 'Strategic and Economic Dialogue']
     alternative_title_list = ['CEO', 'Crown Prince', 'Sultan', 'Defense Minister', 'Deputy Crown Prince', 'Deputy PM', 'Finance Minister', 'Pope', 'Secretary of State', 'Minister of Enviornment',
-                          'Foreign Minister', 'Foregin Minster', 'Foreign Secretary', 'Vice-Premeir', 'Deputy CroPri',
+                          'Foreign Minister', 'Foregin Minster', 'Foreign Secretary', 'Vice-Premeir', 'Deputy CroPri', 'Minister of State',
                           'Minister of Foreign Affairs', 'Minister of External Relations', 'Opposition Leader', 'Premier', 'Chairman and General Secretary of the National League of Democracy',
                           'Defense Minister', 'Minister for Foreign Affairs', 'Minister of Foreign Affairs', 'Minister of Finance', 'Minister of Foreign Trade', 'State Counselor',
                           'Minister of Environment', 'Minister of Natural Resources', 'Secretary of Foreign Relations', 'State Councilor', 'Premier of the State Council',
@@ -579,6 +579,11 @@ def country_and_leader_getter(new_PRES_MEETING_LIST, country_name_list, country_
                 dup = dup.replace("Foreign Secretary", "Foreign Minister")
                 if dup not in duplicate_check_meetings_list:
                     duplicate_check_meetings_list.append(dup)
+            elif str('Minister of State') in str(dup):
+                if 'Myanmar' in str(dup):
+                    dup = dup.replace("Minister of State for Foreign Affairs", "Foreign Minister")
+                    if dup not in duplicate_check_meetings_list:
+                        duplicate_check_meetings_list.append(dup)
             elif str('Minister of State for Foreign Affairs') in str(dup):
                 if 'United Arab Emirates' in str(dup):
                     dup = dup.replace("Minister of State for Foreign Affairs", "Foreign Minister")
@@ -696,7 +701,7 @@ def database_updater(country_name_list, new_list):
     Two_pt_leader_list = ['President', 'Prime Minister', 'Prime Minster', 'King', 'Chancellor', 'Taoiseach', 'Queen', 'Amir', 'Emperor', 'Pope', 'Sultan']
     One_pt_leader_list = ['CEO', 'Crown Prince', 'Defense Minister', 'Deputy Crown Prince', 'Deputy PM', 'Finance Minister', 'Secretary of State',
                           'Foreign Minister', 'Foregin Minster', 'Foreign Secretary', 'State Counselor', 'Secretary of Defense', 'Minister of Oil', 'Minister of Defense',
-                          'Minister of Foreign Affairs', 'Minister of External Relations', 'Opposition Leader', 'Premier', 'Chairman and General Secretary of the National League of Democracy',
+                          'Minister of Foreign Affairs', 'Minister of State', 'Minister of External Relations', 'Opposition Leader', 'Premier', 'Chairman and General Secretary of the National League of Democracy',
                           'Defense Minister', 'Minister for Foreign Affairs', 'Minister of Foreign Affairs', 'Minister of Finance', 'Minister of Foreign Trade', 'Deputy CroPri',
                           'Minister of Environment', 'Minister of Natural Resources', 'Secretary of Interior', 'Secretary of Finance', 'Secretary of Foreign Relations', 'State Councilor', 'Premier of the State Council', 'Minister of Enviornment',
                           'Minister of Power', 'Minister of State for Foreign Affairs','Vice Prez', 'Vice Premier', 'Vice-Premeir']

@@ -1,9 +1,11 @@
+/*Initialization of MY Quantpolitik Angular App */
 var QPCountryAngular = angular.module('app', ['ngRoute', 'ngSanitize', 'CountryAngularApp']).
 config(function ($routeProvider, $sceDelegateProvider) {
   $routeProvider.when('/App', {
     templateUrl: '../static/assets/js/CountryAngularApp/partials/start.html',
     controller: 'CountryDataController'
   })
+  //Specify links and routing to rest of the website from the angular app
   .when("/", {
     templateUrl: '../templates/index.html'
   })
