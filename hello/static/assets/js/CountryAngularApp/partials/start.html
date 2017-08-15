@@ -1,121 +1,108 @@
 {% verbatim %}
 <div class="row">
-  <div class="col-sm-3"></div>
+         <h2 id=countryName>{{CountryNameBeingPassed}}</h2>
+</div>
+<div id="imageOveflow">
+           <img id="flag" src="../static/images/flags_of_the_world/{{CountryNameBeingPassed}}.svg" />
+      <div id="tableStuff">
+        <table id="tableData" cellspacing="3">
+           <tr>
+              <th>QuantPolitik Score:</th>
+            </tr>
+            <tr>
+             <td>{{QPScoreBeingPassed}}</td>
+            </tr>
+            <tr>
+              <th>Population</th>
+            </tr>
+            <tr>
+              <td>{{PopulationBeingPassed}}</td>
+            </tr>
+            <tr>
+              <th>GDP</th>
+            </tr>
+            <tr>
+              <td>${{GDPBeingPassed}}-Billion</td>
+            </tr>
+            <tr>
+              <th>GDP Per Capita</th>
+            </tr>
+            </tr>
+            <tr>
+               <td>${{GDPPerCapitaBeingPassed}}</td>
+             </tr>
+            <tr>
+              <th>HDI</th>
+            </tr>
+           <tr>
+           <td>{{HDIBeingPassed}}</td>
+           </tr>
+           <tr>
+              <th>Geographical Size</th>
+            </tr>
+            <tr>
+             <td>{{SizeBeingPassed}}</td>
+           </tr>
+            <tr>
+              <th>Presidential Interaction Score</th>
+            </tr>
+            <tr>
+             <td>{{PresidentialScoreBeingPassed}}</td>
+            </tr>
+            <tr>
+              <th>Governmental Perspective Score</th>
+            </tr>
+            <tr>
+             <td>{{GPScoreBeingPassed}}</td>
+            <tr>
+              <th>Cultural Diffusion Score</th>
+            </tr>
+            <tr>
+             <td>{{CDScoreBeingPassed}}</td>
+           </tr>
+            <tr>
+              <th>Security Score</th>
+            </tr>
+            <tr>
+            <td>{{SecurityScoreBeingPassed}}</td>
+            </tr>
+            <tr>
+              <th>Secretary of State Interaction</th>
+            </tr>
+            <tr>
+             <td>{{SecStateScoreBeingPassed}}</td>
+            </tr>
+            <tr>
+              <th>Country Profile Score</th>
+            </tr>
+            <tr>
+             <td>{{CProfileScoreBeingPassed}}</td>
+            </tr>
+            <tr>
+              <th>Business Relations Score</th>
+            </tr>
+            <tr>
+             <td>{{BRScoreBeingPassed}}</td>
+            </tr>
+            <tr>
+              <th>Trade Score</th>
+            </tr>
+            <tr>
+             <td>{{TradeScoreBeingPassed}}</td>
+           </tr>
+        </table>
+      </div>
+</div>
   <div class="col-sm-6">
-    <h1 class="text-center">Welcome to QuantPolitik by Country!</h1>
     <br />
-    <img src="../static/images/UN_General_Assembly_photo_4.jpg" style="width:70%" class="center-block"/>
     <br />
     <div id="start" class="row">
-      <a href="#/start">
-        <form name="CountrySelect">
-          <label for="repeatSelect"> Choose a Country: </label>
-          <select name="CountryChosen" id="CountryChosen" ng-model="CountryChosen" ng-change="CountrySelectValue(CountryChosen)">
-            <option ng-repeat="country in CountryData" value="{{country.CountryName}}">{{country.CountryName}}</option>
-          </select>
-          {{CountryToUse}}
-        </form>
-        <span class="glyphicon glyphicon-play"></span>
-      </a>
     </div>
   </div>
   <div class="col-sm-3"></div>
-  <svg id="Graph Country D3" width="180%" height="160%" z-index:"1000"></svg>
+  <svg id="GraphCountryD3"></svg>
   <div class="table-users">
-
-   <table cellspacing="0">
-     <h2>{{CountryNameBeingPassed}}</h2>
-      <tr>
-         <th>Flag</th>
-      </tr>
-      <tr>
-        <td><img src="../static/images/flags_of_the_world/{{CountryNameBeingPassed}}.svg" style="width:10%" /></td>
-      </tr>
-      <tr>
-         <th>QuantPolitik Score:</th>
-       </tr>
-       <tr>
-        <td>{{QPScoreBeingPassed}}</td>
-       </tr>
-       <tr>
-         <th>Population</th>
-       </tr>
-       <tr>
-         <td>{{PopulationBeingPassed}}</td>
-       </tr>
-       <tr>
-         <th>GDP</th>
-       </tr>
-       <tr>
-         <td>{{GDPBeingPassed}}</td>
-       </tr>
-       <tr>
-         <th>GDP Per Capita</th>
-       </tr>
-       </tr>
-       <tr>
-          <td>{{GDPPerCapitaBeingPassed}}</td>
-        </tr>
-       <tr>
-         <th>HDI</th>
-       </tr>
-      <tr>
-      <td>{{HDIBeingPassed}}</td>
-      </tr>
-      <tr>
-         <th>Geographical Size</th>
-       </tr>
-       <tr>
-        <td>{{SizeBeingPassed}}</td>
-      </tr>
-       <tr>
-         <th>Presidential Interaction Score</th>
-       </tr>
-       <tr>
-        <td>{{PresidentialScoreBeingPassed}}</td>
-       </tr>
-       <tr>
-         <th>Governmental Perspective Score</th>
-       </tr>
-       <tr>
-        <td>{{GPScoreBeingPassed}}</td>
-       <tr>
-         <th>Cultural Diffusion Score</th>
-       </tr>
-       <tr>
-        <td>{{CDScoreBeingPassed}}</td>
-      </tr>
-       <tr>
-         <th>Security Score</th>
-       </tr>
-       <tr>
-       <td>{{SecurityScoreBeingPassed}}</td>
-       </tr>
-       <tr>
-         <th>Secretary of State Interaction</th>
-       </tr>
-       <tr>
-        <td>{{SecStateScoreBeingPassed}}</td>
-       </tr>
-       <tr>
-         <th>Country Profile Score</th>
-       </tr>
-       <tr>
-        <td>{{CProfileScoreBeingPassed}}</td>
-       </tr>
-       <tr>
-         <th>Business Relations Score</th>
-       </tr>
-       <tr>
-        <td>{{BRScoreBeingPassed}}</td>
-       </tr>
-       <tr>
-         <th>Trade Score</th>
-       </tr>
-       <tr>
-        <td>{{TradeScoreBeingPassed}}</td>
-      </tr>
-   </table>
+    <country-angular data="countryGraphAPIData" countryNameBeingPassed="countryNameChosen"></country-angular>
 </div>
 
     <!--
@@ -123,5 +110,8 @@
     $scope.BRScoreBeingPassed = CountryData[14]["BR_SCORE2"];
     $scope.TradeScoreBeingPassed = CountryData[15]["Trade_SCORE2"];
   -->
+  <div id="twitter-container">
+  </div>
+
 </div>
 {% endverbatim %}

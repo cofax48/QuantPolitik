@@ -1,5 +1,8 @@
+// set aPITOUSE according to local or production variable
 var aPITOUSE = 'http://www.quantpolitik.com/';
 //var aPITOUSE = 'http://localhost:5000/';
+
+//Get todays date and use it to pull todays new data from database
 var today = new Date();
 var dd = today.getDate();
 var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -13,16 +16,21 @@ if(mm<10) {mm='0'+mm}
 today = month_name+'-'+dd+'-'+yyyy;
 var column_to_use = today;
 
+//this function is called on loading of the screen and displays the default map for today's QP Score
 function onLoad() {
 
   //http://localhost:5000/api/QP_Score
+  //Initialize array with dummy variable
   var whole_data = [{Country_Name:'placeHolder', value:0}];
+
+  //Use an API call from my Django view to access the QP Score to show on initial load
   d3.json(aPITOUSE + 'apiDynamic/QP_SCORE2', function(error, incomingData) {
     for (var i in COUNTRY_JSON_AUTHORITATIVE_list) {if (whole_data.length == 198) {mapDraw()}
     else {
       whole_data.push({Country_Name:COUNTRY_JSON_AUTHORITATIVE_list[i]["Country_Name"], id:COUNTRY_JSON_AUTHORITATIVE_list[i]["id"], value:incomingData[0][COUNTRY_JSON_AUTHORITATIVE_list[i]["Country_Name"]]});};
   }
       });
+  //This function is only for the QP Score with just todays data
   function mapDraw() {
 
   var width = 850, height = 400;
@@ -42,6 +50,7 @@ function onLoad() {
 
   var url = 'https://gist.githubusercontent.com/d3byex/65a128a9a499f7f0b37d/raw/176771c2f08dbd3431009ae27bef9b2f2fb56e36/world-110m.json';
 
+  //Acquire geo json data from CDN
   d3.json(url, function (error, world) {
       var countries = topojson.feature(world, world.objects.countries).features;
       var neighbors = topojson.neighbors(world.objects.countries.geometries);
@@ -240,7 +249,6 @@ function createDataViz() {
   function onchange(selectValue) {
     var new_select = selectValue.replace(/ /g, "_");
     d3.json(aPITOUSE + 'api/' + new_select, function(error, incomingData) {
-      console.log()
       incomingData = incomingData[0];
 
     var table_name = incomingData;
@@ -495,6 +503,7 @@ function createDataViz() {
                                 if (datapoint === 'Sec_of_State_2017') {
                                   meeting_list = []
 
+                                  //API for json of who the sec of state met with
                                   d3.json(aPITOUSE + 'meetingjsonlist', function(error, incomingData) {
                                     for (var i in _.range(incomingData[0].length)) {
                                     if (incomingData[0][i]["Country Name"] === country_name_and_iso[p.id]) {

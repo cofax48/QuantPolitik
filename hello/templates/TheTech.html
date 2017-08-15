@@ -43,7 +43,7 @@
 					<section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
 						<div class="content">
 							<h1>The Tech</h1>
-							<p class="major"><!--[-->QuantPolitik is built on a polyglot platform of Postgres, Python (Pandas, Django), and JavaScript, and is hosted in the cloud, courtesy of Heroku.<!--]--></p>
+							<p class="major"><!--[-->QuantPolitik is built on a polyglot platform of Postgres, Python (Pandas, Django), and JavaScript (Angular, D3, jQuery), and is hosted in the cloud, courtesy of Heroku.<!--]--></p>
 							<ul class="actions vertical">
 								<li><a href="https://github.com/cofax48/QuantPolitik" class="button big wide smooth-scroll-middle">View the Repo on GitHub</a></li>
 							</ul>
@@ -141,19 +141,19 @@
 					<!-- Seven -->
 						<section class="spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
 							<div class="content">
-								<h2>The Maps (D3):</h2>
-								<p>The maps on the site are the major users of the API, (though there are other features that do use them),
-									on the data is propagated in JSON and returned view the API, the choropleth mapping program,
-									retrieves the data and using the D3 library builds SVGs representing a map of the world,
-									and colors the map based on the quantized-scale of the data received.
-									The D3 map is meant to be scalable and portable as the data constantly changes,
-									yet the scales are redrawn accordingly and the colors consistently shift. </p>
+								<h2>The Dashboard (Angular and D3):</h2>
+								<p>The Dashboard has two Single Page Application (spa) views: by variable, which is displayed
+									through D3 in the form of color changing Choropleth maps, and by country in the form of an Angular application.
+								Both applications draw on previous elements of the project, namely the APIs and the database, yet each displays its model
+							in a different manner. For variable graphing, D3 enabled a sufficent degree of DOM control to permit an SPA of
+							dynamic Choropleth maps. However, Angular was employed for the creation of view-by-country display as the benefits of Interpolation
+						and passing a single graphing directive were pronounced. Additionally, it could be argued, this project would have been remiss if it didn't employ and flesh out a JavaScript Framework </p>
 								<ul class="actions vertical">
 									<li><a href="https://github.com/cofax48/QuantPolitik/blob/master/hello/static/assets/js/mapButtonsAndData.js" class="button">The Javascript</a></li>
 								</ul>
 							</div>
 							<div class="image">
-								<img src="../static/images/d3-js.jpg" alt="" />
+								<img src="../static/images/angularD3.png" alt="" />
 							</div>
 						</section>
 

@@ -145,6 +145,7 @@ def get_Table(request):
     return JsonResponse(list_return, safe=False)
 
 def get_Table_and_Column(request):
+    #r'^api/\w{2,20}/\w{2,20}'
     #connect to database
     conn = engine.connect()
     #preform query and return json data
@@ -153,8 +154,10 @@ def get_Table_and_Column(request):
     ABRV_table_name = str(request)[24:]
     ABRV_table_name = str(ABRV_table_name)[:-2]
 
-    country_name, table_name = ABRV_table_name.split("/")
-    country_name = country_name.replace('%20', ' ')
+    table_name = ABRV_table_name.rsplit('/', 1)[-1] # table
+    country_url = ABRV_table_name.rsplit('/', 2)[-2] # country
+    country_name = country_url.replace('%20', ' ')
+
 
     query = conn.execute('''SELECT "{}" FROM "{}";'''.format(country_name, table_name))
     query_list = query.cursor.fetchall()
@@ -214,6 +217,7 @@ def get_Dynamic_Table(request):
     return JsonResponse(list_return, safe=False)
 
 def get_Country_headline_data(request):
+    #r'^api/ByCountry/\w{2,40}'
     #connect to database
     conn = engine.connect()
     #preform query and return json data

@@ -1,4 +1,168 @@
+script = """    <a href="http://twitter.com/EmbajadaEEUUarg">Argentina</a><br />
+    <a href="http://twitter.com/usembarmenia">Armenia</a><br />
+    <a href="http://twitter.com/USAembassyinOz">Australia</a><br />
+    <a href="http://twitter.com/usembvienna">Austria</a><br />
+    <a href="http://twitter.com/USEmbassyBah">Bahrain</a><br />
+    <a href="http://twitter.com/USEmbassyBbdos">Barbados</a><br />
+    <a href="http://twitter.com/usembbrussels">Belgium</a><br />
+    <a href="http://twitter.com/EmbEUAenBolivia">Bolivia</a><br />
+    <a href="http://twitter.com/USEmbassySJJ">Bosnia &amp; Herzegovina </a><br />
+    <a href="http://twitter.com/EmbaixadaEUA">Brazil</a><br />
+    <a href="http://twitter.com/USEmbCameroon">Cameroon </a><br />
+    <a href="http://twitter.com/USEmbPhnomPenh">Cambodia</a><br />
+    <a href="http://twitter.com/usembassyottawa">Canada</a><br />
+    <a href="http://twitter.com/EmbajadaEEUUcl">Chile</a><br />
+    <a href="http://twitter.com/USEmbassyBogota">Colombia</a><br />
+    <a href="http://twitter.com/USEmbKinshasa">Congo, D.R.</a><br />
+    <a href="http://twitter.com/usembassysjo">Costa Rica</a><br />
+    <a href="http://twitter.com/USIntHavana">Cuba</a><br />
+    <a href="http://twitter.com/USEmbassyCyprus">Cyprus</a><br />
+    <a href="http://twitter.com/USEmbassyPrague">Czech Republic</a><br />
+    <a href="http://twitter.com/usembdenmark">Denmark</a><br />
+    <a href="http://twitter.com/EmbajadaUSAenRD">Dominican Republic</a><br />
+    <a href="http://twitter.com/usembassy_quito">Ecuador</a><br />
+    <a href="http://twitter.com/usembassycairo">Egypt</a><br />
+    <a href="http://twitter.com/USEmbTallinn">Estonia</a><br />
+    <a href="https://twitter.com/#!/usembfinland">Finland</a><br />
+    <a href="https://twitter.com/#!/USEmbassyFrance">France</a><br />
+    <a href="http://twitter.com/usembassygabon">Gabon</a><br />
+    <a href="https://twitter.com/EmbassyTbilisi">Georgia</a><br />
+    <a href="http://twitter.com/usbotschaft">Germany</a><br />
+    <a href="http://twitter.com/usembassyaccra">Ghana</a><br />
+    <a href="http://twitter.com/USEmbassyAthens">Greece</a><br />
+    <a href="http://twitter.com/usembassyguate">Guatemala</a><br />
+    <a href="http://twitter.com/EmbassyConakry">Guinea</a><br />
+    <a href="http://twitter.com/visageorge">Guyana</a><br />
+    <a href="http://twitter.com/USEmbassyHaiti">Haiti</a><br />
+    <a href="http://twitter.com/usembassyteg">Honduras</a><br />
+    <a href="http://twitter.com/usembbudapest">Hungary</a><br />
+    <a href="http://twitter.com/#!/USAndIndia">India</a><br />
+    <a href="http://twitter.com/usembassyjkt">Indonesia</a><br />
+    <a href="http://twitter.com/usembassydublin">Ireland</a><br />
+    <a href="http://twitter.com/usembassyta">Israel</a><br />
+    <a href="http://twitter.com/AmbasciataUSA">Italy</a><br />
+    <a href="http://twitter.com/usembassytokyo">Japan</a><br />
+    <a href="http://twitter.com/USEmbassyJordan">Jordan</a><br />
+    <a href="https://twitter.com/USembassyAstana">Kazakhstan </a><br />
+    <a href="http://twitter.com/USEmbassyKenya">Kenya </a><br />
+    <a href="http://twitter.com/UsembassySeoul">Korea, South</a><br />
+    <a href="http://twitter.com/USEmbassyKG">Kyrgyzstan</a><br />
+    <a href="http://twitter.com/USEmbassyQ8">Kuwait </a><br />
+    <a href="http://twitter.com/USEmbassyRiga">Latvia</a><br />
+    <a href="http://twitter.com/embassymonrovia">Liberia</a><br />
+    <a href="http://www.twitter.com/USAEmbassyLibya">Libya</a><br />
+    <a href="http://twitter.com/USMadagascar">Madagascar and the Comoros</a><br />
+    <a href="http://twitter.com/usembassykl">Malaysia </a><br />
+    <a href="http://twitter.com/#!/USEmbassyMali">Mali </a><br />
+    <a href="http://twitter.com/USEmbassyMEX">Mexico</a><br />
+    <a href="https://twitter.com/usembassyFSM">Micronesia, Federated States of</a><br />
+    <a href="http://twitter.com/USembMoldova">Moldova</a><br />
+    <a href="http://twitter.com/USEmbassyMaputo">Mozambique</a><br />
+    <a href="http://twitter.com/usembassynepal">Nepal</a><br />
+    <a href="http://twitter.com/usembthehague">Netherlands</a><br />
+    <a href="http://twitter.com/usembassynz">New Zealand</a><br />
+    <a href="http://twitter.com/USEmbassyAbuja">Nigeria</a><br />
+    <a href="http://twitter.com/usembassyoslo">Norway</a><br />
+    <a href="http://twitter.com/USEmbMuscat">Oman</a><br />
+    <a href="http://twitter.com/usembislamabad">Pakistan</a><br />
+    <a href="http://twitter.com/USEmbPan">Panama</a><br />
+    <a href="http://twitter.com/laembajada">Paraguay</a><br />
+    <a href="http://twitter.com/USEMBASSYPERU">Peru</a><br />
+    <a href="https://twitter.com/usembassymanila">Philippines</a><br />
+    <a href="http://twitter.com/USEmbassyWarsaw">Poland</a><br />
+    <a href="http://twitter.com/usembassyQatar">Qatar</a><br />
+    <a href="http://twitter.com/usembassysamoa">Samoa</a><br />
+    <a href="http://twitter.com/USEmbassyRiyadh">Saudi Arabia</a><br />
+    <a href="https://twitter.com/usembassydakar">Senegal</a><br />
+    <a href="http://twitter.com/usembassyserbia">Serbia</a><br />
+    <a href="https://twitter.com/redwhitebluedot">Singapore</a><br />
+    <a href="http://twitter.com/USEmbassySLO">Slovenia</a><br />
+    <a href="http://twitter.com/USEmbPretoria">South Africa</a><br />
+    <a href="http://twitter.com/USembassyMadrid">Spain</a><br />
+    <a href="http://twitter.com/USEmbSL">Sri Lanka</a><br />
+    <a href="http://twitter.com/usembassysweden">Sweden</a><br />
+    <a href="http://twitter.com/USEmbassyBern">Switzerland and Liechtenstein</a><br />
+    <a href="http://twitter.com/USEmbassySyria">Syria</a><br />
+    <a href="http://twitter.com/AmEmbTZ">Tanzania</a><br />
+    <a href="http://twitter.com/USEmbassyBKK">Thailand</a><br />
+    <a href="https://twitter.com/USEmbassyDili">Timor-Leste</a><br />
+    <a href="http://twitter.com/usembassytogo">Togo</a><br />
+    <a href="http://twitter.com/USembassyTurkey">Turkey</a><br />
+    <a href="http://twitter.com/usmissionuganda">Uganda</a><br />
+    <a href="http://twitter.com/USAinUK">United Kingdom</a><br />
+    <a href="http://twitter.com/usembassyMVD">Uruguay</a><br />
+    <a href="http://twitter.com/usembassyve">Venezuela</a><br />
+    <a href="http://twitter.com/usembassyzambia">Zambia</a><br />
+    <a href="http://twitter.com/usembassyharare">Zimbabwe</a><br />
+    <a href="https://twitter.com/usambnz">Ambassador to New Zealand &amp; Samoa</a><br />
+    <a href="https://twitter.com/USAmbUruguay">Ambassador to Uruguay</a></td>"""
+
+import re
+daily_schedule_links = re.compile('twitter.com/.*?">', re.DOTALL)
+dsl = daily_schedule_links.findall(script)
+
+list_of_sched_links = []
+for links in dsl:
+    yao = links[12:-2]
+    print(yao)
+    list_of_sched_links.append(yao)
+print(list_of_sched_links)
+
+ndaily_schedule_links = re.compile('">.*?</a><br />', re.DOTALL)
+ndsl = ndaily_schedule_links.findall(script)
+
+nlist_of_sched_links = []
+for links in ndsl:
+    yao = links[2:-10]
+    print(yao)
+    nlist_of_sched_links.append(yao)
+print(nlist_of_sched_links)
+zipper = zip(nlist_of_sched_links, list_of_sched_links)
+for z in zipper:
+    #"Afghanistan": "usembassykabul",
+    #('United Kingdom', 'USAinUK')
+    newyao = str(z)
+    nwyao1 = newyao.replace("('", '"')
+    nwyao2 = nwyao1.replace("', '", '": "')
+    nwyao2 = nwyao2.replace("')", '",')
+    print(nwyao2)
 """
+from sqlalchemy import create_engine
+import json
+from unidecode import unidecode
+#from django.http import HttpResponse, JsonResponse
+#from api.country_to_number import iso_numberifier
+engine = create_engine('postgres://gbwbpntofkrmsw:2507b82970b5a13014f347ca1e2d3858f306698fe700ac8c859ce5f7ac2598bc@ec2-107-20-191-76.compute-1.amazonaws.com:5432/d2tm6s6rp66r9p')
+conn = engine.connect()
+
+from datetime import datetime
+import time
+import pytz
+
+todays_date = datetime.fromtimestamp(int(time.time()) - 57600).strftime('%B-%d-%Y')
+ABRV_table_name = 'http://localhost:5000/api/Cape%20Verde/QP_SCORE2'
+
+table_name = ABRV_table_name.rsplit('/', 1)[-1] # table
+country_url = ABRV_table_name.rsplit('/', 2)[-2] # country
+country_name = country_url.replace('%20', ' ')
+
+
+query = conn.execute('''SELECT "{}" FROM "{}";'''.format(country_name, table_name))
+query_list = query.cursor.fetchall()
+
+date_query = conn.execute('''SELECT "Date" FROM "{}";'''.format(table_name))
+date_query_list = date_query.cursor.fetchall()
+
+country_data_dict = {}
+zipper = zip(query_list, date_query_list)
+for z in zipper:
+    country_data_dict[z[1][0]] = z[0][0]
+
+json_list_to_send = []
+json_list_to_send.append(country_data_dict)
+
+print(json_list_to_send)
+
 n = 10
 #3628800
 num = 1
@@ -92,7 +256,7 @@ nyc_tz = timezone('US/Eastern')
 nyc_dt = utc_dt.astimezone(nyc_tz)
 print(nyc_dt)
 print(str(datetime.tzinfo))
-"""
+
 
 
 from sqlalchemy import create_engine
@@ -113,7 +277,7 @@ todays_date = datetime.fromtimestamp(int(time.time()) - 57600).strftime('%B-%d-%
 print(todays_date)
 print(int(time.time()))
 
-"""
+
 query = conn.execute('''SELECT "{}" FROM "{}";'''.format(country_name, table_name))
 query_list = query.cursor.fetchall()
 

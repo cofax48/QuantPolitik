@@ -1,8 +1,50 @@
-angular.module('app', ['ngRoute', 'ngSanitize', 'CountryAngularApp']).
+var QPCountryAngular = angular.module('app', ['ngRoute', 'ngSanitize', 'CountryAngularApp']).
 config(function ($routeProvider, $sceDelegateProvider) {
-  $routeProvider.when('/start', {
+  $routeProvider.when('/App', {
     templateUrl: '../static/assets/js/CountryAngularApp/partials/start.html',
     controller: 'CountryDataController'
+  })
+  .when("/", {
+    templateUrl: '../templates/index.html'
+  })
+  .when("/TheAlgorithm", {
+    templateUrl: '../templates/TheAlgorithm.html'
+  })
+  .when("/about", {
+    templateUrl: '../templates/about.html'
+  })
+  .when("/TheTech", {
+    templateUrl: '../templates/TheTech.html'
+  })
+  .when("/AreasofAnalysis", {
+    templateUrl: '../templates/areaOfAnalysis.html'
+  })
+  .when("/BureaucraticExchange", {
+    templateUrl: '../templates/BureaucraticExchange.html'
+  })
+  .when("/BusinessRelations", {
+    templateUrl: '../templates/BusinessRelations.html'
+  })
+  .when("/CountryProfile", {
+    templateUrl: '../templates/CountryProfile.html'
+  })
+  .when("/CulturalDiffusion", {
+    templateUrl: '../templates/CulturalDiffusion.html'
+  })
+  .when("/GovernmentalPerspective", {
+    templateUrl: '../templates/GovernmentalPerspective.html'
+  })
+  .when("/Prestige", {
+    templateUrl: '../templates/Prestige.html'
+  })
+  .when("/Security", {
+    templateUrl: '../templates/Security.html'
+  })
+  .when("/TradeRelations", {
+    templateUrl: '../templates/TradeRelations.html'
+  })
+  .when("/datadashboard", {
+    templateUrl: '../templates/dataDashBoard.html'
   });
   $routeProvider.otherwise({
   redirectTo: '/start'

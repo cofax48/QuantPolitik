@@ -7,30 +7,63 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="../static/assets/css/DataByCountryAngularApp.css" />
-  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+  <link href="../static/assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="//fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700" rel="stylesheet" type="text/css">
 </head>
-<body ng-app="app">
+<body id="body" ng-app="app">
   {% verbatim %}
-  <div class="container" ng-controller="CountryDataController">
-    <div class="navbar navbar-default navbar-fixed-top top-navbar">
+  <div class="container" ng-controller="CountryDataController" data-ng-init="init('Afghanistan')">
+    <div class="navbar navbar-defaults navbar-fixed-top top-navbar">
     <div class="container app-container">
         <div class="navbar-header">
-          <h1>Explore QuantPolitik by Country!</h1>
+          <nav id="nav">
+            <ol>
+              <li><a id="Home" href="/">Home</a></li>
+              <li><a id="Algorithm" href="/TheAlgorithm">The Algorithm</a></li>
+              <li><a id="About" href="/about">About Us</a></li>
+              <li><a id="Tech" href="/TheTech">QuantPolitik Tech</a></li>
+              <li><a id="Analysis" href="/AreasofAnalysis"> &#8744; Areas of Analysis</a>
+              <ul class="maList">
+                <li style="white-space: nowrap;"><a href="/BureaucraticExchange">Bureaucratic Exchange</a></li>
+                <li style="white-space: nowrap;"><a href="/BusinessRelations">Business Relations</a></li>
+                <li style="white-space: nowrap;"><a href="/CountryProfile">Country Profile</a></li>
+                <li style="white-space: nowrap;"><a href="/CulturalDiffusion">Cultural Diffusion</a></li>
+                <li style="white-space: nowrap;"><a href="/GovernmentalPerspective">Gov Perspective</a></li>
+                <li style="white-space: nowrap;"><a href="/Prestige">Prestige</a></li>
+                <li style="white-space: nowrap;"><a href="/Security">Security</a></li>
+                <li style="white-space: nowrap;"><a href="/TradeRelations">Trade Relations</a></li>
+              </ul>
+            </li>
+              <li><a id="dashboardbutton" href="/datadashboard">Data Dashboard</a></li>
+              <li><form id="maLabel" name="CountrySelect">
+                <label for="repeatSelect"> Choose a Country: </label>
+                <select name="CountryChosen" id="CountryChosen" ng-model="CountryChosen" ng-change="CountrySelectValue(CountryChosen)">
+                  <option ng-repeat="country in CountryData" value="{{country.CountryName}}">{{country.CountryName}}</option>
+                </select>
+              </form>
+            </li>
+            </ol>
+          </nav>
         </div>
       </div>
     </div>
+    				<div id="errythingElse">
     <div class="container body-content app-container">
       <div ng-view></div>
-      	<span class="badge">{{CountryDataBeingPassed}}</span>
       {% endverbatim %}
   </div>
+  <script src="https://platform.twitter.com/widgets.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash-fp/0.10.4/lodash-fp.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular-route.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular-sanitize.js"></script>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="../static/assets/js/jquery.min.js"></script>
   <script src="../static/assets/js/CountryAngularApp/app.js"></script>
+  <script src="../static/assets/js/countryTweetUrlArray.js"></script>
+  <script src="../static/assets/js/CountryAngularApp/countryDirective.js"></script>
   <script src="../static/assets/js/CountryAngularApp/CountryController.js"></script>
+  <script src="../static/assets/js/DropdownButton.js"></script>
 </body>
 </html>
