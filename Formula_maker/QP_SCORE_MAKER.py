@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 #! Data Grabber
 
-#PCA = Tells me which variables are useful
-#Log transform =
-#Decay Algorithm
-
 import time
 time1 = time.time()
 from datetime import datetime
