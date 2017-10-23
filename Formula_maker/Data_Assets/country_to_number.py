@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# This turns a country to its index position/alphabetical order
 def country_numberifier(country):
     codex = {
     'Afghanistan':0,
