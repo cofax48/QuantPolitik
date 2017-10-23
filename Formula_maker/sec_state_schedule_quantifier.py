@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+#! This file downloads the sec of state master schedule, builds a web crawler for specific dates, 
+# parses the schedule, and updates the database
 import datetime, time
 from time import sleep
 time1 = time.time()
